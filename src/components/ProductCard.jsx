@@ -22,7 +22,7 @@ export default function ProductCard({ product, categories = [] }) {
 
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
   const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
-  const catLabel = categories.find(c => c.id === product.category)?.[`name_${lang}`] || product.category
+  const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
 
   function handleAddToCart(e) {
     e.preventDefault()

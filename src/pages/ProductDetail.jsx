@@ -71,7 +71,7 @@ export default function ProductDetail() {
   function handleAddToCart() {
     const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
     addToCart({ ...product, quantity: qty })
-    toast({ title: t('product.added'), description: `${qty} × ${name}` })
+    toast({ title: t('product.added'), description: `${qty} × ${name}`, duration: 3000 })
   }
 
   if (loading) return <ProductDetailSkeleton />
@@ -96,7 +96,7 @@ export default function ProductDetail() {
   const description = lang === 'en'
     ? (product.description_en || product.description_fr)
     : product.description_fr
-  const catLabel = categories.find(c => c.id === product.category)?.[`name_${lang}`] || product.category
+  const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -168,8 +168,9 @@ export default function ProductDetail() {
               <button
                 type="button"
                 aria-label="Augmenter"
-                onClick={() => setQty(q => q + 1)}
-                className="h-10 w-10 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors"
+                onClick={() => setQty(q => Math.min(99, q + 1))}
+                className="h-10 w-10 rounded-lg border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-40"
+                disabled={qty >= 99}
               >
                 <Plus className="h-4 w-4" />
               </button>

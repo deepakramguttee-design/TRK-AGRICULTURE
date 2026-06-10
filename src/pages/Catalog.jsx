@@ -89,11 +89,11 @@ export default function Catalog() {
           </FilterPill>
           {categories.map(cat => (
             <FilterPill
-              key={cat.id}
-              active={activeCategory === cat.id}
-              onClick={() => setActiveCategory(cat.id)}
+              key={cat.slug}
+              active={activeCategory === cat.slug}
+              onClick={() => setActiveCategory(cat.slug)}
             >
-              {CATEGORY_EMOJI[cat.id]} {lang === 'en' ? cat.name_en : cat.name_fr}
+              {CATEGORY_EMOJI[cat.slug]} {lang === 'en' ? cat.name_en : cat.name_fr}
             </FilterPill>
           ))}
         </div>

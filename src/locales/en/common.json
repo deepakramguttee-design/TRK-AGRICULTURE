@@ -15,6 +15,58 @@
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions"
   },
+  "b2b": {
+    "hero": {
+      "title": "Hotels, restaurants & landscapers",
+      "subtitle": "Regular supply of fresh plants, negotiated rates",
+      "cta": "Request a quote"
+    },
+    "advantages": {
+      "title": "Why choose TRK Agriculture?",
+      "delivery": { "title": "Scheduled weekly deliveries", "desc": "Plan your deliveries at your own pace — every week, on the days and times that suit you." },
+      "pricing": { "title": "Volume-based B2B pricing", "desc": "The more you order, the lower your prices. Personalised quote based on your monthly volumes." },
+      "variety": { "title": "Custom varieties on request", "desc": "Need a specific variety? We can grow to order to meet your exact requirements." }
+    },
+    "clients": {
+      "title": "They trust us"
+    },
+    "form": {
+      "title": "Request a quote",
+      "subtitle": "Fill in this form and we will get back to you within 48h.",
+      "companyType": "Business type",
+      "companyTypePlaceholder": "Select",
+      "companyName": "Company name",
+      "contactName": "Contact name",
+      "email": "Email",
+      "phone": "Phone",
+      "volume": "Estimated monthly volume",
+      "volumePlaceholder": "Select",
+      "categories": "Varieties of interest",
+      "message": "Free message",
+      "messagePlaceholder": "Describe your needs, preferred delivery frequency...",
+      "submit": "Request a quote",
+      "submitting": "Sending…",
+      "types": {
+        "hotel": "Hotel",
+        "restaurant": "Restaurant",
+        "landscaper": "Landscaper",
+        "green_space": "Green space",
+        "other": "Other"
+      },
+      "volumes": {
+        "lt5": "Less than 5 trays / month",
+        "5_20": "5 to 20 trays / month",
+        "20_50": "20 to 50 trays / month",
+        "gt50": "More than 50 trays / month",
+        "unknown": "I don't know yet"
+      }
+    },
+    "success": {
+      "title": "Request sent!",
+      "message": "Thank you, our team will contact you within 48h.",
+      "back": "Back to home"
+    }
+  },
   "cart": {
     "title": "My cart",
     "empty": "Your cart is empty",

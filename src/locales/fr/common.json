@@ -15,6 +15,58 @@
     "privacy": "Confidentialité",
     "terms": "CGV"
   },
+  "b2b": {
+    "hero": {
+      "title": "Hôtels, restaurants, paysagistes",
+      "subtitle": "Approvisionnement régulier en plants frais, tarifs négociés",
+      "cta": "Demander un devis"
+    },
+    "advantages": {
+      "title": "Pourquoi choisir TRK Agriculture ?",
+      "delivery": { "title": "Livraisons hebdomadaires programmées", "desc": "Planifiez vos livraisons selon votre rythme — chaque semaine, aux jours et heures qui vous conviennent." },
+      "pricing": { "title": "Tarifs B2B dégressifs sur volume", "desc": "Plus vous commandez, plus vos prix baissent. Devis personnalisé selon vos volumes mensuels." },
+      "variety": { "title": "Variétés sur commande possible", "desc": "Besoin d'une variété spécifique ? Nous pouvons cultiver sur commande pour satisfaire vos exigences." }
+    },
+    "clients": {
+      "title": "Ils nous font confiance"
+    },
+    "form": {
+      "title": "Demander un devis",
+      "subtitle": "Remplissez ce formulaire et nous vous contactons sous 48h.",
+      "companyType": "Type d'entreprise",
+      "companyTypePlaceholder": "Sélectionner",
+      "companyName": "Nom de l'entreprise",
+      "contactName": "Nom du contact",
+      "email": "Email",
+      "phone": "Téléphone",
+      "volume": "Volume mensuel estimé",
+      "volumePlaceholder": "Sélectionner",
+      "categories": "Variétés intéressées",
+      "message": "Message libre",
+      "messagePlaceholder": "Décrivez vos besoins, fréquence de livraison souhaitée...",
+      "submit": "Demander un devis",
+      "submitting": "Envoi en cours…",
+      "types": {
+        "hotel": "Hôtel",
+        "restaurant": "Restaurant",
+        "landscaper": "Paysagiste",
+        "green_space": "Espace vert",
+        "other": "Autre"
+      },
+      "volumes": {
+        "lt5": "Moins de 5 plateaux / mois",
+        "5_20": "5 à 20 plateaux / mois",
+        "20_50": "20 à 50 plateaux / mois",
+        "gt50": "Plus de 50 plateaux / mois",
+        "unknown": "Je ne sais pas encore"
+      }
+    },
+    "success": {
+      "title": "Demande envoyée !",
+      "message": "Merci, notre équipe vous contacte sous 48h.",
+      "back": "Retour à l'accueil"
+    }
+  },
   "cart": {
     "title": "Mon panier",
     "empty": "Votre panier est vide",
