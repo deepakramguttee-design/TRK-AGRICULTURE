@@ -84,14 +84,17 @@ export default function Catalog() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <FilterPill active={activeCategory === 'all'} onClick={() => setActiveCategory('all')}>
+          <FilterPill active={activeCategory === 'all'} onClick={() => { console.log('[FILTER] selectedCategory: all'); setActiveCategory('all') }}>
             {t('catalog.all')}
           </FilterPill>
           {categories.map(cat => (
             <FilterPill
               key={cat.slug}
               active={activeCategory === cat.slug}
-              onClick={() => setActiveCategory(cat.slug)}
+              onClick={() => {
+                console.log('[FILTER] selectedCategory:', cat.slug)
+                setActiveCategory(cat.slug)
+              }}
             >
               {CATEGORY_EMOJI[cat.slug]} {lang === 'en' ? cat.name_en : cat.name_fr}
             </FilterPill>
