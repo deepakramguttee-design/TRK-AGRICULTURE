@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "catalog": "Catalogue",
+    "b2b": "B2B Hotels & Restaurants",
+    "about": "About",
+    "contact": "Contact",
+    "cart": "Cart",
+    "account": "My Account"
+  },
+  "footer": {
+    "tagline": "Grown in Mauritius 🇲🇺",
+    "delivery": "Delivery in 9 districts",
+    "legal": "Legal",
+    "legalNotice": "Legal Notice",
+    "privacy": "Privacy Policy",
+    "terms": "Terms & Conditions"
+  },
+  "home": {
+    "hero": {
+      "title": "Fresh plants grown in Mauritius",
+      "subtitle": "Order directly from the producer. Delivery within 24h across all districts.",
+      "cta": "View catalogue"
+    },
+    "features": {
+      "b2c": {
+        "title": "B2C Catalogue",
+        "desc": "Order our freshly harvested vegetables, fruits, and herbs, delivered directly to your door."
+      },
+      "b2b": {
+        "title": "B2B Subscriptions",
+        "desc": "Custom solutions for hotels and restaurants. Recurring orders, invoices and negotiated terms."
+      },
+      "fresh": {
+        "title": "24h Freshness Guarantee",
+        "desc": "All our products are harvested the same morning and delivered within 24 hours. Freshness guaranteed."
+      },
+      "cta": "Learn more"
+    }
+  }
+}

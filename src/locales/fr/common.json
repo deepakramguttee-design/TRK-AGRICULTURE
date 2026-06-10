@@ -1,0 +1,40 @@
+{
+  "nav": {
+    "catalog": "Catalogue",
+    "b2b": "B2B Hôtels & Restaurants",
+    "about": "À propos",
+    "contact": "Contact",
+    "cart": "Panier",
+    "account": "Mon compte"
+  },
+  "footer": {
+    "tagline": "Cultivé à Maurice 🇲🇺",
+    "delivery": "Livraison dans 9 districts",
+    "legal": "Informations légales",
+    "legalNotice": "Mentions légales",
+    "privacy": "Confidentialité",
+    "terms": "CGV"
+  },
+  "home": {
+    "hero": {
+      "title": "Plants frais cultivés à Maurice",
+      "subtitle": "Commandez directement auprès du producteur. Livraison en 24h dans tous les districts.",
+      "cta": "Voir le catalogue"
+    },
+    "features": {
+      "b2c": {
+        "title": "Catalogue B2C",
+        "desc": "Commandez nos légumes, fruits et plantes aromatiques fraîchement récoltés, livrés directement chez vous."
+      },
+      "b2b": {
+        "title": "Abonnements B2B",
+        "desc": "Solutions sur-mesure pour hôtels et restaurants. Commandes récurrentes, factures et conditions négociées."
+      },
+      "fresh": {
+        "title": "Garantie fraîcheur 24h",
+        "desc": "Tous nos produits sont récoltés le matin même et livrés dans les 24 heures. Fraîcheur garantie."
+      },
+      "cta": "En savoir plus"
+    }
+  }
+}
