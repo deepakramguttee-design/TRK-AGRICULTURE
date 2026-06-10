@@ -11,6 +11,10 @@ import Checkout from './pages/Checkout'
 import B2B from './pages/B2B'
 import Account from './pages/Account'
 import Admin from './pages/Admin'
+import AdminProducts from './pages/AdminProducts'
+import OrderConfirmation from './pages/OrderConfirmation'
+import { Toaster } from './components/ui/toaster'
+import LanguageBar from './components/layout/LanguageBar'
 
 function App() {
   return (
@@ -18,21 +22,25 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <div className="min-h-screen flex flex-col">
+            <LanguageBar />
             <Header />
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/catalogue" element={<Catalog />} />
-                <Route path="/produit/:id" element={<ProductDetail />} />
+                <Route path="/produit/:sku" element={<ProductDetail />} />
                 <Route path="/panier" element={<Cart />} />
                 <Route path="/commande" element={<Checkout />} />
                 <Route path="/b2b" element={<B2B />} />
                 <Route path="/compte" element={<Account />} />
                 <Route path="/admin" element={<Admin />} />
+                <Route path="/admin/products" element={<AdminProducts />} />
+                <Route path="/commande/confirmee/:orderNumber" element={<OrderConfirmation />} />
               </Routes>
             </main>
             <Footer />
           </div>
+          <Toaster />
         </CartProvider>
       </AuthProvider>
     </BrowserRouter>

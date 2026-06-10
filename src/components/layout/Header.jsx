@@ -1,16 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ShoppingCart, User, Menu, Globe } from 'lucide-react'
+import { ShoppingCart, User, Menu } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { useCart } from '@/contexts/CartContext'
 
 const NAV_LINKS = [
@@ -21,12 +15,12 @@ const NAV_LINKS = [
 ]
 
 export default function Header() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { cartCount } = useCart()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-9 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         {/* Logo */}
         <Link to="/" className="font-bold text-base md:text-lg text-primary tracking-tight">
@@ -48,26 +42,6 @@ export default function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-1">
-          {/* Language selector */}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="sm" className="gap-1 px-2">
-                <Globe className="h-4 w-4" />
-                <span className="text-xs uppercase font-semibold">
-                  {i18n.language.slice(0, 2)}
-                </span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => i18n.changeLanguage('fr')}>
-                Français
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => i18n.changeLanguage('en')}>
-                English
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           {/* Cart */}
           <Button variant="ghost" size="icon" asChild>
             <Link to="/panier" aria-label={t('nav.cart')}>

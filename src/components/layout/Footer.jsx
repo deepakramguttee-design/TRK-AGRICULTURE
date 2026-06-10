@@ -79,9 +79,17 @@ export default function Footer() {
 
         <Separator className="my-6" />
 
-        <p className="text-center text-xs text-muted-foreground">
-          © {new Date().getFullYear()} TRK Agriculture Limited — {t('footer.tagline')}
-        </p>
+        <div className="flex items-center justify-center gap-4">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} TRK Agriculture Limited — {t('footer.tagline')}
+          </p>
+          <Link
+            to="/admin/products"
+            className="text-xs text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+          >
+            ⚙
+          </Link>
+        </div>
       </div>
     </footer>
   )
