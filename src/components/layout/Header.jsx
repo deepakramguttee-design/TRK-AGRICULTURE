@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { useCart } from '@/contexts/CartContext'
+import { useAuth } from '@/contexts/AuthContext'
 
 const NAV_LINKS = [
   { to: '/catalogue', labelKey: 'nav.catalog' },
@@ -17,6 +18,7 @@ const NAV_LINKS = [
 export default function Header() {
   const { t } = useTranslation()
   const { cartCount } = useCart()
+  const { isAdmin } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
@@ -42,6 +44,15 @@ export default function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-1">
+          {/* Admin link — visible uniquement pour les admins */}
+          {isAdmin && (
+            <Link
+              to="/admin"
+              className="hidden md:block text-xs text-muted-foreground/60 hover:text-foreground transition-colors px-2"
+            >
+              Admin
+            </Link>
+          )}
           {/* Cart */}
           <Button variant="ghost" size="icon" asChild>
             <Link to="/panier" aria-label={t('nav.cart')}>
