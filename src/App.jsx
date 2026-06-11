@@ -19,6 +19,9 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProductsList from './pages/admin/AdminProductsList'
 import AdminProductCreate from './pages/admin/AdminProductCreate'
 import AdminProductEdit from './pages/admin/AdminProductEdit'
+import Confidentialite from './pages/Confidentialite'
+import Privacy from './pages/Privacy'
+import MentionsLegales from './pages/MentionsLegales'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
 
@@ -42,6 +45,9 @@ function App() {
                 <Route path="/compte" element={<Account />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
+                <Route path="/confidentialite" element={<Confidentialite />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/mentions-legales" element={<MentionsLegales />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />

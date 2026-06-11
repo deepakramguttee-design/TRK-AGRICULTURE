@@ -28,7 +28,8 @@
       "variety": { "title": "Variétés sur commande possible", "desc": "Besoin d'une variété spécifique ? Nous pouvons cultiver sur commande pour satisfaire vos exigences." }
     },
     "clients": {
-      "title": "Ils nous font confiance"
+      "title": "Ils nous font confiance",
+      "placeholder": "Vos retours et logos bienvenus"
     },
     "form": {
       "title": "Demander un devis",
@@ -43,9 +44,12 @@
       "volumePlaceholder": "Sélectionner",
       "categories": "Variétés intéressées",
       "message": "Message libre",
-      "messagePlaceholder": "Décrivez vos besoins, fréquence de livraison souhaitée...",
+      "contactNamePlaceholder": "Votre nom complet",
+      "messagePlaceholder": "Précisez votre besoin, fréquence souhaitée, contraintes...",
       "submit": "Demander un devis",
       "submitting": "Envoi en cours…",
+      "required": "Ce champ est requis",
+      "errorTitle": "Erreur",
       "types": {
         "hotel": "Hôtel",
         "restaurant": "Restaurant",
@@ -62,8 +66,9 @@
       }
     },
     "success": {
-      "title": "Demande envoyée !",
-      "message": "Merci, notre équipe vous contacte sous 48h.",
+      "title": "Merci, votre demande est bien reçue !",
+      "message": "Notre équipe vous contactera sous 48h pour discuter de vos besoins.",
+      "ref": "Référence :",
       "back": "Retour à l'accueil"
     }
   },

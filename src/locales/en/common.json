@@ -28,7 +28,8 @@
       "variety": { "title": "Custom varieties on request", "desc": "Need a specific variety? We can grow to order to meet your exact requirements." }
     },
     "clients": {
-      "title": "They trust us"
+      "title": "They trust us",
+      "placeholder": "Your feedback and logos are welcome"
     },
     "form": {
       "title": "Request a quote",
@@ -43,9 +44,12 @@
       "volumePlaceholder": "Select",
       "categories": "Varieties of interest",
       "message": "Free message",
-      "messagePlaceholder": "Describe your needs, preferred delivery frequency...",
+      "contactNamePlaceholder": "Your full name",
+      "messagePlaceholder": "Describe your needs, preferred delivery frequency, constraints...",
       "submit": "Request a quote",
       "submitting": "Sending…",
+      "required": "This field is required",
+      "errorTitle": "Error",
       "types": {
         "hotel": "Hotel",
         "restaurant": "Restaurant",
@@ -62,8 +66,9 @@
       }
     },
     "success": {
-      "title": "Request sent!",
-      "message": "Thank you, our team will contact you within 48h.",
+      "title": "Thank you, your request has been received!",
+      "message": "Our team will contact you within 48 hours to discuss your needs.",
+      "ref": "Reference:",
       "back": "Back to home"
     }
   },

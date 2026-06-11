@@ -272,6 +272,31 @@ CREATE TABLE IF NOT EXISTS testimonials (
 );
 
 -- ============================================================
+-- 13. B2B INQUIRIES — demandes de devis B2B (pré-inscription)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS b2b_inquiries (
+  id                    uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  business_type         text NOT NULL,
+  business_name         text NOT NULL,
+  contact_name          text NOT NULL,
+  email                 text NOT NULL,
+  phone                 text NOT NULL,
+  estimated_volume      text NOT NULL,
+  varieties_interested  text[] DEFAULT '{}',
+  message               text,
+  status                text NOT NULL DEFAULT 'new'
+                        CHECK (status IN ('new','contacted','converted','closed')),
+  created_at            timestamptz DEFAULT now()
+);
+
+ALTER TABLE b2b_inquiries ENABLE ROW LEVEL SECURITY;
+-- Toute personne peut soumettre une demande (anon + authenticated)
+CREATE POLICY "Anyone can insert b2b_inquiry" ON b2b_inquiries
+  FOR INSERT WITH CHECK (true);
+-- Seul le service_role (admin) peut lire/modifier
+-- (pas de policy SELECT/UPDATE publique)
+
+-- ============================================================
 -- TRIGGER : auto-update updated_at
 -- ============================================================
 CREATE OR REPLACE FUNCTION set_updated_at()
