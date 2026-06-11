@@ -148,6 +148,48 @@
     "loading": "Loading...",
     "error": "Failed to load products."
   },
+  "account": {
+    "error": "Error",
+    "cancel": "Cancel",
+    "signout": "Sign out",
+    "profile": {
+      "title": "My profile",
+      "name": "Full name",
+      "namePlaceholder": "John Doe",
+      "phone": "Phone",
+      "lang": "Preferred language",
+      "company": "Company",
+      "edit": "Edit",
+      "save": "Save",
+      "saved": "Profile updated"
+    },
+    "orders": {
+      "title": "My orders",
+      "empty": "No orders yet.",
+      "discover": "Browse catalogue",
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "preparing": "Preparing",
+        "out_for_delivery": "Out for delivery",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled"
+      }
+    },
+    "password": {
+      "title": "Password",
+      "new": "New password",
+      "confirm": "Confirm password",
+      "save": "Change password",
+      "success": "Password updated",
+      "tooShort": "Password must be at least 6 characters",
+      "mismatch": "Passwords do not match"
+    },
+    "admin": {
+      "title": "Administration",
+      "link": "Go to back-office"
+    }
+  },
   "home": {
     "hero": {
       "title": "Fresh plants grown in Mauritius",
