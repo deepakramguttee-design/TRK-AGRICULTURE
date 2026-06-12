@@ -20,7 +20,7 @@ export default function Footer() {
   return (
     <footer className="border-t bg-muted/40 mt-auto">
       <div className="container mx-auto px-4 py-10">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
             <h3 className="font-bold text-primary mb-2 text-lg">
@@ -40,6 +40,39 @@ export default function Footer() {
                   {district}
                 </li>
               ))}
+            </ul>
+          </div>
+
+          {/* Navigation */}
+          <div>
+            <h4 className="font-semibold mb-3 text-sm uppercase tracking-wide">
+              {t('footer.links')}
+            </h4>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="/a-propos"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('nav.about')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/contact"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('nav.contact')}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/b2b"
+                  className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {t('nav.b2b')}
+                </Link>
+              </li>
             </ul>
           </div>
 

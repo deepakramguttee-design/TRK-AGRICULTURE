@@ -13,7 +13,8 @@
     "legal": "Informations légales",
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",
-    "terms": "CGV"
+    "terms": "CGV",
+    "links": "Navigation"
   },
   "b2b": {
     "hero": {
@@ -189,6 +190,30 @@
       "title": "Administration",
       "link": "Accéder au back-office"
     }
+  },
+  "about": {
+    "title": "À propos de TRK Agriculture",
+    "subtitle": "Des plants cultivés à Maurice, par une famille passionnée",
+    "intro": "TRK Agriculture est une pépinière familiale mauricienne. Nous cultivons sur place, à Henrietta (Vacoas), une large gamme de plants maraîchers : épices et aromates, salades, brèdes, légumes variés, melons et pastèques.",
+    "body": "Notre conviction est simple : un bon potager commence par un bon plant. C'est pourquoi nous cultivons localement des plants vigoureux, prêts à être repiqués, sans passer par l'importation ni de longues chaînes logistiques. Du producteur directement à vous.",
+    "approach": {
+      "title": "Notre démarche",
+      "body": "Chaque plateau est préparé avec soin dans notre pépinière. Nous sélectionnons des variétés adaptées au climat mauricien pour vous offrir les meilleures chances de réussite, que vous soyez jardinier amateur ou maraîcher expérimenté."
+    },
+    "delivery": {
+      "title": "Livraison dans toute l'île",
+      "body": "Nous livrons vos plants dans les 9 districts de Maurice, directement à votre domicile. Choisissez vos plants, passez commande, et recevez-les frais, prêts à planter."
+    }
+  },
+  "contact": {
+    "title": "Contactez-nous",
+    "intro": "Une question sur nos plants, une commande, ou un projet ? Nous sommes là pour vous aider.",
+    "email": "Email",
+    "phone": "Téléphone",
+    "whatsapp": "WhatsApp",
+    "address": "Adresse",
+    "note": "Pour toute commande, le plus simple est de passer par notre catalogue en ligne. Pour les commandes en gros (hôtels, restaurants, revendeurs), contactez-nous directement par WhatsApp ou email.",
+    "viewCatalog": "Voir le catalogue"
   },
   "home": {
     "hero": {

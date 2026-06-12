@@ -26,6 +26,8 @@ import AdminB2BDetail from './pages/admin/AdminB2BDetail'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
+import APropos from './pages/APropos'
+import Contact from './pages/Contact'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
 
@@ -52,6 +54,8 @@ function App() {
                 <Route path="/confidentialite" element={<Confidentialite />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/mentions-legales" element={<MentionsLegales />} />
+                <Route path="/a-propos" element={<APropos />} />
+                <Route path="/contact" element={<Contact />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />

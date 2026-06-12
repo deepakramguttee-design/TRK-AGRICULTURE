@@ -13,7 +13,8 @@
     "legal": "Legal",
     "legalNotice": "Legal Notice",
     "privacy": "Privacy Policy",
-    "terms": "Terms & Conditions"
+    "terms": "Terms & Conditions",
+    "links": "Navigation"
   },
   "b2b": {
     "hero": {
@@ -189,6 +190,30 @@
       "title": "Administration",
       "link": "Go to back-office"
     }
+  },
+  "about": {
+    "title": "About TRK Agriculture",
+    "subtitle": "Plants grown in Mauritius, by a passionate family",
+    "intro": "TRK Agriculture is a Mauritian family nursery. We grow a wide range of vegetable plants right here in Henrietta (Vacoas): herbs and spices, salads, brèdes, assorted vegetables, melons and watermelons.",
+    "body": "Our belief is simple: a good garden starts with a good plant. That's why we grow healthy, ready-to-transplant plants locally — no imports, no long supply chains. Straight from the grower to you.",
+    "approach": {
+      "title": "Our approach",
+      "body": "Every tray is carefully prepared in our nursery. We select varieties suited to the Mauritian climate to give you the best chance of success, whether you're a hobby gardener or an experienced grower."
+    },
+    "delivery": {
+      "title": "Delivery across the island",
+      "body": "We deliver your plants to all 9 districts of Mauritius, straight to your door. Choose your plants, place your order, and receive them fresh and ready to plant."
+    }
+  },
+  "contact": {
+    "title": "Contact us",
+    "intro": "A question about our plants, an order, or a project? We're here to help.",
+    "email": "Email",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "address": "Address",
+    "note": "For orders, the easiest way is through our online catalogue. For bulk orders (hotels, restaurants, resellers), contact us directly via WhatsApp or email.",
+    "viewCatalog": "View catalogue"
   },
   "home": {
     "hero": {
