@@ -1,1 +1,6 @@
+/sw.js               /sw.js               200
+/workbox-*.js        /workbox-*.js        200
+/registerSW.js       /registerSW.js       200
+/manifest.webmanifest /manifest.webmanifest 200
+
 /*    /index.html   200
