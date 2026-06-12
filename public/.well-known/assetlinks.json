@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "mu.kailashfarming.app",
+    "sha256_cert_fingerprints": ["7B:A8:33:35:06:C0:C2:74:B7:5B:91:FD:ED:40:E0:DB:E1:47:9C:33:9D:C1:E4:7B:55:72:BB:BB:6F:F2:91:4F"]
+  }
+}]
