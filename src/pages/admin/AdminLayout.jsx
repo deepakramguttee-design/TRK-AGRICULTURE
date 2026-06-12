@@ -7,8 +7,8 @@ import { toast } from '@/hooks/use-toast'
 const NAV = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/produits', label: 'Produits', icon: Package },
-  { label: 'Commandes', icon: ShoppingCart, disabled: true },
-  { label: 'B2B', icon: Users, disabled: true },
+  { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
+  { to: '/admin/b2b', label: 'B2B', icon: Users },
 ]
 
 export default function AdminLayout() {

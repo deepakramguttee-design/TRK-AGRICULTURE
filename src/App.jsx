@@ -19,6 +19,10 @@ import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminProductsList from './pages/admin/AdminProductsList'
 import AdminProductCreate from './pages/admin/AdminProductCreate'
 import AdminProductEdit from './pages/admin/AdminProductEdit'
+import AdminOrdersList from './pages/admin/AdminOrdersList'
+import AdminOrderDetail from './pages/admin/AdminOrderDetail'
+import AdminB2BList from './pages/admin/AdminB2BList'
+import AdminB2BDetail from './pages/admin/AdminB2BDetail'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -54,6 +58,10 @@ function App() {
                   <Route path="produits" element={<AdminProductsList />} />
                   <Route path="produits/nouveau" element={<AdminProductCreate />} />
                   <Route path="produits/:sku/editer" element={<AdminProductEdit />} />
+                  <Route path="commandes" element={<AdminOrdersList />} />
+                  <Route path="commandes/:order_number" element={<AdminOrderDetail />} />
+                  <Route path="b2b" element={<AdminB2BList />} />
+                  <Route path="b2b/:id" element={<AdminB2BDetail />} />
                 </Route>
               </Routes>
             </main>
