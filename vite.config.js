@@ -8,29 +8,53 @@ const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
 export default defineConfig({
+  server: {
+    port: 5174,
+    strictPort: true,
+  },
   plugins: [
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'icon-*.svg'],
+      includeAssets: ['favicon.svg', 'icons/*.png'],
       manifest: {
-        name: 'TRK Agriculture',
-        short_name: 'TRK',
-        description: 'Plants frais cultivés à Maurice',
+        id: '/',
+        name: 'TRK Agriculture Limited',
+        short_name: 'TRK Agri',
+        description: 'Fruits, légumes et épices frais cultivés à Maurice, livrés chez vous.',
         theme_color: '#16a34a',
         background_color: '#ffffff',
         display: 'standalone',
+        orientation: 'portrait',
+        scope: '/',
         start_url: '/',
+        lang: 'fr',
+        dir: 'ltr',
+        categories: ['shopping', 'food', 'business'],
         icons: [
           {
-            src: 'icon-192x192.svg',
+            src: '/icons/icon-192x192.png',
             sizes: '192x192',
-            type: 'image/svg+xml',
+            type: 'image/png',
+            purpose: 'any',
           },
           {
-            src: 'icon-512x512.svg',
+            src: '/icons/icon-512x512.png',
             sizes: '512x512',
-            type: 'image/svg+xml',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/icons/icon-maskable-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+          {
+            src: '/icons/icon-maskable-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
       },
