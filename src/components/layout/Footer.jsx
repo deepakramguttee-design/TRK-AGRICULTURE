@@ -9,13 +9,13 @@ import { Leaf, Mail, MapPin } from 'lucide-react'
 // TODO: remplacer ces URLs par les vraies pages TRK Agriculture
 const SOCIAL = [
   {
-    href: 'https://www.facebook.com/TRKAgricultureLimited',
+    href: 'https://www.facebook.com/TRKAgricultureLimited', // ✓ URL officielle
     label: 'Facebook TRK Agriculture',
     icon: IconFacebook,
     hover: 'hover:bg-blue-100 hover:text-blue-700',
   },
   {
-    href: 'https://www.instagram.com/trkagriculturelimited',
+    href: 'https://www.instagram.com/trk_agriculture', // ✓ URL officielle
     label: 'Instagram TRK Agriculture',
     icon: IconInstagram,
     hover: 'hover:bg-pink-100 hover:text-pink-600',
