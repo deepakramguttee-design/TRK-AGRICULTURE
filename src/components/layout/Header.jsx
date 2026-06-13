@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ShoppingCart, User, Menu, LayoutDashboard, LogOut } from 'lucide-react'
+import { ShoppingCart, User, Menu, LayoutDashboard, LogOut, Leaf } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
@@ -24,6 +24,7 @@ export default function Header() {
   const { cartCount } = useCart()
   const { user, isAdmin, signOut } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
 
   async function handleSignOut() {
@@ -31,21 +32,36 @@ export default function Header() {
     navigate('/', { replace: true })
   }
 
+  function isActive(path) {
+    return location.pathname === path || location.pathname.startsWith(path + '/')
+  }
+
   return (
     <header className="sticky top-9 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
+
         {/* Logo */}
-        <Link to="/" className="font-bold text-base md:text-lg text-primary tracking-tight">
-          TRK AGRICULTURE LIMITED
+        <Link to="/" className="flex items-center gap-2.5 group shrink-0">
+          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
+            <Leaf className="h-4 w-4 text-primary-foreground" />
+          </div>
+          <span className="font-bold text-sm md:text-[15px] text-foreground tracking-tight leading-tight">
+            TRK Agriculture
+            <span className="hidden sm:inline text-muted-foreground font-normal"> Limited</span>
+          </span>
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className={`text-sm font-medium px-3 py-1.5 rounded-md transition-colors ${
+                isActive(link.to)
+                  ? 'text-foreground bg-accent'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent/50'
+              }`}
             >
               {t(link.labelKey)}
             </Link>
@@ -54,7 +70,6 @@ export default function Header() {
 
         {/* Right actions */}
         <div className="flex items-center gap-1">
-          {/* Admin link — visible uniquement pour les admins */}
           {isAdmin && (
             <Link
               to="/admin"
@@ -63,6 +78,7 @@ export default function Header() {
               Admin
             </Link>
           )}
+
           {/* Cart */}
           <Button variant="ghost" size="icon" asChild>
             <Link to="/panier" aria-label={t('nav.cart')}>
@@ -128,26 +144,35 @@ export default function Header() {
               <div className="flex flex-col gap-1 mt-8">
                 <Link
                   to="/"
-                  className="font-bold text-primary mb-4 text-lg"
+                  className="flex items-center gap-2.5 mb-6"
                   onClick={() => setMobileOpen(false)}
                 >
-                  TRK AGRICULTURE LIMITED
+                  <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
+                    <Leaf className="h-4 w-4 text-primary-foreground" />
+                  </div>
+                  <span className="font-bold text-foreground">TRK Agriculture</span>
                 </Link>
+
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.to}
                     to={link.to}
-                    className="text-base font-medium py-3 border-b last:border-0 text-foreground"
+                    className={`text-sm font-medium py-2.5 px-3 rounded-lg border-b border-border/40 last:border-0 transition-colors ${
+                      isActive(link.to)
+                        ? 'text-foreground bg-accent'
+                        : 'text-muted-foreground hover:text-foreground'
+                    }`}
                     onClick={() => setMobileOpen(false)}
                   >
                     {t(link.labelKey)}
                   </Link>
                 ))}
+
                 {user ? (
                   <>
                     <Link
                       to="/compte"
-                      className="text-base font-medium py-3 mt-2 flex items-center gap-2"
+                      className="text-sm font-medium py-2.5 px-3 mt-2 rounded-lg flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                       onClick={() => setMobileOpen(false)}
                     >
                       <User className="h-4 w-4" />
@@ -156,7 +181,7 @@ export default function Header() {
                     {isAdmin && (
                       <Link
                         to="/admin"
-                        className="text-base font-medium py-3 flex items-center gap-2"
+                        className="text-sm font-medium py-2.5 px-3 rounded-lg flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                         onClick={() => setMobileOpen(false)}
                       >
                         <LayoutDashboard className="h-4 w-4" />
@@ -165,7 +190,7 @@ export default function Header() {
                     )}
                     <button
                       onClick={() => { handleSignOut(); setMobileOpen(false) }}
-                      className="text-base font-medium py-3 flex items-center gap-2 text-destructive w-full"
+                      className="text-sm font-medium py-2.5 px-3 rounded-lg flex items-center gap-2 text-destructive w-full hover:bg-destructive/10 transition-colors"
                     >
                       <LogOut className="h-4 w-4" />
                       Déconnexion
@@ -174,7 +199,7 @@ export default function Header() {
                 ) : (
                   <Link
                     to="/login"
-                    className="text-base font-medium py-3 mt-2 flex items-center gap-2"
+                    className="text-sm font-medium py-2.5 px-3 mt-2 rounded-lg flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
                     onClick={() => setMobileOpen(false)}
                   >
                     <User className="h-4 w-4" />

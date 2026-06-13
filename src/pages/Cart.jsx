@@ -4,15 +4,15 @@ import { Trash2, Minus, Plus, Leaf, ShoppingBag } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 import { Button } from '@/components/ui/button'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
-import { getDeliveryFee } from '@/lib/delivery'
+import { FREE_DELIVERY_THRESHOLD } from '@/lib/delivery'
 
 export default function Cart() {
   const { t, i18n } = useTranslation()
   const { items, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart()
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
-  const deliveryFee = getDeliveryFee(null, cartTotal)
-  const total = cartTotal + deliveryFee
+  const isFreeDelivery = cartTotal >= FREE_DELIVERY_THRESHOLD
+  const amountUntilFree = (FREE_DELIVERY_THRESHOLD - cartTotal).toFixed(2)
 
   if (items.length === 0) {
     return (
@@ -134,20 +134,24 @@ export default function Cart() {
             <div className="flex justify-between text-sm">
               <span className="text-muted-foreground">{t('cart.delivery')}</span>
               <span className="font-medium">
-                {deliveryFee === 0 ? t('cart.free') : `Rs ${deliveryFee.toFixed(2)}`}
+                {isFreeDelivery ? t('cart.free') : '—'}
               </span>
             </div>
 
-            {deliveryFee === 0 && (
-              <p className="text-xs text-primary">{t('cart.freeDeliveryNote')}</p>
-            )}
-            {deliveryFee > 0 && (
-              <p className="text-xs text-muted-foreground">{t('cart.deliveryEstimate')}</p>
+            {/* Livraison gratuite banner */}
+            {isFreeDelivery ? (
+              <div className="flex items-center gap-2 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+                {t('cart.freeDeliveryReached')}
+              </div>
+            ) : (
+              <div className="text-xs bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-stone-700">
+                {t('cart.freeDeliveryProgress', { amount: amountUntilFree })}
+              </div>
             )}
 
             <div className="border-t pt-3 flex justify-between items-center">
               <span className="font-semibold">{t('cart.total')}</span>
-              <span className="text-2xl font-bold text-primary">Rs {total.toFixed(2)}</span>
+              <span className="text-2xl font-bold text-primary">Rs {cartTotal.toFixed(2)}</span>
             </div>
 
             <Button className="w-full" size="lg" asChild>

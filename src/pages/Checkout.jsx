@@ -8,7 +8,7 @@ import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
-import { DISTRICTS, getDeliveryFee, isValidMauritiusPhone } from '@/lib/delivery'
+import { DISTRICTS, FREE_DELIVERY_THRESHOLD, getDeliveryFee, isValidMauritiusPhone } from '@/lib/delivery'
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@/components/ui/select'
@@ -188,7 +188,7 @@ export default function Checkout() {
                         {DISTRICTS.map(d => (
                           <SelectItem key={d.name} value={d.name}>
                             {d.name}
-                            {cartTotal >= d.freeThreshold
+                            {cartTotal >= FREE_DELIVERY_THRESHOLD
                               ? ` — ${t('cart.free')}`
                               : ` — Rs ${d.fee}`}
                           </SelectItem>

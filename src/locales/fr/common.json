@@ -84,7 +84,9 @@
     "delivery": "Livraison",
     "deliveryEstimate": "Estimé (selon district)",
     "free": "Gratuit",
-    "freeDeliveryNote": "Livraison offerte pour les commandes ≥ Rs 1 000",
+    "freeDeliveryNote": "Livraison offerte pour les commandes ≥ Rs 3 500",
+    "freeDeliveryProgress": "Plus que Rs {{amount}} pour la livraison gratuite !",
+    "freeDeliveryReached": "Livraison gratuite 🎉",
     "total": "Total",
     "checkout": "Passer commande"
   },

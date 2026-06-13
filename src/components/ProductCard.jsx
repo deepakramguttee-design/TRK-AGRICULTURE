@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, CheckCircle } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const CATEGORY_EMOJI = {
@@ -15,6 +14,19 @@ export const CATEGORY_EMOJI = {
   melons:  '🍈',
 }
 
+const CATEGORY_STYLES = {
+  epices:  { badge: 'bg-amber-100 text-amber-800 border-amber-200',     placeholder: 'from-amber-50 to-amber-100/80' },
+  salades: { badge: 'bg-lime-100 text-lime-800 border-lime-200',         placeholder: 'from-lime-50 to-lime-100/80' },
+  bredes:  { badge: 'bg-emerald-100 text-emerald-800 border-emerald-200', placeholder: 'from-emerald-50 to-emerald-100/80' },
+  legumes: { badge: 'bg-orange-100 text-orange-800 border-orange-200',   placeholder: 'from-orange-50 to-orange-100/80' },
+  melons:  { badge: 'bg-yellow-100 text-yellow-800 border-yellow-200',   placeholder: 'from-yellow-50 to-yellow-100/80' },
+}
+
+const DEFAULT_STYLES = {
+  badge: 'bg-green-100 text-green-800 border-green-200',
+  placeholder: 'from-green-50 to-green-100/80',
+}
+
 export default function ProductCard({ product, categories = [] }) {
   const { t, i18n } = useTranslation()
   const { addToCart } = useCart()
@@ -23,6 +35,7 @@ export default function ProductCard({ product, categories = [] }) {
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
   const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
   const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
+  const styles = CATEGORY_STYLES[product.category] || DEFAULT_STYLES
 
   function handleAddToCart(e) {
     e.preventDefault()
@@ -34,32 +47,41 @@ export default function ProductCard({ product, categories = [] }) {
 
   return (
     <Link to={`/produit/${product.sku}`} className="block group h-full">
-      <Card className="flex flex-col overflow-hidden hover:shadow-md transition-shadow h-full">
-        <div className="aspect-square bg-green-50 flex items-center justify-center overflow-hidden">
+      <Card className="flex flex-col overflow-hidden h-full border-border/60 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:border-green-200/70">
+
+        {/* Image */}
+        <div className={`aspect-square overflow-hidden relative bg-gradient-to-br ${styles.placeholder}`}>
           {product.image_url ? (
             <img
               src={product.image_url}
               alt={name}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-full object-cover group-hover:scale-[1.07] transition-transform duration-500 ease-out"
               loading="lazy"
             />
           ) : (
-            <span className="text-5xl select-none" aria-hidden>
-              {CATEGORY_EMOJI[product.category] || '🌱'}
-            </span>
+            <div className="w-full h-full flex items-center justify-center">
+              <span
+                className="text-5xl select-none opacity-70 group-hover:scale-110 transition-transform duration-300"
+                aria-hidden
+              >
+                {CATEGORY_EMOJI[product.category] || '🌱'}
+              </span>
+            </div>
           )}
         </div>
 
+        {/* Category badge */}
         <CardHeader className="p-3 pb-0">
-          <Badge variant="secondary" className="w-fit text-[10px] mb-1.5">
+          <span className={`inline-flex items-center gap-1 w-fit text-[10px] font-semibold px-2 py-0.5 rounded-full border ${styles.badge} mb-1.5`}>
             {CATEGORY_EMOJI[product.category]} {catLabel}
-          </Badge>
-          <CardTitle className="text-sm font-semibold leading-snug line-clamp-2">
+          </span>
+          <CardTitle className="text-sm font-semibold leading-snug line-clamp-2 text-foreground">
             {name}
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="px-3 py-2 mt-auto">
+        {/* Price */}
+        <CardContent className="px-3 py-1.5 mt-auto">
           <p className="text-base font-bold text-primary">
             Rs {Number(product.price_mur).toFixed(2)}
             <span className="text-xs font-normal text-muted-foreground ml-1">
@@ -68,14 +90,20 @@ export default function ProductCard({ product, categories = [] }) {
           </p>
         </CardContent>
 
+        {/* CTA */}
         <CardFooter className="p-3 pt-0">
           <Button
             size="sm"
-            className="w-full text-xs gap-1"
-            variant={justAdded ? 'secondary' : 'default'}
+            className={`w-full text-xs gap-1.5 transition-all duration-300 ${
+              justAdded ? 'bg-green-600 hover:bg-green-600 scale-[0.98]' : ''
+            }`}
             onClick={handleAddToCart}
           >
-            <ShoppingCart className="h-3 w-3" />
+            {justAdded ? (
+              <CheckCircle className="h-3.5 w-3.5 animate-trk-check-pop" />
+            ) : (
+              <ShoppingCart className="h-3.5 w-3.5" />
+            )}
             {justAdded ? t('catalog.added') : t('catalog.addToCart')}
           </Button>
         </CardFooter>
