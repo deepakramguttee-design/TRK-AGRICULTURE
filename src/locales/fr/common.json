@@ -7,7 +7,9 @@
     "about": "À propos",
     "contact": "Contact",
     "cart": "Panier",
-    "account": "Mon compte"
+    "account": "Mon compte",
+    "signin": "Se connecter",
+    "nursery": "Pépinière"
   },
   "footer": {
     "tagline": "Cultivé à Maurice 🇲🇺",
@@ -313,6 +315,17 @@
       "legumes": "Légumes",
       "melons": "Melons & Pastèques"
     }
+  },
+  "nursery": {
+    "title": "Pépinière en direct",
+    "subtitle": "Suivez en temps réel nos lots en cours de culture",
+    "sownDaysAgo": "Semé il y a {{days}} jours",
+    "readyIn": "Prêt dans {{days}} j",
+    "readyNow": "Prêt à la vente 🎉",
+    "plateaux": "{{count}} plateau(x)",
+    "progress": "Progression",
+    "empty": "Aucun lot en cours",
+    "emptyDesc": "Revenez bientôt pour voir nos semis en cours !"
   },
   "home": {
     "hero": {

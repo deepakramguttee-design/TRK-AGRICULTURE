@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { to: '/catalogue',      labelKey: 'nav.catalog' },
   { to: '/notre-process',  labelKey: 'nav.process' },
   { to: '/calendrier',     labelKey: 'nav.calendar' },
+  { to: '/pepiniere',      labelKey: 'nav.nursery' },
   { to: '/b2b',            labelKey: 'nav.b2b' },
   { to: '/a-propos',       labelKey: 'nav.about' },
   { to: '/contact',        labelKey: 'nav.contact' },
@@ -117,13 +118,13 @@ export default function Header() {
                 <DropdownMenuItem asChild>
                   <Link to="/compte" className="flex items-center gap-2">
                     <User className="h-3.5 w-3.5" />
-                    Mon compte
+                    {t('nav.account')}
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleSignOut} className="flex items-center gap-2 text-destructive focus:text-destructive">
                   <LogOut className="h-3.5 w-3.5" />
-                  Déconnexion
+                  {t('account.signout')}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -195,7 +196,7 @@ export default function Header() {
                       className="text-sm font-medium py-2.5 px-3 rounded-lg flex items-center gap-2 text-destructive w-full hover:bg-destructive/10 transition-colors"
                     >
                       <LogOut className="h-4 w-4" />
-                      Déconnexion
+                      {t('account.signout')}
                     </button>
                   </>
                 ) : (
@@ -205,7 +206,7 @@ export default function Header() {
                     onClick={() => setMobileOpen(false)}
                   >
                     <User className="h-4 w-4" />
-                    Se connecter
+                    {t('nav.signin')}
                   </Link>
                 )}
               </div>

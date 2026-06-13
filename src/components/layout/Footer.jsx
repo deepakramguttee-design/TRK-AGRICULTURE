@@ -124,6 +124,7 @@ export default function Footer() {
                 { to: '/catalogue',     key: 'nav.catalog' },
                 { to: '/notre-process', key: 'nav.process' },
                 { to: '/calendrier',    key: 'nav.calendar' },
+                { to: '/pepiniere',    key: 'nav.nursery' },
                 { to: '/b2b',           key: 'nav.b2b' },
                 { to: '/a-propos',      key: 'nav.about' },
                 { to: '/contact',       key: 'nav.contact' },

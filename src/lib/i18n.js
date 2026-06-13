@@ -14,10 +14,9 @@ i18n
       en: { common: enCommon },
     },
     defaultNS: 'common',
-    fallbackLng: 'fr',
-    lng: 'fr',
+    fallbackLng: 'en',
     detection: {
-      order: ['localStorage', 'navigator'],
+      order: ['localStorage'],
       caches: ['localStorage'],
     },
     interpolation: {

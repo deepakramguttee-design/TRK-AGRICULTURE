@@ -23,6 +23,7 @@ import AdminOrdersList from './pages/admin/AdminOrdersList'
 import AdminOrderDetail from './pages/admin/AdminOrderDetail'
 import AdminB2BList from './pages/admin/AdminB2BList'
 import AdminB2BDetail from './pages/admin/AdminB2BDetail'
+import AdminSowingList from './pages/admin/AdminSowingList'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -30,6 +31,7 @@ import APropos from './pages/APropos'
 import Contact from './pages/Contact'
 import NosProcess from './pages/NosProcess'
 import Calendrier from './pages/Calendrier'
+import Nursery from './pages/Nursery'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
 
@@ -60,6 +62,7 @@ function App() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/notre-process" element={<NosProcess />} />
                 <Route path="/calendrier" element={<Calendrier />} />
+                <Route path="/pepiniere" element={<Nursery />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
@@ -70,6 +73,7 @@ function App() {
                   <Route path="commandes/:order_number" element={<AdminOrderDetail />} />
                   <Route path="b2b" element={<AdminB2BList />} />
                   <Route path="b2b/:id" element={<AdminB2BDetail />} />
+                  <Route path="semis" element={<AdminSowingList />} />
                 </Route>
               </Routes>
             </main>

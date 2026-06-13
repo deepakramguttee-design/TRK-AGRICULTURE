@@ -7,7 +7,9 @@
     "about": "About",
     "contact": "Contact",
     "cart": "Cart",
-    "account": "My Account"
+    "account": "My Account",
+    "signin": "Sign in",
+    "nursery": "Nursery"
   },
   "footer": {
     "tagline": "Grown in Mauritius 🇲🇺",
@@ -313,6 +315,17 @@
       "legumes": "Vegetables",
       "melons": "Melons & Watermelons"
     }
+  },
+  "nursery": {
+    "title": "Live Nursery",
+    "subtitle": "Track our seedling batches in real time",
+    "sownDaysAgo": "Sown {{days}} days ago",
+    "readyIn": "Ready in {{days}}d",
+    "readyNow": "Ready to sell 🎉",
+    "plateaux": "{{count}} tray(s)",
+    "progress": "Progress",
+    "empty": "No active batches",
+    "emptyDesc": "Check back soon to see our seedling batches!"
   },
   "home": {
     "hero": {
