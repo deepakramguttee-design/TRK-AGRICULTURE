@@ -121,10 +121,12 @@ export default function Footer() {
             </h4>
             <ul className="space-y-2.5">
               {[
-                { to: '/catalogue', key: 'nav.catalog' },
-                { to: '/b2b',       key: 'nav.b2b' },
-                { to: '/a-propos',  key: 'nav.about' },
-                { to: '/contact',   key: 'nav.contact' },
+                { to: '/catalogue',     key: 'nav.catalog' },
+                { to: '/notre-process', key: 'nav.process' },
+                { to: '/calendrier',    key: 'nav.calendar' },
+                { to: '/b2b',           key: 'nav.b2b' },
+                { to: '/a-propos',      key: 'nav.about' },
+                { to: '/contact',       key: 'nav.contact' },
               ].map(link => (
                 <li key={link.to}>
                   <Link

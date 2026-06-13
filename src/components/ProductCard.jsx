@@ -27,6 +27,12 @@ const DEFAULT_STYLES = {
   placeholder: 'from-green-50 to-green-100/80',
 }
 
+const STATUS_STYLES = {
+  available:    'bg-green-100 text-green-800 border-green-200',
+  in_production:'bg-amber-100 text-amber-800 border-amber-200',
+  coming_soon:  'bg-sky-100 text-sky-800 border-sky-200',
+}
+
 export default function ProductCard({ product, categories = [] }) {
   const { t, i18n } = useTranslation()
   const { addToCart } = useCart()
@@ -36,6 +42,8 @@ export default function ProductCard({ product, categories = [] }) {
   const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
   const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
   const styles = CATEGORY_STYLES[product.category] || DEFAULT_STYLES
+  const status = product.status || 'available'
+  const statusClass = STATUS_STYLES[status] || STATUS_STYLES.available
 
   function handleAddToCart(e) {
     e.preventDefault()
@@ -70,11 +78,16 @@ export default function ProductCard({ product, categories = [] }) {
           )}
         </div>
 
-        {/* Category badge */}
+        {/* Category badge + status */}
         <CardHeader className="p-3 pb-0">
-          <span className={`inline-flex items-center gap-1 w-fit text-[10px] font-semibold px-2 py-0.5 rounded-full border ${styles.badge} mb-1.5`}>
-            {CATEGORY_EMOJI[product.category]} {catLabel}
-          </span>
+          <div className="flex flex-wrap items-center gap-1 mb-1.5">
+            <span className={`inline-flex items-center gap-1 w-fit text-[10px] font-semibold px-2 py-0.5 rounded-full border ${styles.badge}`}>
+              {CATEGORY_EMOJI[product.category]} {catLabel}
+            </span>
+            <span className={`inline-flex items-center w-fit text-[10px] font-semibold px-2 py-0.5 rounded-full border ${statusClass}`}>
+              {t(`catalog.status.${status}`)}
+            </span>
+          </div>
           <CardTitle className="text-sm font-semibold leading-snug line-clamp-2 text-foreground">
             {name}
           </CardTitle>

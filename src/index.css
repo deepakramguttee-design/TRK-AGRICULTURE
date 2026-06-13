@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -73,6 +73,18 @@
 @layer utilities {
   .font-display {
     font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  }
+  .font-bricolage {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  }
+  .font-nunito {
+    font-family: 'Nunito Sans', system-ui, sans-serif;
+  }
+  .bg-alveoles {
+    background-image:
+      linear-gradient(rgba(30, 77, 43, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(30, 77, 43, 0.055) 1px, transparent 1px);
+    background-size: 8px 16px;
   }
 }
 

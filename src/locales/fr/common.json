@@ -1,6 +1,8 @@
 {
   "nav": {
     "catalog": "Catalogue",
+    "process": "Notre Process",
+    "calendar": "Calendrier",
     "b2b": "B2B Hôtels & Restaurants",
     "about": "À propos",
     "contact": "Contact",
@@ -14,7 +16,8 @@
     "legalNotice": "Mentions légales",
     "privacy": "Confidentialité",
     "terms": "CGV",
-    "links": "Navigation"
+    "links": "Navigation",
+    "explore": "Explorer"
   },
   "b2b": {
     "hero": {
@@ -149,7 +152,12 @@
     "addToCart": "Ajouter au panier",
     "added": "Ajouté !",
     "loading": "Chargement...",
-    "error": "Erreur de chargement des produits."
+    "error": "Erreur de chargement des produits.",
+    "status": {
+      "available": "Disponible",
+      "in_production": "En production",
+      "coming_soon": "Bientôt disponible"
+    }
   },
   "account": {
     "error": "Erreur",
@@ -216,6 +224,95 @@
     "address": "Adresse",
     "note": "Pour toute commande, le plus simple est de passer par notre catalogue en ligne. Pour les commandes en gros (hôtels, restaurants, revendeurs), contactez-nous directement par WhatsApp ou email.",
     "viewCatalog": "Voir le catalogue"
+  },
+  "process": {
+    "title": "Notre Process",
+    "subtitle": "Du substrat à votre jardin — comment naissent nos plants",
+    "plateauTitle": "La culture en plateau alvéolé",
+    "plateauDesc": "Tous nos plants sont cultivés en plateaux alvéolés dans un environnement contrôlé. Chaque alvéole accueille une graine unique, nourrie avec soin jusqu'au stade idéal pour la transplantation dans votre jardin.",
+    "standard128": "Plateau 128 alvéoles",
+    "standard128Desc": "Format standard pour épices, salades, brèdes et légumes",
+    "cucu98": "Plateau 98 alvéoles",
+    "cucu98Desc": "Alvéoles plus grandes pour cucurbitacées : melons, pastèques, concombres",
+    "stepsTitle": "Les 6 étapes de production",
+    "steps": {
+      "substrat": {
+        "title": "Préparation du substrat",
+        "desc": "Sélection et mélange de tourbe, perlite et compost organique adapté à chaque famille de plants. Le substrat assure drainage et rétention d'eau idéaux."
+      },
+      "semis": {
+        "title": "Semis",
+        "desc": "Dépôt d'une graine par alvéole, à la profondeur optimale selon l'espèce. Chaque graine est sélectionnée pour son taux de germination élevé."
+      },
+      "germination": {
+        "title": "Germination",
+        "desc": "En conditions contrôlées (température, humidité), les graines lèvent en 3 à 14 jours selon la variété et la saison."
+      },
+      "croissance": {
+        "title": "Croissance en pépinière",
+        "desc": "Les plantules grandissent sous abri avec arrosage régulier et surveillance des ravageurs. C'est l'étape la plus longue du cycle."
+      },
+      "durcissement": {
+        "title": "Durcissement",
+        "desc": "Avant la vente, les plants sont exposés progressivement aux conditions extérieures — soleil, vent, variations thermiques — pour renforcer leur résistance."
+      },
+      "vente": {
+        "title": "Prêt à vendre",
+        "desc": "Le plant est vigoureux, bien enraciné dans son alvéole, prêt à être repiké dans votre jardin, votre pot ou votre carré potager."
+      }
+    },
+    "durationsTitle": "Durées de production par catégorie",
+    "durationsNote": "Durées indicatives à Maurice. La saison chaude (nov – avr) accélère la croissance ; la saison fraîche (mai – oct) la ralentit légèrement.",
+    "durationCols": {
+      "category": "Catégorie",
+      "germination": "Germination",
+      "nursery": "Pépinière",
+      "total": "Total",
+      "examples": "Exemples de variétés"
+    },
+    "durations": {
+      "epices":  { "germination": "5–10 j", "nursery": "3–4 sem", "total": "4–6 sem", "examples": "Basilic, Thym, Coriandre, Citronnelle" },
+      "salades": { "germination": "3–7 j",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Laitue, Roquette, Mesclun" },
+      "bredes":  { "germination": "5–10 j", "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Brède mouroum, Brède thazard, Songe" },
+      "legumes": { "germination": "7–14 j", "nursery": "4–6 sem", "total": "5–8 sem", "examples": "Tomate, Poivron, Aubergine, Choux" },
+      "melons":  { "germination": "5–7 j",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Melon, Pastèque, Concombre, Courgette" }
+    },
+    "ideasTitle": "Idées pour la suite",
+    "ideasContentTitle": "Contenus à développer",
+    "ideasContent": [
+      "Articles conseils plantation — semaine par semaine, comment entretenir vos plants après la livraison",
+      "FAQ — vos questions les plus fréquentes : arrosage, substrat, ravageurs communs à Maurice",
+      "Page « Notre Histoire » — portrait de la famille TRK, notre pépinière à Henrietta (Vacoas)",
+      "Vidéos pépinière — suivez la production de la graine au plant en time-lapse"
+    ],
+    "ideasVarietiesTitle": "Nouvelles variétés à cultiver selon la saison",
+    "ideasVarieties": [
+      "Herbes aromatiques premium : menthe poivrée, menthe verte, origan, romarin (saison fraîche, mai – oct)",
+      "Fleurs comestibles : capucines, bourrache, tagètes (toute l'année, idéal pour la restauration)",
+      "Brèdes saison chaude : brède mafane aux vertus antiparasitaires, cresson tropical (nov – avr)",
+      "Piments créoles : piment oiseau, piment banane, piment doux (saison chaude, nov – avr)",
+      "Micro-pousses & graines germées : radis, tournesol, pois chiche (culture ultra-rapide, 7–14 jours)"
+    ]
+  },
+  "calendrier": {
+    "title": "Calendrier de disponibilité",
+    "subtitle": "Les meilleurs mois pour commander chaque catégorie à Maurice",
+    "climateNote": "Île Maurice · Saison chaude & pluvieuse : nov → avr · Saison fraîche & sèche : mai → oct",
+    "months": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+    "legend": {
+      "high": "Pleine disponibilité",
+      "medium": "Disponibilité partielle",
+      "low": "Disponibilité limitée"
+    },
+    "note": "Ce calendrier reflète la production saisonnière en pépinière. Les commandes hors saison sont possibles sur demande.",
+    "orderCta": "Commander maintenant",
+    "categories": {
+      "epices": "Épices & Aromates",
+      "salades": "Salades",
+      "bredes": "Brèdes",
+      "legumes": "Légumes",
+      "melons": "Melons & Pastèques"
+    }
   },
   "home": {
     "hero": {

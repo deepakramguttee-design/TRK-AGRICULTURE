@@ -13,10 +13,12 @@ import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
 
 const NAV_LINKS = [
-  { to: '/catalogue', labelKey: 'nav.catalog' },
-  { to: '/b2b', labelKey: 'nav.b2b' },
-  { to: '/a-propos', labelKey: 'nav.about' },
-  { to: '/contact', labelKey: 'nav.contact' },
+  { to: '/catalogue',      labelKey: 'nav.catalog' },
+  { to: '/notre-process',  labelKey: 'nav.process' },
+  { to: '/calendrier',     labelKey: 'nav.calendar' },
+  { to: '/b2b',            labelKey: 'nav.b2b' },
+  { to: '/a-propos',       labelKey: 'nav.about' },
+  { to: '/contact',        labelKey: 'nav.contact' },
 ]
 
 export default function Header() {

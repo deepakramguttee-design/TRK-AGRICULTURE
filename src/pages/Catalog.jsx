@@ -143,7 +143,32 @@ export default function Catalog() {
           <Leaf className="h-14 w-14 mx-auto mb-4 opacity-20" />
           <p>{t('catalog.noResults')}</p>
         </div>
+      ) : activeCategory === 'all' ? (
+        /* Grouped by category */
+        <div className="space-y-10">
+          {categories.map(cat => {
+            const catProducts = filtered.filter(p => p.category === cat.slug || p.category === cat.id)
+            if (catProducts.length === 0) return null
+            return (
+              <section key={cat.slug} id={`cat-${cat.slug}`}>
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-2xl">{CATEGORY_EMOJI[cat.slug]}</span>
+                  <h2 className="font-display text-xl font-bold text-foreground">
+                    {lang === 'en' ? cat.name_en : cat.name_fr}
+                  </h2>
+                  <span className="text-xs text-muted-foreground ml-1">({catProducts.length})</span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {catProducts.map(product => (
+                    <ProductCard key={product.id} product={product} categories={categories} />
+                  ))}
+                </div>
+              </section>
+            )
+          })}
+        </div>
       ) : (
+        /* Flat grid for a specific category */
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {filtered.map(product => (
             <ProductCard key={product.id} product={product} categories={categories} />

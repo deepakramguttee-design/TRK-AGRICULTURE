@@ -1,6 +1,8 @@
 {
   "nav": {
     "catalog": "Catalogue",
+    "process": "Our Process",
+    "calendar": "Season Calendar",
     "b2b": "B2B Hotels & Restaurants",
     "about": "About",
     "contact": "Contact",
@@ -14,7 +16,8 @@
     "legalNotice": "Legal Notice",
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions",
-    "links": "Navigation"
+    "links": "Navigation",
+    "explore": "Explore"
   },
   "b2b": {
     "hero": {
@@ -149,7 +152,12 @@
     "addToCart": "Add to cart",
     "added": "Added!",
     "loading": "Loading...",
-    "error": "Failed to load products."
+    "error": "Failed to load products.",
+    "status": {
+      "available": "Available",
+      "in_production": "In Production",
+      "coming_soon": "Coming Soon"
+    }
   },
   "account": {
     "error": "Error",
@@ -216,6 +224,95 @@
     "address": "Address",
     "note": "For orders, the easiest way is through our online catalogue. For bulk orders (hotels, restaurants, resellers), contact us directly via WhatsApp or email.",
     "viewCatalog": "View catalogue"
+  },
+  "process": {
+    "title": "Our Process",
+    "subtitle": "From substrate to your garden — how our seedlings come to life",
+    "plateauTitle": "Tray-cell cultivation",
+    "plateauDesc": "All our seedlings are grown in cell trays in a controlled environment. Each cell holds a single seed, carefully nurtured until it reaches the ideal stage for transplanting into your garden.",
+    "standard128": "128-cell tray",
+    "standard128Desc": "Standard format for herbs, salads, brèdes and vegetables",
+    "cucu98": "98-cell tray",
+    "cucu98Desc": "Larger cells for cucurbits: melons, watermelons, cucumbers",
+    "stepsTitle": "The 6 production stages",
+    "steps": {
+      "substrat": {
+        "title": "Substrate preparation",
+        "desc": "We select and blend peat, perlite and organic compost tailored to each plant family. The substrate ensures ideal drainage and water retention."
+      },
+      "semis": {
+        "title": "Seeding",
+        "desc": "One seed is placed per cell at the optimal depth for each species. Every seed is selected for its high germination rate."
+      },
+      "germination": {
+        "title": "Germination",
+        "desc": "Under controlled conditions (temperature, humidity), seeds sprout in 3 to 14 days depending on the variety and season."
+      },
+      "croissance": {
+        "title": "Nursery growth",
+        "desc": "Seedlings grow under shelter with regular watering and pest monitoring. This is the longest stage of the production cycle."
+      },
+      "durcissement": {
+        "title": "Hardening off",
+        "desc": "Before sale, plants are progressively exposed to outdoor conditions — sunlight, wind, temperature changes — to strengthen their resilience."
+      },
+      "vente": {
+        "title": "Ready to sell",
+        "desc": "The plant is vigorous, well-rooted in its cell, and ready to be transplanted into your garden bed, pot or raised planter."
+      }
+    },
+    "durationsTitle": "Production timelines by category",
+    "durationsNote": "Approximate timelines in Mauritius. The hot season (Nov – Apr) speeds up growth; the cool season (May – Oct) slows it slightly.",
+    "durationCols": {
+      "category": "Category",
+      "germination": "Germination",
+      "nursery": "Nursery",
+      "total": "Total",
+      "examples": "Example varieties"
+    },
+    "durations": {
+      "epices":  { "germination": "5–10 d", "nursery": "3–4 wk", "total": "4–6 wk", "examples": "Basil, Thyme, Coriander, Lemongrass" },
+      "salades": { "germination": "3–7 d",  "nursery": "2–3 wk", "total": "3–4 wk", "examples": "Lettuce, Rocket, Mesclun" },
+      "bredes":  { "germination": "5–10 d", "nursery": "2–3 wk", "total": "3–4 wk", "examples": "Moringa, Amaranth, Taro leaves" },
+      "legumes": { "germination": "7–14 d", "nursery": "4–6 wk", "total": "5–8 wk", "examples": "Tomato, Pepper, Eggplant, Cabbage" },
+      "melons":  { "germination": "5–7 d",  "nursery": "2–3 wk", "total": "3–4 wk", "examples": "Melon, Watermelon, Cucumber, Courgette" }
+    },
+    "ideasTitle": "Ideas for the future",
+    "ideasContentTitle": "Content to develop",
+    "ideasContent": [
+      "Planting tips articles — week-by-week guides on caring for your seedlings after delivery",
+      "FAQ — your most common questions: watering, substrate, pests common in Mauritius",
+      "Our Story page — a portrait of the TRK family and our nursery in Henrietta (Vacoas)",
+      "Nursery videos — follow production from seed to seedling in time-lapse"
+    ],
+    "ideasVarietiesTitle": "New varieties to grow by season",
+    "ideasVarieties": [
+      "Premium herbs: peppermint, spearmint, oregano, rosemary (cool season, May – Oct)",
+      "Edible flowers: nasturtiums, borage, marigolds (year-round, ideal for restaurants)",
+      "Extra hot-season brèdes: mafane leaves (antiparasitic), tropical watercress (Nov – Apr)",
+      "Creole chillies: bird's eye chilli, banana pepper, sweet chilli (hot season, Nov – Apr)",
+      "Microgreens & sprouts: radish, sunflower, chickpea (ultra-fast crop, 7–14 days)"
+    ]
+  },
+  "calendrier": {
+    "title": "Seasonal Calendar",
+    "subtitle": "The best months to order each category in Mauritius",
+    "climateNote": "Mauritius · Hot & rainy season: Nov → Apr · Cool & dry season: May → Oct",
+    "months": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    "legend": {
+      "high": "Full availability",
+      "medium": "Partial availability",
+      "low": "Limited availability"
+    },
+    "note": "This calendar reflects seasonal nursery production. Off-season orders are possible on request.",
+    "orderCta": "Order now",
+    "categories": {
+      "epices": "Herbs & Spices",
+      "salades": "Salads",
+      "bredes": "Brèdes",
+      "legumes": "Vegetables",
+      "melons": "Melons & Watermelons"
+    }
   },
   "home": {
     "hero": {

@@ -28,6 +28,8 @@ import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
 import APropos from './pages/APropos'
 import Contact from './pages/Contact'
+import NosProcess from './pages/NosProcess'
+import Calendrier from './pages/Calendrier'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
 
@@ -56,6 +58,8 @@ function App() {
                 <Route path="/mentions-legales" element={<MentionsLegales />} />
                 <Route path="/a-propos" element={<APropos />} />
                 <Route path="/contact" element={<Contact />} />
+                <Route path="/notre-process" element={<NosProcess />} />
+                <Route path="/calendrier" element={<Calendrier />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
