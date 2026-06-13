@@ -4,7 +4,41 @@ import { useTranslation } from 'react-i18next'
 import { Separator } from '@/components/ui/separator'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Leaf, Globe, MessageCircle, Mail, MapPin } from 'lucide-react'
+import { Leaf, Mail, MapPin } from 'lucide-react'
+
+// TODO: remplacer ces URLs par les vraies pages TRK Agriculture
+const SOCIAL = [
+  {
+    href: 'https://www.facebook.com/TRKAgricultureLimited',
+    label: 'Facebook TRK Agriculture',
+    icon: IconFacebook,
+    hover: 'hover:bg-blue-100 hover:text-blue-700',
+  },
+  {
+    href: 'https://www.instagram.com/trkagriculturelimited',
+    label: 'Instagram TRK Agriculture',
+    icon: IconInstagram,
+    hover: 'hover:bg-pink-100 hover:text-pink-600',
+  },
+  {
+    href: 'https://wa.me/23052345678',
+    label: 'WhatsApp TRK Agriculture',
+    icon: IconWhatsApp,
+    hover: 'hover:bg-green-100 hover:text-green-700',
+  },
+  {
+    href: 'https://www.tiktok.com/@trkagriculturelimited',
+    label: 'TikTok TRK Agriculture',
+    icon: IconTikTok,
+    hover: 'hover:bg-stone-200 hover:text-stone-800',
+  },
+  {
+    href: 'mailto:contact@trkagriculturelimited.mu',
+    label: 'Email TRK Agriculture',
+    icon: ({ className }) => <Mail className={className} />,
+    hover: 'hover:bg-green-100 hover:text-green-700',
+  },
+]
 
 const DISTRICTS = [
   'Port Louis', 'Pamplemousses', 'Rivière du Rempart',
@@ -47,29 +81,21 @@ export default function Footer() {
               <MapPin className="h-3.5 w-3.5 shrink-0" />
               Île Maurice
             </div>
+
             {/* Social links */}
-            <div className="flex gap-2">
-              <a
-                href="#"
-                aria-label="Page Facebook TRK Agriculture"
-                className="w-8 h-8 rounded-lg bg-stone-100 hover:bg-blue-100 hover:text-blue-700 flex items-center justify-center text-stone-500 transition-colors"
-              >
-                <Globe className="h-4 w-4" />
-              </a>
-              <a
-                href="https://wa.me/230"
-                aria-label="WhatsApp TRK Agriculture"
-                className="w-8 h-8 rounded-lg bg-stone-100 hover:bg-green-100 hover:text-green-700 flex items-center justify-center text-stone-500 transition-colors"
-              >
-                <MessageCircle className="h-4 w-4" />
-              </a>
-              <a
-                href="mailto:contact@trkagriculturelimited.mu"
-                aria-label="Email TRK Agriculture"
-                className="w-8 h-8 rounded-lg bg-stone-100 hover:bg-green-100 hover:text-green-700 flex items-center justify-center text-stone-500 transition-colors"
-              >
-                <Mail className="h-4 w-4" />
-              </a>
+            <div className="flex flex-wrap gap-2">
+              {SOCIAL.map(({ href, label, icon: Icon, hover }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className={`w-8 h-8 rounded-lg bg-stone-100 flex items-center justify-center text-stone-500 transition-colors ${hover}`}
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              ))}
             </div>
           </div>
 
@@ -170,5 +196,41 @@ export default function Footer() {
 
       </div>
     </footer>
+  )
+}
+
+/* ── Icônes SVG inline (lucide-react ne fournit pas les logos de marques) ── */
+
+function IconFacebook({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+    </svg>
+  )
+}
+
+function IconInstagram({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+    </svg>
+  )
+}
+
+function IconWhatsApp({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
+    </svg>
+  )
+}
+
+function IconTikTok({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
   )
 }
