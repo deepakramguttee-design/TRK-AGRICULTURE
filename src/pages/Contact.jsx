@@ -8,8 +8,8 @@ const CONTACT_ITEMS = [
   {
     icon: Mail,
     key: 'email',
-    href: 'mailto:kailash.ramguttee@gmail.com',
-    value: 'kailash.ramguttee@gmail.com',
+    href: 'mailto:kailashramguttee@gmail.com',
+    value: 'kailashramguttee@gmail.com',
   },
   {
     icon: Phone,
