@@ -65,7 +65,7 @@ export default function Confidentialite() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             {[
               ['Site web', 'trk-agriculture.netlify.app'],
-              ['Email', 'deepak.ramguttee@gmail.com'],
+              ['Email', 'kailashramguttee@gmail.com'],
             ].map(([k, v]) => (
               <div key={k} className="bg-zinc-50 rounded-lg px-4 py-3 border border-zinc-100">
                 <p className="text-xs text-zinc-400 font-medium uppercase tracking-wide mb-0.5">{k}</p>
@@ -185,8 +185,8 @@ export default function Confidentialite() {
           </div>
           <p className="mt-3">
             Pour exercer ces droits :{' '}
-            <a href="mailto:deepak.ramguttee@gmail.com" className="text-primary hover:underline font-medium">
-              deepak.ramguttee@gmail.com
+            <a href="mailto:kailashramguttee@gmail.com" className="text-primary hover:underline font-medium">
+              kailashramguttee@gmail.com
             </a>
           </p>
         </Section>
@@ -231,11 +231,11 @@ export default function Confidentialite() {
             Pour toute question concernant vos données ou cette politique de confidentialité.
           </p>
           <a
-            href="mailto:deepak.ramguttee@gmail.com"
+            href="mailto:kailashramguttee@gmail.com"
             className="inline-flex items-center gap-2 bg-primary text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors"
           >
             <Mail size={15} />
-            deepak.ramguttee@gmail.com
+            kailashramguttee@gmail.com
           </a>
         </div>
 
