@@ -25,6 +25,7 @@ import AdminOrderDetail from './pages/admin/AdminOrderDetail'
 import AdminB2BList from './pages/admin/AdminB2BList'
 import AdminB2BDetail from './pages/admin/AdminB2BDetail'
 import AdminSowingList from './pages/admin/AdminSowingList'
+import AdminUsersList from './pages/admin/AdminUsersList'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -76,6 +77,7 @@ function App() {
                   <Route path="b2b" element={<AdminB2BList />} />
                   <Route path="b2b/:id" element={<AdminB2BDetail />} />
                   <Route path="semis" element={<AdminSowingList />} />
+                  <Route path="utilisateurs" element={<AdminUsersList />} />
                 </Route>
               </Routes>
             </main>

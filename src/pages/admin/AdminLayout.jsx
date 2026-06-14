@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, Leaf } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, Leaf, UserCheck } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 import ProtectedAdminRoute from '@/components/ProtectedAdminRoute'
 import { toast } from '@/hooks/use-toast'
@@ -10,6 +10,7 @@ const NAV = [
   { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
   { to: '/admin/b2b', label: 'B2B', icon: Users },
   { to: '/admin/semis', label: 'Semis', icon: Leaf },
+  { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UserCheck },
 ]
 
 export default function AdminLayout() {
