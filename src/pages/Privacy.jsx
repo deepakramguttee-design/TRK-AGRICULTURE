@@ -1,191 +1,250 @@
 import { Link } from 'react-router-dom'
+import { Shield, Database, Eye, Clock, UserCheck, Lock, Mail } from 'lucide-react'
+
+const Section = ({ icon: Icon, number, title, children }) => (
+  <div className="group relative">
+    <div className="flex gap-4 items-start">
+      <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-green-50 border border-green-100 flex items-center justify-center text-primary mt-0.5 group-hover:bg-green-100 transition-colors">
+        <Icon size={18} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <h2 className="font-display text-xl font-bold text-zinc-900 mb-4 flex items-baseline gap-2">
+          <span className="text-primary/40 text-sm font-sans font-semibold tabular-nums">{String(number).padStart(2,'0')}</span>
+          {title}
+        </h2>
+        <div className="text-sm text-zinc-600 leading-relaxed space-y-3">
+          {children}
+        </div>
+      </div>
+    </div>
+    <div className="mt-8 border-b border-zinc-100" />
+  </div>
+)
+
+const Tag = ({ children }) => (
+  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-800 border border-green-200 mr-1.5 mb-1.5">
+    {children}
+  </span>
+)
+
+const NegBox = ({ children }) => (
+  <div className="bg-zinc-50 border border-zinc-200 rounded-xl p-4 text-sm text-zinc-600">
+    {children}
+  </div>
+)
 
 export default function Privacy() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
-      <article className="prose prose-zinc max-w-none">
-        <h1 className="text-3xl font-bold text-primary mb-1">
-          Privacy Policy
-        </h1>
-        <p className="text-sm text-muted-foreground mb-10">
-          Last updated: June 10, 2026
-        </p>
-
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">1. Who We Are</h2>
-          <p>
-            TRK AGRICULTURE LIMITED is a company registered in Mauritius specialising in
-            the cultivation and sale of fresh plants (spices, salads, leafy greens,
-            vegetables, melons).
+    <div className="min-h-screen bg-white">
+      {/* Hero */}
+      <div className="bg-[#f4f1ea] border-b border-stone-200">
+        <div className="max-w-3xl mx-auto px-4 py-16">
+          <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 text-green-800 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+            <Shield size={13} />
+            Data &amp; Privacy
+          </div>
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-zinc-900 mb-4 leading-tight">
+            Privacy<br />
+            <span className="text-primary">Policy</span>
+          </h1>
+          <p className="text-zinc-500 text-sm">
+            Last updated: June 14, 2026 · TRK Agriculture Limited, Mauritius
           </p>
-          <ul className="mt-2 space-y-1 text-sm">
-            <li><span className="font-medium">Website:</span> https://trk-agriculture.netlify.app</li>
-            <li><span className="font-medium">Contact email:</span> deepak.ramguttee@gmail.com</li>
-            <li><span className="font-medium">Phone:</span> [to be completed]</li>
-          </ul>
-        </section>
+        </div>
+      </div>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">2. Data We Collect</h2>
+      {/* Content */}
+      <div className="max-w-3xl mx-auto px-4 py-14 space-y-10">
 
-          <p className="font-medium mt-4 mb-2">When placing an order (Cash on Delivery):</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>First and last name</li>
-            <li>Phone number (for delivery)</li>
-            <li>Email address (optional)</li>
-            <li>Delivery address</li>
-            <li>District of Mauritius</li>
-            <li>Preferred delivery slot</li>
-            <li>Any notes</li>
-          </ul>
-
-          <p className="font-medium mt-4 mb-2">When submitting a B2B quote request:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Company name and type (hotel, restaurant, etc.)</li>
-            <li>Contact name</li>
-            <li>Professional email and phone</li>
-            <li>Estimated monthly volume</li>
-            <li>Varieties of interest</li>
-          </ul>
-
-          <p className="font-medium mt-4 mb-2">Technical data collected automatically:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>IP address (server logs, retained for 30 days)</li>
-            <li>Browser type and device</li>
-            <li>Session cookies (shopping cart)</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">3. Why We Collect This Data</h2>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>To process and deliver your orders</li>
-            <li>To contact you to confirm or adjust a delivery</li>
-            <li>To respond to B2B quote requests</li>
-            <li>To improve the service (anonymised analysis)</li>
-          </ul>
-          <p className="mt-4 font-medium">We do NOT use your data for:</p>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Targeted advertising</li>
-            <li>Selling to third parties</li>
-            <li>Unsolicited newsletters</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">4. Where Your Data Is Stored</h2>
+        <Section icon={Eye} number={1} title="Who We Are">
           <p>
-            Your data is hosted by Supabase, on servers located in Singapore
-            (ap-southeast-1 region). Supabase is SOC 2 Type II compliant.
+            <strong className="text-zinc-800">TRK AGRICULTURE LIMITED</strong> is a company registered
+            in Mauritius, specialising in the cultivation and direct sale of fresh plants —
+            spices, salads, leafy greens, vegetables and melons.
           </p>
-        </section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+            {[
+              ['Website', 'trk-agriculture.netlify.app'],
+              ['Email', 'deepak.ramguttee@gmail.com'],
+            ].map(([k, v]) => (
+              <div key={k} className="bg-zinc-50 rounded-lg px-4 py-3 border border-zinc-100">
+                <p className="text-xs text-zinc-400 font-medium uppercase tracking-wide mb-0.5">{k}</p>
+                <p className="text-sm font-medium text-zinc-800">{v}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">5. Who We Share Your Data With</h2>
-          <p>Your data is accessible only to:</p>
-          <ul className="list-disc pl-5 space-y-1 mt-2">
-            <li>The TRK Agriculture team to process your order</li>
-            <li>Our hosting provider (Supabase) for storage</li>
-            <li>
-              The future payment provider (upon MIPS integration, for card payments)
-            </li>
+        <Section icon={Database} number={2} title="Data We Collect">
+          <p className="font-semibold text-zinc-700">When placing an order (Cash on Delivery or Juice):</p>
+          <div className="flex flex-wrap pt-1">
+            {['First & last name','Phone number','Email address (optional)','Delivery address','District of Mauritius','Preferred delivery slot','Order notes'].map(d => (
+              <Tag key={d}>{d}</Tag>
+            ))}
+          </div>
+          <p className="font-semibold text-zinc-700 mt-2">When submitting a B2B quote request:</p>
+          <div className="flex flex-wrap pt-1">
+            {['Company name & type','Contact name','Professional email & phone','Estimated monthly volume','Varieties of interest'].map(d => (
+              <Tag key={d}>{d}</Tag>
+            ))}
+          </div>
+          <p className="font-semibold text-zinc-700 mt-2">Technical data (collected automatically):</p>
+          <div className="flex flex-wrap pt-1">
+            {['IP address (logs, 30 days)','Browser type & device','Session cookies (cart)'].map(d => (
+              <Tag key={d}>{d}</Tag>
+            ))}
+          </div>
+        </Section>
+
+        <Section icon={Eye} number={3} title="Why We Collect This Data">
+          <ul className="space-y-2">
+            {[
+              'To process and deliver your orders',
+              'To contact you to confirm or adjust a delivery',
+              'To respond to B2B quote requests',
+              'To improve the service (anonymised analysis)',
+            ].map(r => (
+              <li key={r} className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">✓</span>
+                <span>{r}</span>
+              </li>
+            ))}
           </ul>
-          <p className="mt-3 font-medium">We NEVER sell your data to third parties.</p>
-        </section>
+          <NegBox>
+            <p className="font-semibold text-zinc-700 mb-2">We do NOT use your data for:</p>
+            <ul className="space-y-1">
+              {['Targeted advertising','Selling to third parties','Unsolicited newsletters'].map(r => (
+                <li key={r} className="flex items-start gap-2">
+                  <span className="text-red-400 mt-0.5">✕</span>
+                  <span>{r}</span>
+                </li>
+              ))}
+            </ul>
+          </NegBox>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">6. Retention Period</h2>
-          <ul className="list-disc pl-5 space-y-1">
-            <li>Order data: 5 years (Mauritian accounting and tax obligations)</li>
-            <li>B2B quote data (unconverted): 2 years</li>
-            <li>Server logs: 30 days</li>
-            <li>Admin account data: for as long as the account is active</li>
-          </ul>
-        </section>
-
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">7. Your Rights</h2>
+        <Section icon={Database} number={4} title="Where Your Data Is Stored">
           <p>
-            In accordance with the Mauritius Data Protection Act 2017 and the GDPR:
+            Your data is hosted by <strong className="text-zinc-800">Supabase</strong>, on servers
+            located in Singapore (region <code className="text-xs bg-zinc-100 px-1.5 py-0.5 rounded">ap-southeast-1</code>).
+            Supabase is <strong className="text-zinc-800">SOC 2 Type II</strong> compliant.
           </p>
-          <ul className="list-disc pl-5 space-y-1 mt-2">
-            <li>
-              <span className="font-medium">Right of access:</span> you may request a copy
-              of your data
-            </li>
-            <li>
-              <span className="font-medium">Right to rectification:</span> correct inaccurate
-              information
-            </li>
-            <li>
-              <span className="font-medium">Right to erasure:</span> request deletion (except
-              where legally required)
-            </li>
-            <li>
-              <span className="font-medium">Right to portability:</span> receive your data in
-              a structured format
-            </li>
+        </Section>
+
+        <Section icon={UserCheck} number={5} title="Who We Share Your Data With">
+          <ul className="space-y-2">
+            {[
+              'The TRK Agriculture team to process your order',
+              'Our hosting provider (Supabase) for storage',
+              'The future payment provider (MIPS, for card payments upon integration)',
+            ].map(r => (
+              <li key={r} className="flex items-start gap-2">
+                <span className="text-primary mt-0.5">→</span>
+                <span>{r}</span>
+              </li>
+            ))}
           </ul>
+          <div className="bg-green-50 border border-green-200 rounded-xl px-4 py-3 text-green-800 font-medium text-sm mt-2">
+            We <strong>never</strong> sell your data to third parties.
+          </div>
+        </Section>
+
+        <Section icon={Clock} number={6} title="Retention Period">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {[
+              ['Order data','5 years','Mauritian accounting & tax obligations'],
+              ['Unconverted B2B quotes','2 years','Commercial prospecting'],
+              ['Server logs','30 days','Security & debugging'],
+              ['Admin account','Account lifetime','Functional access'],
+            ].map(([label, duration, reason]) => (
+              <div key={label} className="bg-zinc-50 border border-zinc-100 rounded-xl p-4">
+                <p className="font-semibold text-zinc-800 text-sm">{label}</p>
+                <p className="text-primary font-bold text-lg mt-1">{duration}</p>
+                <p className="text-xs text-zinc-400 mt-1">{reason}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        <Section icon={UserCheck} number={7} title="Your Rights">
+          <p>
+            In accordance with the <strong className="text-zinc-800">Mauritius Data Protection Act 2017</strong> and the GDPR:
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
+            {[
+              ['Right of access','Request a copy of your data'],
+              ['Right to rectification','Correct inaccurate information'],
+              ['Right to erasure','Request deletion (except legal obligations)'],
+              ['Right to portability','Receive your data in a structured format'],
+            ].map(([right, desc]) => (
+              <div key={right} className="border border-zinc-200 rounded-xl p-4">
+                <p className="font-semibold text-zinc-800 text-sm">{right}</p>
+                <p className="text-zinc-500 text-xs mt-1">{desc}</p>
+              </div>
+            ))}
+          </div>
           <p className="mt-3">
-            To exercise these rights, contact us at:{' '}
-            <a href="mailto:deepak.ramguttee@gmail.com" className="text-primary hover:underline">
+            To exercise these rights:{' '}
+            <a href="mailto:deepak.ramguttee@gmail.com" className="text-primary hover:underline font-medium">
               deepak.ramguttee@gmail.com
             </a>
           </p>
-        </section>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">8. Cookies</h2>
+        <Section icon={Lock} number={8} title="Cookies">
           <p>
-            We use only cookies that are essential for the site to function (shopping cart,
-            admin login session). No advertising or tracking cookies are used.
+            We use only cookies <strong className="text-zinc-800">essential</strong> to the
+            site's operation (shopping cart, admin login session).
+            No advertising or tracking cookies are used.
           </p>
-        </section>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">9. Security</h2>
+        <Section icon={Shield} number={9} title="Security">
           <p>
-            All communications with the site are encrypted (HTTPS). Admin access is
-            protected by password and RLS (Row Level Security) policies at the database level.
+            All communications are encrypted (<strong className="text-zinc-800">HTTPS</strong>).
+            Admin access is protected by password and{' '}
+            <strong className="text-zinc-800">RLS</strong> (Row Level Security) policies
+            at the database level.
           </p>
-        </section>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">10. Minors</h2>
+        <Section icon={Eye} number={10} title="Minors">
           <p>
             Our service is intended for adults (18+). We do not knowingly collect data
             relating to minors.
           </p>
-        </section>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">11. Changes</h2>
+        <Section icon={Clock} number={11} title="Changes">
           <p>
-            This policy may be updated. Any changes will be published on this page with a
-            new last-updated date.
+            This policy may be updated. Any changes will be published on this page
+            with a new last-updated date.
           </p>
-        </section>
+        </Section>
 
-        <section className="mb-8">
-          <h2 className="text-xl font-semibold mb-3">12. Contact</h2>
-          <p>For any questions regarding this policy:</p>
-          <ul className="mt-2 space-y-1 text-sm">
-            <li>
-              <span className="font-medium">Email:</span>{' '}
-              <a href="mailto:deepak.ramguttee@gmail.com" className="text-primary hover:underline">
-                deepak.ramguttee@gmail.com
-              </a>
-            </li>
-            <li><span className="font-medium">Phone:</span> [to be completed]</li>
-            <li><span className="font-medium">Address:</span> [TRK Mauritian address]</li>
-          </ul>
-        </section>
-      </article>
+        {/* Contact CTA */}
+        <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+          <div className="w-12 h-12 bg-white rounded-full border border-green-200 flex items-center justify-center mx-auto mb-4 text-primary">
+            <Mail size={22} />
+          </div>
+          <h2 className="font-display text-2xl font-bold text-zinc-900 mb-2">Any questions?</h2>
+          <p className="text-zinc-600 text-sm mb-5">
+            For any questions about your data or this privacy policy.
+          </p>
+          <a
+            href="mailto:deepak.ramguttee@gmail.com"
+            className="inline-flex items-center gap-2 bg-primary text-white text-sm font-semibold px-6 py-3 rounded-xl hover:bg-green-700 transition-colors"
+          >
+            <Mail size={15} />
+            deepak.ramguttee@gmail.com
+          </a>
+        </div>
 
-      <div className="mt-10 pt-6 border-t">
-        <Link to="/" className="text-sm text-primary hover:underline">
-          ← Back to home
-        </Link>
+        <div className="pt-2">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-primary transition-colors">
+            ← Back to home
+          </Link>
+        </div>
       </div>
     </div>
   )

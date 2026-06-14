@@ -47,7 +47,7 @@ const DISTRICTS = [
 ]
 
 export default function Footer() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
 
@@ -182,7 +182,7 @@ export default function Footer() {
             <Link to="/mentions-legales" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               {t('footer.legalNotice')}
             </Link>
-            <Link to="/confidentialite" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
+            <Link to={i18n.language === 'en' ? '/privacy' : '/confidentialite'} className="text-xs text-muted-foreground hover:text-foreground transition-colors">
               {t('footer.privacy')}
             </Link>
             <Link to="/cgv" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
