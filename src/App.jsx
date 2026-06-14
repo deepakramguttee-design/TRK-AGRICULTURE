@@ -26,6 +26,7 @@ import AdminB2BList from './pages/admin/AdminB2BList'
 import AdminB2BDetail from './pages/admin/AdminB2BDetail'
 import AdminSowingList from './pages/admin/AdminSowingList'
 import AdminUsersList from './pages/admin/AdminUsersList'
+import AdminLoginPage from './pages/admin/AdminLoginPage'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -66,6 +67,7 @@ function App() {
                 <Route path="/notre-process" element={<NosProcess />} />
                 <Route path="/calendrier" element={<Calendrier />} />
                 <Route path="/pepiniere" element={<Nursery />} />
+                <Route path="/admin/login" element={<AdminLoginPage />} />
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />

@@ -44,10 +44,12 @@ export function AuthProvider({ children }) {
     return supabase.auth.signOut()
   }
 
-  const isAdmin = profile?.role === 'admin'
+  const isAdmin    = profile?.role === 'admin'
+  const isEmployee = profile?.role === 'employe'
+  const role       = profile?.role ?? null
 
   return (
-    <AuthContext.Provider value={{ user, profile, isAdmin, signIn, signOut, loading }}>
+    <AuthContext.Provider value={{ user, profile, role, isAdmin, isEmployee, signIn, signOut, loading }}>
       {children}
     </AuthContext.Provider>
   )

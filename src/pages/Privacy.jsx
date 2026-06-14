@@ -66,7 +66,7 @@ export default function Privacy() {
             {[
               ['Website', 'trk-agriculture.netlify.app'],
               ['Email', 'kailashramguttee@gmail.com'],
-              ['Phone', '+230 5774 5304'],
+              ['Phone', '+230 5774 5306'],
             ].map(([k, v]) => (
               <div key={k} className="bg-zinc-50 rounded-lg px-4 py-3 border border-zinc-100">
                 <p className="text-xs text-zinc-400 font-medium uppercase tracking-wide mb-0.5">{k}</p>

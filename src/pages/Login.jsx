@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -16,13 +17,22 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
-    const { error } = await signIn(email, password)
+    const { data, error } = await signIn(email, password)
     if (error) {
       toast({ title: 'Connexion impossible', description: error.message, variant: 'destructive' })
       setLoading(false)
-    } else {
-      navigate('/admin', { replace: true })
+      return
     }
+    const uid = data?.user?.id
+    if (uid) {
+      const { data: prof } = await supabase.from('profiles').select('role').eq('id', uid).single()
+      const role = prof?.role
+      if (role === 'admin' || role === 'employe') {
+        navigate('/admin', { replace: true })
+        return
+      }
+    }
+    navigate('/compte', { replace: true })
   }
 
   return (

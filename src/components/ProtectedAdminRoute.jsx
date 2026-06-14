@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, ShieldX } from 'lucide-react'
 
 export default function ProtectedAdminRoute({ children }) {
-  const { user, isAdmin, loading } = useAuth()
+  const { user, isAdmin, isEmployee, loading } = useAuth()
 
   if (loading) {
     return (
@@ -15,9 +15,9 @@ export default function ProtectedAdminRoute({ children }) {
     )
   }
 
-  if (!user) return <Navigate to="/login" replace />
+  if (!user) return <Navigate to="/admin/login" replace />
 
-  if (!isAdmin) {
+  if (!isAdmin && !isEmployee) {
     return (
       <div className="min-h-[calc(100vh-6.25rem)] flex flex-col items-center justify-center gap-4">
         <ShieldX className="h-12 w-12 text-destructive" />
