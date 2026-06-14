@@ -8,7 +8,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
 import { DISTRICTS } from '@/lib/delivery'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Smartphone, Banknote } from 'lucide-react'
 
 const STATUS_LABELS = {
   pending:   'En attente',
@@ -50,17 +50,29 @@ function formatPrice(n) {
   return 'Rs ' + parts[0] + '.' + parts[1]
 }
 
+const PAYMENT_LABELS = {
+  cod:   'COD',
+  juice: 'Juice',
+}
+
+const PAYMENT_STATUS_LABELS = {
+  pending: 'En attente',
+  paid:    'Payé',
+  failed:  'Échoué',
+}
+
 export default function AdminOrdersList() {
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [filterDistrict, setFilterDistrict] = useState('all')
+  const [filterPayment, setFilterPayment] = useState('all')
 
   useEffect(() => {
     supabase
       .from('orders')
-      .select('id, order_number, created_at, guest_phone, customer_notes, status, total_mur')
+      .select('id, order_number, created_at, guest_phone, customer_notes, status, total_mur, payment_method, payment_status')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
@@ -76,9 +88,10 @@ export default function AdminOrdersList() {
       !q ||
       (o.order_number || '').toLowerCase().includes(q) ||
       parsed.name.toLowerCase().includes(q)
-    const matchStatus = filterStatus === 'all' || o.status === filterStatus
+    const matchStatus  = filterStatus === 'all' || o.status === filterStatus
     const matchDistrict = filterDistrict === 'all' || parsed.district === filterDistrict
-    return matchSearch && matchStatus && matchDistrict
+    const matchPayment  = filterPayment === 'all' || o.payment_method === filterPayment
+    return matchSearch && matchStatus && matchDistrict && matchPayment
   })
 
   if (loading) {
@@ -92,8 +105,10 @@ export default function AdminOrdersList() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Commandes COD</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">{orders.length} commandes au total</p>
+        <h1 className="text-2xl font-bold">Commandes</h1>
+        <p className="text-sm text-muted-foreground mt-0.5">
+          {orders.length} commandes — {orders.filter(o => o.payment_method === 'juice' && o.payment_status === 'pending').length} Juice en attente
+        </p>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -125,6 +140,16 @@ export default function AdminOrdersList() {
             ))}
           </SelectContent>
         </Select>
+        <Select value={filterPayment} onValueChange={setFilterPayment}>
+          <SelectTrigger className="w-36">
+            <SelectValue placeholder="Paiement" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Tous</SelectItem>
+            <SelectItem value="cod">COD</SelectItem>
+            <SelectItem value="juice">Juice</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="rounded-lg border overflow-x-auto">
@@ -137,6 +162,7 @@ export default function AdminOrdersList() {
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Téléphone</th>
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">District</th>
               <th className="px-4 py-3 text-right font-semibold text-muted-foreground whitespace-nowrap">Total</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Paiement</th>
               <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Statut</th>
               <th className="px-4 py-3 text-right font-semibold text-muted-foreground">Actions</th>
             </tr>
@@ -158,6 +184,23 @@ export default function AdminOrdersList() {
                   <td className="px-4 py-3">{order.guest_phone || '—'}</td>
                   <td className="px-4 py-3">{parsed.district || '—'}</td>
                   <td className="px-4 py-3 text-right font-semibold">{formatPrice(order.total_mur)}</td>
+                  <td className="px-4 py-3 text-center">
+                    {order.payment_method === 'juice' ? (
+                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+                        order.payment_status === 'pending'
+                          ? 'bg-amber-100 text-amber-700 border-amber-200'
+                          : 'bg-green-100 text-green-700 border-green-200'
+                      }`}>
+                        <Smartphone className="h-3 w-3" />
+                        Juice {order.payment_status === 'paid' ? '✓' : '⏳'}
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-muted text-muted-foreground border-border">
+                        <Banknote className="h-3 w-3" />
+                        COD
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-center">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${

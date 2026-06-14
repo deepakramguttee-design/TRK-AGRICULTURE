@@ -121,9 +121,39 @@
     "notesPlaceholder": "Delivery instructions, gate code...",
     "submit": "Confirm order",
     "submitting": "Sending…",
+    "juiceSubmit": "Create order and pay with Juice",
     "summary": "Your order",
     "backToCart": "Back to cart",
-    "requiredFields": "Required fields"
+    "requiredFields": "Required fields",
+    "juice": "Pay with MCB Juice",
+    "juiceInfo": {
+      "title": "Juice Payment",
+      "notice": "Your order will be created and placed on hold. Payment instructions will be shown at the next step."
+    },
+    "juiceStep": {
+      "title": "Order created — complete your payment",
+      "subtitle": "Make the Juice transfer to confirm your order",
+      "beneficiary": "Beneficiary",
+      "juiceNumber": "Juice number",
+      "amount": "Exact amount to transfer",
+      "refLabel": "Reference to enter in the transfer",
+      "refNote": "Copy this reference exactly so we can match your payment to your order.",
+      "steps": "How to proceed",
+      "step1": "Open your MCB Juice app",
+      "step2": "Select Send Money → {{amount}} to {{number}}",
+      "step3": "In the Reference / Label field, enter: {{ref}}",
+      "step4": "Confirm the payment",
+      "step5": "Copy your transaction ID and paste it in the field below",
+      "txnLabel": "Juice transaction ID *",
+      "txnPlaceholder": "e.g. JUICE-XXXXXXXX",
+      "txnError": "Please enter your Juice transaction ID",
+      "txnHint": "Visible in your Juice app after confirming the transfer.",
+      "confirming": "Saving…",
+      "confirm": "Confirm payment",
+      "notice": "Your order will be on hold until our team validates the payment.",
+      "copy": "Copy",
+      "copied": "Copied!"
+    }
   },
   "confirmation": {
     "title": "Order confirmed!",
@@ -332,6 +362,30 @@
       "title": "Fresh plants grown in Mauritius",
       "subtitle": "Order directly from the producer. Delivery within 24h across all districts.",
       "cta": "View catalogue"
+    },
+    "stats": {
+      "local": "Local Products",
+      "districts": "Districts Delivered",
+      "varieties": "Fresh Varieties"
+    },
+    "why": {
+      "tag": "Our Commitment",
+      "title": "Why choose TRK?",
+      "items": [
+        { "title": "Grown here", "desc": "Our plants grow on the island of Mauritius, harvested the very morning of your delivery." },
+        { "title": "Fast delivery", "desc": "Order online, receive at home. Delivery available across all 9 districts." },
+        { "title": "Guaranteed quality", "desc": "Rigorous selection at every harvest. Without unnecessary chemicals." },
+        { "title": "Always in season", "desc": "Our catalogue evolves with the seasons to offer you what is at its very best." }
+      ]
+    },
+    "seasons": {
+      "tag": "Harvest Calendar",
+      "title": "Our products, through the seasons",
+      "note": "* Indicative. The catalogue is updated according to available harvests."
+    },
+    "cta": {
+      "title": "Freshness delivered to your door",
+      "desc": "Order online, receive your fresh plants directly from our fields. Everywhere in Mauritius."
     },
     "features": {
       "b2c": {

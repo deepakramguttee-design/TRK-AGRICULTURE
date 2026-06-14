@@ -121,9 +121,39 @@
     "notesPlaceholder": "Instructions de livraison, code d'entrée...",
     "submit": "Confirmer la commande",
     "submitting": "Envoi en cours…",
+    "juiceSubmit": "Créer la commande et payer par Juice",
     "summary": "Votre commande",
     "backToCart": "Retour au panier",
-    "requiredFields": "Champs obligatoires"
+    "requiredFields": "Champs obligatoires",
+    "juice": "Paiement par MCB Juice",
+    "juiceInfo": {
+      "title": "Paiement Juice",
+      "notice": "Votre commande sera créée et mise en attente. Les instructions de virement vous seront affichées à l'étape suivante."
+    },
+    "juiceStep": {
+      "title": "Commande créée — finalisez le paiement",
+      "subtitle": "Effectuez le virement Juice pour confirmer votre commande",
+      "beneficiary": "Bénéficiaire",
+      "juiceNumber": "Numéro Juice",
+      "amount": "Montant exact à virer",
+      "refLabel": "Libellé à saisir dans le virement",
+      "refNote": "Copiez cette référence exactement pour que nous puissions identifier votre paiement.",
+      "steps": "Comment procéder",
+      "step1": "Ouvrez votre application MCB Juice",
+      "step2": "Sélectionnez Envoyer de l'argent → {{amount}} au {{number}}",
+      "step3": "Dans le champ Libellé / Référence, saisissez : {{ref}}",
+      "step4": "Validez le paiement",
+      "step5": "Copiez votre ID de transaction et collez-le dans le champ ci-dessous",
+      "txnLabel": "ID de transaction Juice *",
+      "txnPlaceholder": "ex : JUICE-XXXXXXXX",
+      "txnError": "Veuillez saisir votre ID de transaction Juice",
+      "txnHint": "Visible dans votre application Juice après validation du virement.",
+      "confirming": "Enregistrement…",
+      "confirm": "Confirmer le paiement",
+      "notice": "Votre commande sera mise en attente jusqu'à validation du paiement par notre équipe.",
+      "copy": "Copier",
+      "copied": "Copié !"
+    }
   },
   "confirmation": {
     "title": "Commande confirmée !",
@@ -332,6 +362,30 @@
       "title": "Plants frais cultivés à Maurice",
       "subtitle": "Commandez directement auprès du producteur. Livraison en 24h dans tous les districts.",
       "cta": "Voir le catalogue"
+    },
+    "stats": {
+      "local": "Produits locaux",
+      "districts": "Districts livrés",
+      "varieties": "Variétés fraîches"
+    },
+    "why": {
+      "tag": "Notre engagement",
+      "title": "Pourquoi choisir TRK ?",
+      "items": [
+        { "title": "Cultivé ici", "desc": "Nos plantes poussent sur l'île Maurice, récoltées le matin même de votre livraison." },
+        { "title": "Livraison rapide", "desc": "Commandez en ligne, recevez chez vous. Livraison disponible dans les 9 districts." },
+        { "title": "Qualité garantie", "desc": "Sélection rigoureuse à chaque récolte. Sans produits chimiques inutiles." },
+        { "title": "Toujours de saison", "desc": "Notre catalogue évolue avec les saisons pour vous offrir ce qui est à son meilleur." }
+      ]
+    },
+    "seasons": {
+      "tag": "Calendrier des récoltes",
+      "title": "Nos produits, au fil des saisons",
+      "note": "* Indicatif. Le catalogue est mis à jour selon les récoltes disponibles."
+    },
+    "cta": {
+      "title": "Fraîcheur livrée chez vous",
+      "desc": "Commandez en ligne, recevez vos plantes fraîches directement de nos champs. Partout à l'île Maurice."
     },
     "features": {
       "b2c": {

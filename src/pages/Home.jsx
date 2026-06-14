@@ -3,34 +3,13 @@ import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Leaf, Truck, Award, Clock, Sun, ShoppingBag, ArrowRight, Droplets } from 'lucide-react'
 
-const STATS = [
-  { value: '100%', label: 'Produits locaux' },
-  { value: '9', label: 'Districts livrés' },
-  { value: '+50', label: 'Variétés fraîches' },
+const STATS_KEYS = [
+  { value: '100%', labelKey: 'home.stats.local' },
+  { value: '9',    labelKey: 'home.stats.districts' },
+  { value: '+50',  labelKey: 'home.stats.varieties' },
 ]
 
-const WHY_ITEMS = [
-  {
-    icon: Leaf,
-    title: 'Cultivé ici',
-    desc: "Nos plantes poussent sur l'île Maurice, récoltées le matin même de votre livraison.",
-  },
-  {
-    icon: Truck,
-    title: 'Livraison rapide',
-    desc: 'Commandez en ligne, recevez chez vous. Livraison disponible dans les 9 districts.',
-  },
-  {
-    icon: Award,
-    title: 'Qualité garantie',
-    desc: 'Sélection rigoureuse à chaque récolte. Sans produits chimiques inutiles.',
-  },
-  {
-    icon: Clock,
-    title: 'Toujours de saison',
-    desc: 'Notre catalogue évolue avec les saisons pour vous offrir ce qui est à son meilleur.',
-  },
-]
+const WHY_ICON_MAP = [Leaf, Truck, Award, Clock]
 
 const SEASONS = [
   {
@@ -139,10 +118,10 @@ export default function Home() {
       <section className="bg-white py-10 border-b border-stone-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
-            {STATS.map(stat => (
-              <div key={stat.label} className="text-center">
+            {STATS_KEYS.map(stat => (
+              <div key={stat.labelKey} className="text-center">
                 <div className="font-display text-4xl md:text-5xl font-bold text-green-700">{stat.value}</div>
-                <div className="text-[10px] text-stone-500 font-semibold tracking-widest uppercase mt-1">{stat.label}</div>
+                <div className="text-[10px] text-stone-500 font-semibold tracking-widest uppercase mt-1">{t(stat.labelKey)}</div>
               </div>
             ))}
           </div>
@@ -153,28 +132,25 @@ export default function Home() {
       <section className="bg-white py-20 md:py-28">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-green-600 mb-3">Notre engagement</p>
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-green-600 mb-3">{t('home.why.tag')}</p>
             <h2 className="font-display text-4xl md:text-5xl font-bold text-stone-900">
-              Pourquoi choisir TRK ?
+              {t('home.why.title')}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {WHY_ITEMS.map((item, i) => {
-              const Icon = item.icon
-              return (
-                <div
-                  key={i}
-                  className="group p-6 rounded-2xl border border-stone-100 bg-stone-50/50 hover:bg-green-50 hover:border-green-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
-                >
-                  <div className="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center text-green-700 mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
-                    <Icon className="h-5 w-5" />
-                  </div>
-                  <h3 className="font-semibold text-stone-900 mb-2 text-sm">{item.title}</h3>
-                  <p className="text-sm text-stone-500 leading-relaxed">{item.desc}</p>
+            {WHY_ICON_MAP.map((Icon, i) => (
+              <div
+                key={i}
+                className="group p-6 rounded-2xl border border-stone-100 bg-stone-50/50 hover:bg-green-50 hover:border-green-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+              >
+                <div className="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center text-green-700 mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+                  <Icon className="h-5 w-5" />
                 </div>
-              )
-            })}
+                <h3 className="font-semibold text-stone-900 mb-2 text-sm">{t(`home.why.items.${i}.title`)}</h3>
+                <p className="text-sm text-stone-500 leading-relaxed">{t(`home.why.items.${i}.desc`)}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -184,9 +160,9 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-10">
             <div className="flex-1">
-              <p className="text-xs font-bold tracking-[0.25em] uppercase text-amber-600 mb-2">Calendrier des récoltes</p>
+              <p className="text-xs font-bold tracking-[0.25em] uppercase text-amber-600 mb-2">{t('home.seasons.tag')}</p>
               <h2 className="font-display text-3xl md:text-4xl font-bold text-stone-900">
-                Nos produits, au fil des saisons
+                {t('home.seasons.title')}
               </h2>
             </div>
             <Sun className="h-8 w-8 text-amber-400 hidden sm:block" />
@@ -212,7 +188,7 @@ export default function Home() {
           </div>
 
           <p className="text-xs text-stone-400 mt-4 text-center">
-            * Indicatif. Le catalogue est mis à jour selon les récoltes disponibles.
+            {t('home.seasons.note')}
           </p>
         </div>
       </section>
@@ -230,11 +206,10 @@ export default function Home() {
         <div className="container mx-auto px-4 text-center relative z-10 max-w-xl">
           <Droplets className="h-9 w-9 text-green-300 mx-auto mb-5" />
           <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
-            Fraîcheur livrée chez vous
+            {t('home.cta.title')}
           </h2>
           <p className="text-green-200 text-sm leading-relaxed mb-8">
-            Commandez en ligne, recevez vos plantes fraîches directement de nos champs.
-            Partout à l'île Maurice.
+            {t('home.cta.desc')}
           </p>
           <Button
             size="lg"

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ChevronLeft, Loader2, CreditCard, Banknote } from 'lucide-react'
+import { ChevronLeft, Loader2, CreditCard, Banknote, CheckCircle2, Smartphone, Copy, Check } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCart } from '@/contexts/CartContext'
 import { toast } from '@/hooks/use-toast'
@@ -9,14 +9,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
 import { DISTRICTS, FREE_DELIVERY_THRESHOLD, getDeliveryFee, isValidMauritiusPhone } from '@/lib/delivery'
+import { getProvider } from '@/lib/payments'
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@/components/ui/select'
 
 const SLOTS = ['morning', 'afternoon', 'any']
-
-const inputClass =
-  'w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
+const inputClass = 'w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
 
 export default function Checkout() {
   const { t, i18n } = useTranslation()
@@ -24,17 +23,20 @@ export default function Checkout() {
   const navigate = useNavigate()
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
-  const [form, setForm] = useState({
-    name: '', phone: '', email: '',
-    district: '', address: '', slot: 'any', notes: '',
-  })
+  const [form, setForm] = useState({ name: '', phone: '', email: '', district: '', address: '', slot: 'any', notes: '' })
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
+  const [paymentMethod, setPaymentMethod] = useState('cod')
+  const [juicePhase, setJuicePhase] = useState(null)  // { orderId, orderNumber, total }
+  const [juiceTxnRef, setJuiceTxnRef] = useState('')
+  const [juiceTxnError, setJuiceTxnError] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   const deliveryFee = getDeliveryFee(form.district, cartTotal)
   const total = cartTotal + deliveryFee
+  const juiceProvider = getProvider('juice')
 
-  if (items.length === 0) {
+  if (items.length === 0 && !juicePhase) {
     return (
       <div className="container mx-auto px-4 py-24 text-center">
         <p className="text-muted-foreground mb-4">{t('cart.empty')}</p>
@@ -67,13 +69,14 @@ export default function Checkout() {
     try {
       const slotLabel = { morning: t('checkout.slotMorning'), afternoon: t('checkout.slotAfternoon'), any: t('checkout.slotAny') }[form.slot]
       const notes = [
-        `Nom: ${form.name}`,
-        `Tél: ${form.phone}`,
-        `District: ${form.district}`,
-        `Adresse: ${form.address}`,
-        `Créneau: ${slotLabel}`,
+        `Nom: ${form.name}`, `Tél: ${form.phone}`, `District: ${form.district}`,
+        `Adresse: ${form.address}`, `Créneau: ${slotLabel}`,
         form.notes ? `Notes: ${form.notes}` : '',
       ].filter(Boolean).join('\n')
+
+      const paymentPayload = paymentMethod === 'juice'
+        ? juiceProvider.buildOrderPayload()
+        : { payment_method: 'cod', payment_status: 'pending' }
 
       const { data: order, error: orderErr } = await supabase
         .from('orders')
@@ -81,8 +84,7 @@ export default function Checkout() {
           guest_phone: form.phone,
           guest_email: form.email || null,
           status: 'pending',
-          payment_method: 'cod',
-          payment_status: 'pending',
+          ...paymentPayload,
           subtotal_mur: cartTotal,
           delivery_fee_mur: deliveryFee,
           total_mur: total,
@@ -102,11 +104,16 @@ export default function Checkout() {
         quantity: item.quantity,
         line_total_mur: Number((item.price_mur * item.quantity).toFixed(2)),
       }))
-
       const { error: itemsErr } = await supabase.from('order_items').insert(orderItems)
       if (itemsErr) throw itemsErr
 
       clearCart()
+
+      if (paymentMethod === 'juice') {
+        setJuicePhase({ orderId: order.id, orderNumber: order.order_number, total })
+        return
+      }
+
       navigate(`/commande/confirmee/${order.order_number}`, {
         replace: true,
         state: { name: form.name, total, district: form.district, deliveryFee },
@@ -118,17 +125,51 @@ export default function Checkout() {
     }
   }
 
-  const fieldClass = (field) =>
-    `${inputClass} ${errors[field] ? 'border-destructive ring-1 ring-destructive' : ''}`
+  async function handleJuiceConfirm() {
+    if (!juiceTxnRef.trim()) { setJuiceTxnError(true); return }
+    setSaving(true)
+    try {
+      const { error } = await supabase
+        .from('orders')
+        .update({ provider_txn_id: juiceTxnRef.trim() })
+        .eq('id', juicePhase.orderId)
+      if (error) throw error
+      navigate(`/commande/confirmee/${juicePhase.orderNumber}`, {
+        replace: true,
+        state: { name: form.name, total: juicePhase.total, district: form.district, deliveryFee, paymentMethod: 'juice' },
+      })
+    } catch (err) {
+      toast({ title: 'Erreur', description: err.message, variant: 'destructive' })
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  // ── Phase 2 : écran de paiement Juice ──────────────────────
+  if (juicePhase) {
+    return (
+      <JuiceScreen
+        orderNumber={juicePhase.orderNumber}
+        total={juicePhase.total}
+        juiceTxnRef={juiceTxnRef}
+        setJuiceTxnRef={v => { setJuiceTxnRef(v); setJuiceTxnError(false) }}
+        juiceTxnError={juiceTxnError}
+        onConfirm={handleJuiceConfirm}
+        saving={saving}
+        t={t}
+        provider={juiceProvider}
+      />
+    )
+  }
+
+  // ── Phase 1 : formulaire ────────────────────────────────────
+  const fieldClass = f => `${inputClass} ${errors[f] ? 'border-destructive ring-1 ring-destructive' : ''}`
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center gap-2 mb-6">
         <Button variant="ghost" size="sm" asChild>
-          <Link to="/panier">
-            <ChevronLeft className="h-4 w-4 mr-1" />
-            {t('checkout.backToCart')}
-          </Link>
+          <Link to="/panier"><ChevronLeft className="h-4 w-4 mr-1" />{t('checkout.backToCart')}</Link>
         </Button>
       </div>
       <h1 className="text-3xl font-bold mb-8">{t('checkout.title')}</h1>
@@ -144,31 +185,20 @@ export default function Checkout() {
               <h2 className="font-semibold text-base mb-4 pb-2 border-b">{t('checkout.contact')}</h2>
               <div className="space-y-4">
                 <Field label={`${t('checkout.name')} *`} error={errors.name}>
-                  <Input
-                    placeholder={t('checkout.namePlaceholder')}
-                    value={form.name}
+                  <Input placeholder={t('checkout.namePlaceholder')} value={form.name}
                     onChange={e => set('name', e.target.value)}
-                    className={errors.name ? 'border-destructive ring-1 ring-destructive' : ''}
-                  />
+                    className={errors.name ? 'border-destructive ring-1 ring-destructive' : ''} />
                 </Field>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label={`${t('checkout.phone')} *`} error={errors.phone} hint={errors.phone ? t('checkout.phoneError') : undefined}>
-                    <Input
-                      type="tel"
-                      placeholder={t('checkout.phonePlaceholder')}
-                      value={form.phone}
+                    <Input type="tel" placeholder={t('checkout.phonePlaceholder')} value={form.phone}
                       onChange={e => set('phone', e.target.value)}
-                      className={errors.phone ? 'border-destructive ring-1 ring-destructive' : ''}
-                    />
+                      className={errors.phone ? 'border-destructive ring-1 ring-destructive' : ''} />
                   </Field>
                   <Field label={t('checkout.email')} error={errors.email}>
-                    <Input
-                      type="email"
-                      placeholder="email@exemple.mu"
-                      value={form.email}
+                    <Input type="email" placeholder="email@exemple.mu" value={form.email}
                       onChange={e => set('email', e.target.value)}
-                      className={errors.email ? 'border-destructive ring-1 ring-destructive' : ''}
-                    />
+                      className={errors.email ? 'border-destructive ring-1 ring-destructive' : ''} />
                   </Field>
                 </div>
               </div>
@@ -187,20 +217,15 @@ export default function Checkout() {
                       <SelectContent>
                         {DISTRICTS.map(d => (
                           <SelectItem key={d.name} value={d.name}>
-                            {d.name}
-                            {cartTotal >= FREE_DELIVERY_THRESHOLD
-                              ? ` — ${t('cart.free')}`
-                              : ` — Rs ${d.fee}`}
+                            {d.name}{cartTotal >= FREE_DELIVERY_THRESHOLD ? ` — ${t('cart.free')}` : ` — Rs ${d.fee}`}
                           </SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
                   </Field>
-                  <Field label={`${t('checkout.slot')}`}>
+                  <Field label={t('checkout.slot')}>
                     <Select value={form.slot} onValueChange={v => set('slot', v)}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
                         {SLOTS.map(s => (
                           <SelectItem key={s} value={s}>
@@ -212,22 +237,14 @@ export default function Checkout() {
                   </Field>
                 </div>
                 <Field label={`${t('checkout.address')} *`} error={errors.address}>
-                  <textarea
-                    rows={3}
-                    placeholder={t('checkout.addressPlaceholder')}
-                    value={form.address}
+                  <textarea rows={3} placeholder={t('checkout.addressPlaceholder')} value={form.address}
                     onChange={e => set('address', e.target.value)}
-                    className={`${fieldClass('address')} resize-none`}
-                  />
+                    className={`${fieldClass('address')} resize-none`} />
                 </Field>
                 <Field label={t('checkout.notes')}>
-                  <textarea
-                    rows={2}
-                    placeholder={t('checkout.notesPlaceholder')}
-                    value={form.notes}
+                  <textarea rows={2} placeholder={t('checkout.notesPlaceholder')} value={form.notes}
                     onChange={e => set('notes', e.target.value)}
-                    className={`${inputClass} resize-none`}
-                  />
+                    className={`${inputClass} resize-none`} />
                 </Field>
               </div>
             </section>
@@ -235,10 +252,28 @@ export default function Checkout() {
             {/* Paiement */}
             <section>
               <h2 className="font-semibold text-base mb-4 pb-2 border-b">{t('checkout.payment')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <PaymentOption icon={<Banknote className="h-5 w-5" />} label={t('checkout.cod')} active />
-                <PaymentOption icon={<CreditCard className="h-5 w-5" />} label={t('checkout.mips')} badge={t('checkout.mipsSoon')} disabled />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                <PaymentOption
+                  icon={<Banknote className="h-5 w-5" />}
+                  label={t('checkout.cod')}
+                  selected={paymentMethod === 'cod'}
+                  onClick={() => setPaymentMethod('cod')}
+                />
+                <PaymentOption
+                  icon={<Smartphone className="h-5 w-5" />}
+                  label={t('checkout.juice')}
+                  selected={paymentMethod === 'juice'}
+                  onClick={() => setPaymentMethod('juice')}
+                  accent
+                />
               </div>
+
+              {paymentMethod === 'juice' && (
+                <div className="rounded-lg border border-green-200 bg-green-50/60 p-4 text-sm text-green-800">
+                  <p className="font-medium mb-1">💚 {t('checkout.juiceInfo.title')}</p>
+                  <p className="text-green-700 text-xs leading-relaxed">{t('checkout.juiceInfo.notice')}</p>
+                </div>
+              )}
             </section>
 
             <p className="text-xs text-muted-foreground">* {t('checkout.requiredFields')}</p>
@@ -248,7 +283,6 @@ export default function Checkout() {
           <div className="lg:sticky lg:top-36 lg:self-start">
             <div className="border rounded-xl p-5 bg-background space-y-3">
               <h2 className="font-semibold">{t('checkout.summary')}</h2>
-
               <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                 {items.map(item => {
                   const name = lang === 'en' ? (item.name_en || item.name_fr) : item.name_fr
@@ -257,8 +291,7 @@ export default function Checkout() {
                       <div className="w-8 h-8 flex-shrink-0 rounded bg-zinc-100 flex items-center justify-center text-base">
                         {item.image_url
                           ? <img src={item.image_url} alt="" className="w-full h-full object-cover rounded" />
-                          : <span aria-hidden>{CATEGORY_EMOJI[item.category] || '🌱'}</span>
-                        }
+                          : <span aria-hidden>{CATEGORY_EMOJI[item.category] || '🌱'}</span>}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="truncate font-medium text-xs">{name}</p>
@@ -269,7 +302,6 @@ export default function Checkout() {
                   )
                 })}
               </div>
-
               <div className="border-t pt-3 space-y-1.5 text-sm">
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.subtotal')}</span>
@@ -277,28 +309,158 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.delivery')}</span>
-                  <span>{form.district
-                    ? (deliveryFee === 0 ? t('cart.free') : `Rs ${deliveryFee.toFixed(2)}`)
-                    : '—'
-                  }</span>
+                  <span>{form.district ? (deliveryFee === 0 ? t('cart.free') : `Rs ${deliveryFee.toFixed(2)}`) : '—'}</span>
                 </div>
               </div>
-
               <div className="border-t pt-3 flex justify-between">
                 <span className="font-semibold">{t('cart.total')}</span>
                 <span className="text-xl font-bold text-primary">Rs {total.toFixed(2)}</span>
               </div>
-
               <Button type="submit" className="w-full" size="lg" disabled={submitting}>
                 {submitting
                   ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('checkout.submitting')}</>
-                  : t('checkout.submit')
-                }
+                  : paymentMethod === 'juice' ? t('checkout.juiceSubmit') : t('checkout.submit')}
               </Button>
             </div>
           </div>
         </div>
       </form>
+    </div>
+  )
+}
+
+// ── Phase 2 : Écran paiement Juice ──────────────────────────────
+function JuiceScreen({ orderNumber, total, juiceTxnRef, setJuiceTxnRef, juiceTxnError, onConfirm, saving, t, provider }) {
+  const amount = `Rs ${Number(total).toFixed(2)}`
+  const [copiedNumber, setCopiedNumber] = useState(false)
+  const [copiedRef, setCopiedRef] = useState(false)
+
+  function copyText(text, setCopied) {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-12 max-w-lg">
+
+      {/* En-tête commande créée */}
+      <div className="text-center mb-8">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 mb-4">
+          <CheckCircle2 className="h-8 w-8 text-green-600" strokeWidth={1.5} />
+        </div>
+        <h1 className="text-2xl font-bold text-stone-900 mb-1">{t('checkout.juiceStep.title')}</h1>
+        <p className="text-muted-foreground text-sm">{t('checkout.juiceStep.subtitle')}</p>
+        <p className="mt-2 text-sm font-semibold text-primary">
+          {t('confirmation.orderNumber')} : {orderNumber}
+        </p>
+      </div>
+
+      {/* Carte instructions Juice */}
+      <div className="rounded-2xl border border-green-200 bg-green-50/40 overflow-hidden mb-6">
+
+        {/* Header vert */}
+        <div className="bg-green-600 px-5 py-3 flex items-center gap-2">
+          <Smartphone className="h-4 w-4 text-green-100" />
+          <span className="text-white font-semibold text-sm">MCB Juice</span>
+        </div>
+
+        {/* Détails paiement */}
+        <div className="p-5 space-y-3">
+
+          <DetailRow label={t('checkout.juiceStep.beneficiary')} value={provider.beneficiaryName} />
+
+          <div className="flex items-center justify-between py-1">
+            <span className="text-xs text-muted-foreground">{t('checkout.juiceStep.juiceNumber')}</span>
+            <div className="flex items-center gap-2">
+              <span className="font-mono font-semibold text-sm tracking-widest">{provider.beneficiaryNumber}</span>
+              <CopyBtn copied={copiedNumber} onClick={() => copyText(provider.beneficiaryNumber, setCopiedNumber)} t={t} />
+            </div>
+          </div>
+
+          {/* Montant — mis en valeur */}
+          <div className="rounded-xl bg-white border border-green-200 px-4 py-3 flex items-center justify-between">
+            <span className="text-sm text-stone-600">{t('checkout.juiceStep.amount')}</span>
+            <span className="font-display text-2xl font-bold text-green-700">{amount}</span>
+          </div>
+
+          {/* Référence à mettre en libellé */}
+          <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+            <p className="text-xs text-amber-700 font-medium mb-2">📋 {t('checkout.juiceStep.refLabel')}</p>
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-mono font-bold text-stone-900 text-sm tracking-wide">{orderNumber}</span>
+              <CopyBtn copied={copiedRef} onClick={() => copyText(orderNumber, setCopiedRef)} t={t} />
+            </div>
+            <p className="text-[11px] text-amber-600 mt-1.5">{t('checkout.juiceStep.refNote')}</p>
+          </div>
+
+          {/* Étapes */}
+          <div className="pt-1">
+            <p className="text-xs font-semibold text-stone-600 uppercase tracking-wider mb-3">{t('checkout.juiceStep.steps')}</p>
+            <ol className="space-y-2">
+              {[
+                t('checkout.juiceStep.step1'),
+                t('checkout.juiceStep.step2', { amount, number: provider.beneficiaryNumber }),
+                t('checkout.juiceStep.step3', { ref: orderNumber }),
+                t('checkout.juiceStep.step4'),
+                t('checkout.juiceStep.step5'),
+              ].map((step, i) => (
+                <li key={i} className="flex gap-3 text-sm text-stone-700">
+                  <span className="flex-shrink-0 w-5 h-5 rounded-full bg-green-100 text-green-700 text-xs font-bold flex items-center justify-center">{i + 1}</span>
+                  <span className="leading-tight pt-0.5">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* Champ ID transaction */}
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1.5">
+          {t('checkout.juiceStep.txnLabel')}
+        </label>
+        <Input
+          placeholder={t('checkout.juiceStep.txnPlaceholder')}
+          value={juiceTxnRef}
+          onChange={e => setJuiceTxnRef(e.target.value)}
+          className={juiceTxnError ? 'border-destructive ring-1 ring-destructive' : ''}
+        />
+        {juiceTxnError && (
+          <p className="text-xs text-destructive mt-1">{t('checkout.juiceStep.txnError')}</p>
+        )}
+        <p className="text-xs text-muted-foreground mt-1">{t('checkout.juiceStep.txnHint')}</p>
+      </div>
+
+      <Button onClick={onConfirm} className="w-full" size="lg" disabled={saving}>
+        {saving
+          ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('checkout.juiceStep.confirming')}</>
+          : t('checkout.juiceStep.confirm')}
+      </Button>
+
+      <p className="text-xs text-muted-foreground text-center mt-4 leading-relaxed">
+        {t('checkout.juiceStep.notice')}
+      </p>
+    </div>
+  )
+}
+
+function CopyBtn({ copied, onClick, t }) {
+  return (
+    <button type="button" onClick={onClick}
+      className="flex items-center gap-1 text-xs px-2 py-1 rounded-md bg-white border border-stone-200 hover:bg-stone-50 transition-colors text-stone-600 shrink-0">
+      {copied ? <Check className="h-3 w-3 text-green-600" /> : <Copy className="h-3 w-3" />}
+      {copied ? t('checkout.juiceStep.copied') : t('checkout.juiceStep.copy')}
+    </button>
+  )
+}
+
+function DetailRow({ label, value }) {
+  return (
+    <div className="flex items-center justify-between py-1">
+      <span className="text-xs text-muted-foreground">{label}</span>
+      <span className="text-sm font-medium">{value}</span>
     </div>
   )
 }
@@ -314,16 +476,26 @@ function Field({ label, error, hint, children }) {
   )
 }
 
-function PaymentOption({ icon, label, active, disabled, badge }) {
+function PaymentOption({ icon, label, selected, onClick, accent }) {
   return (
-    <div className={`flex items-center gap-3 p-3 rounded-lg border-2 text-sm
-      ${active ? 'border-primary bg-primary/5 font-medium' : ''}
-      ${disabled ? 'opacity-50 border-border' : ''}`}
+    <button type="button" onClick={onClick}
+      className={`flex items-center gap-3 p-3 rounded-lg border-2 text-sm w-full text-left transition-all duration-150
+        ${selected
+          ? accent
+            ? 'border-green-500 bg-green-50 font-medium text-green-800'
+            : 'border-primary bg-primary/5 font-medium'
+          : 'border-border hover:border-stone-300 hover:bg-muted/30'
+        }`}
     >
-      {icon}
+      <span className={selected && accent ? 'text-green-600' : selected ? 'text-primary' : 'text-muted-foreground'}>
+        {icon}
+      </span>
       <span className="flex-1">{label}</span>
-      {active && <span className="text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">✓</span>}
-      {badge && <span className="text-[10px] bg-muted text-muted-foreground px-1.5 py-0.5 rounded">{badge}</span>}
-    </div>
+      {selected && (
+        <span className={`text-xs px-1.5 py-0.5 rounded ${accent ? 'bg-green-600 text-white' : 'bg-primary text-primary-foreground'}`}>
+          ✓
+        </span>
+      )}
+    </button>
   )
 }
