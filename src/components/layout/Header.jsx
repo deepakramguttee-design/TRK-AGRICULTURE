@@ -25,7 +25,7 @@ const NAV_LINKS = [
 export default function Header() {
   const { t } = useTranslation()
   const { cartCount } = useCart()
-  const { user, isAdmin, signOut } = useAuth()
+  const { user, profile, isAdmin, signOut } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -100,11 +100,16 @@ export default function Header() {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="hidden md:inline-flex" aria-label={t('nav.account')}>
-                  <User className="h-5 w-5" />
-                </Button>
+                <button className="hidden md:flex items-center gap-2 rounded-full pl-1 pr-3 py-1 hover:bg-accent transition-colors">
+                  <div className="w-7 h-7 rounded-full bg-primary flex items-center justify-center text-[11px] font-bold text-primary-foreground shrink-0">
+                    {(profile?.full_name || user.email).slice(0, 2).toUpperCase()}
+                  </div>
+                  <span className="text-sm font-medium max-w-[80px] truncate">
+                    {profile?.full_name?.split(' ')[0] || t('nav.account')}
+                  </span>
+                </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-44">
+              <DropdownMenuContent align="end" className="w-48">
                 <div className="px-2 py-1.5 text-xs text-muted-foreground truncate">{user.email}</div>
                 <DropdownMenuSeparator />
                 {isAdmin && (
@@ -129,9 +134,10 @@ export default function Header() {
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <Button variant="ghost" size="icon" asChild className="hidden md:inline-flex">
-              <Link to="/login" aria-label={t('nav.account')}>
-                <User className="h-5 w-5" />
+            <Button size="sm" variant="outline" asChild className="hidden md:inline-flex gap-1.5">
+              <Link to="/login">
+                <User className="h-3.5 w-3.5" />
+                {t('nav.signin')}
               </Link>
             </Button>
           )}
