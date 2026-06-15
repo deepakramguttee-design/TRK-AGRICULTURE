@@ -16,15 +16,12 @@ export default function AdminLoginPage() {
   async function handleSubmit(e) {
     e.preventDefault()
     setLoading(true)
-    const { data, error } = await signIn(email, password)
+    const { error } = await signIn(email, password)
     if (error) {
       toast({ title: 'Connexion impossible', description: error.message, variant: 'destructive' })
       setLoading(false)
       return
     }
-    const role = data?.user?.id
-      ? await fetch(`/api/role`).catch(() => null)
-      : null
     navigate('/admin', { replace: true })
   }
 

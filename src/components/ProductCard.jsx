@@ -37,6 +37,7 @@ export default function ProductCard({ product, categories = [] }) {
   const { t, i18n } = useTranslation()
   const { addToCart } = useCart()
   const [justAdded, setJustAdded] = useState(false)
+  const [qty, setQty] = useState(1)
 
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
   const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
@@ -45,13 +46,28 @@ export default function ProductCard({ product, categories = [] }) {
   const status = product.status || 'available'
   const statusClass = STATUS_STYLES[status] || STATUS_STYLES.available
 
+  function stop(e) { e.preventDefault(); e.stopPropagation() }
+
   function handleAddToCart(e) {
-    e.preventDefault()
-    e.stopPropagation()
-    addToCart(product)
+    stop(e)
+    addToCart({ ...product, quantity: qty })
     setJustAdded(true)
     setTimeout(() => setJustAdded(false), 1500)
   }
+
+  function handleQtyInput(e) {
+    stop(e)
+    const val = parseInt(e.target.value, 10)
+    if (!isNaN(val) && val >= 1) setQty(val)
+    else if (e.target.value === '') setQty('')
+  }
+
+  function handleQtyBlur() {
+    if (!qty || qty < 1) setQty(1)
+  }
+
+  function decrement(e) { stop(e); setQty(q => Math.max(1, (q || 1) - 1)) }
+  function increment(e) { stop(e); setQty(q => (q || 1) + 1) }
 
   return (
     <Link to={`/produit/${product.sku}`} className="block group h-full">
@@ -104,7 +120,33 @@ export default function ProductCard({ product, categories = [] }) {
         </CardContent>
 
         {/* CTA */}
-        <CardFooter className="p-3 pt-0">
+        <CardFooter className="p-3 pt-0 flex flex-col gap-2">
+          {/* Qty selector */}
+          <div className="flex items-center gap-1 w-full" onClick={stop}>
+            <button
+              type="button"
+              onClick={decrement}
+              className="h-7 w-7 rounded-md border border-border bg-muted hover:bg-muted/80 flex items-center justify-center text-sm font-medium text-foreground transition-colors shrink-0"
+            >
+              −
+            </button>
+            <input
+              type="number"
+              min="1"
+              value={qty}
+              onChange={handleQtyInput}
+              onBlur={handleQtyBlur}
+              onClick={stop}
+              className="flex-1 h-7 text-center text-sm font-semibold border border-border rounded-md bg-background focus:outline-none focus:ring-1 focus:ring-primary [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+            <button
+              type="button"
+              onClick={increment}
+              className="h-7 w-7 rounded-md border border-border bg-muted hover:bg-muted/80 flex items-center justify-center text-sm font-medium text-foreground transition-colors shrink-0"
+            >
+              +
+            </button>
+          </div>
           <Button
             size="sm"
             className={`w-full text-xs gap-1.5 transition-all duration-300 ${
