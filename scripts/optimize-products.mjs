@@ -6,7 +6,8 @@ const SRC  = 'photos'
 const DEST = 'public/products'
 mkdirSync(DEST, { recursive: true })
 
-// src → dest slug (oignon rosada + rubex ignorés : doublons MD5 de oignon francia)
+// ⚠️ oignon francia/rosada/rubex : MD5 identiques (même fichier source)
+// traités quand même en 3 slugs distincts selon la demande
 const MAP = [
   ['bettrave.jpg',                   'betterave.jpg'],
   ['brocolli.jpg',                   'brocoli.jpg'],
@@ -23,7 +24,8 @@ const MAP = [
   ['laitue tourbillon.jpg',          'laitue-tourbillon.jpg'],
   ['oignon.jpg',                     'oignon.jpg'],
   ['oignon francia.jpg',             'oignon-francia.jpg'],
-  // oignon rosada.jpg & oignon rubex.jpg → doublons exacts, ignorés
+  ['oignon rosada.jpg',              'oignon-rosada.jpg'],
+  ['oignon rubex.jpg',               'oignon-rubex.jpg'],
   ['patisson locale.jpg',            'patisson-locale.jpg'],
   ['patisson.jpg',                   'patisson.jpg'],
   ['persil frisé.jpg',               'persil-frise.jpg'],
@@ -54,8 +56,8 @@ for (const [src, dest] of MAP) {
     const before = statSync(srcPath).size
     await sharp(srcPath)
       .rotate()
-      .resize({ width: 1200, withoutEnlargement: true })
-      .jpeg({ quality: 72, mozjpeg: true })
+      .resize({ width: 1600, withoutEnlargement: true })
+      .jpeg({ quality: 80, mozjpeg: true })
       .toFile(destPath)
     const after = statSync(destPath).size
     const gain = Math.round((1 - after / before) * 100)
@@ -78,4 +80,4 @@ console.log(
   (Math.round(totalAfter/1024) + ' Ko').padStart(8) +
   `  -${Math.round((1 - totalAfter/totalBefore)*100)}%`
 )
-console.log('\nDoublons ignorés: oignon rosada.jpg, oignon rubex.jpg (MD5 = oignon francia.jpg)')
+console.log('\n⚠️  oignon-francia/rosada/rubex ont le même MD5 — 3 fichiers identiques traités séparément')
