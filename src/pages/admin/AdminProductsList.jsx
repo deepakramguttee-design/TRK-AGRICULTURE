@@ -154,7 +154,11 @@ export default function AdminProductsList() {
                     {product.sku}
                   </code>
                 </td>
-                <td className="px-4 py-3 font-medium">{product.name_fr}</td>
+                <td className="px-4 py-3 font-medium">
+                  <Link to={`/admin/produits/${product.sku}`} className="hover:text-primary hover:underline underline-offset-2 transition-colors">
+                    {product.name_fr}
+                  </Link>
+                </td>
                 <td className="px-4 py-3">
                   <Badge variant="secondary" className="text-xs gap-1">
                     {CATEGORY_EMOJI[product.category]} {product.category}
