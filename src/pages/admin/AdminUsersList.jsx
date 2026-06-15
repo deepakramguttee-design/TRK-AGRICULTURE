@@ -38,12 +38,13 @@ function InviteModal({ onClose, onCreated }) {
     }
     setSaving(true)
 
-    // Use a server-side RPC function so the admin's browser session is never replaced
-    const { error } = await supabase.rpc('create_team_member', {
-      p_email:     form.email.trim(),
-      p_password:  form.password,
-      p_full_name: form.full_name.trim(),
-      p_role:      form.role,
+    const { error } = await supabase.functions.invoke('create-team-member', {
+      body: {
+        email:     form.email.trim(),
+        password:  form.password,
+        full_name: form.full_name.trim(),
+        role:      form.role,
+      },
     })
 
     if (error) {
