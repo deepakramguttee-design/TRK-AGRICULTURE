@@ -1,8 +1,12 @@
-[{
-  "relation": ["delegate_permission/common.handle_all_urls"],
-  "target": {
-    "namespace": "android_app",
-    "package_name": "mu.kailashfarming.app",
-    "sha256_cert_fingerprints": ["7B:A8:33:35:06:C0:C2:74:B7:5B:91:FD:ED:40:E0:DB:E1:47:9C:33:9D:C1:E4:7B:55:72:BB:BB:6F:F2:91:4F"]
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "mu.kailashfarming.app",
+      "sha256_cert_fingerprints": [
+        "30:C7:4D:33:5B:34:A4:88:E1:62:7D:C0:B9:02:1F:23:88:43:BF:AA:21:C8:69:9A:4C:4B:99:8C:3D:BA:37:BF"
+      ]
+    }
   }
-}]
+]
