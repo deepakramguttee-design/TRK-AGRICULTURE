@@ -38,7 +38,7 @@ function InviteModal({ onClose, onCreated }) {
     }
     setSaving(true)
 
-    const { error } = await supabase.functions.invoke('create-team-member', {
+    const { data, error } = await supabase.functions.invoke('create-team-member', {
       body: {
         email:     form.email.trim(),
         password:  form.password,
@@ -47,8 +47,10 @@ function InviteModal({ onClose, onCreated }) {
       },
     })
 
-    if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+    // functions.invoke renvoie l'erreur HTTP dans error, le message métier dans data.error
+    const errMsg = data?.error ?? error?.message
+    if (errMsg) {
+      toast({ title: 'Erreur', description: errMsg, variant: 'destructive' })
       setSaving(false)
       return
     }
