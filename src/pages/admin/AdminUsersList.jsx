@@ -37,6 +37,10 @@ function InviteModal({ onClose, onCreated }) {
       return
     }
     setSaving(true)
+
+    // Save admin session before signUp — signUp may replace it if email confirmation is disabled
+    const { data: { session: adminSession } } = await supabase.auth.getSession()
+
     const { data, error } = await supabase.auth.signUp({
       email: form.email,
       password: form.password,
@@ -47,11 +51,28 @@ function InviteModal({ onClose, onCreated }) {
       setSaving(false)
       return
     }
+
+    // Restore admin session if it was replaced by the new user's session
+    if (data.session && adminSession) {
+      await supabase.auth.setSession({
+        access_token: adminSession.access_token,
+        refresh_token: adminSession.refresh_token,
+      })
+    }
+
     const uid = data.user?.id
     if (uid) {
-      await supabase.from('profiles').upsert({ id: uid, role: form.role, email: form.email, full_name: form.full_name })
+      const { error: upsertErr } = await supabase
+        .from('profiles')
+        .upsert({ id: uid, role: form.role, email: form.email, full_name: form.full_name })
+      if (upsertErr) {
+        toast({ title: 'Compte créé mais profil non sauvegardé', description: upsertErr.message, variant: 'destructive' })
+        setSaving(false)
+        return
+      }
     }
-    toast({ title: 'Membre ajouté', description: `${form.email} — un email de confirmation a été envoyé.` })
+
+    toast({ title: 'Membre ajouté', description: `${form.email} ajouté avec le rôle ${form.role}.` })
     setSaving(false)
     onCreated()
     onClose()
