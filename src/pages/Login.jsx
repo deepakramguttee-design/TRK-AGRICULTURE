@@ -72,7 +72,7 @@ export default function Login() {
     const uid = data?.user?.id
     if (uid) {
       const { data: prof } = await supabase.from('profiles').select('role').eq('id', uid).single()
-      if (prof?.role === 'admin' || prof?.role === 'employe') {
+      if (prof?.role === 'admin' || prof?.role === 'operator') {
         navigate('/admin', { replace: true })
         return
       }

@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
   }
 
   const isAdmin    = profile?.role === 'admin'
-  const isEmployee = profile?.role === 'employe'
+  const isEmployee = profile?.role === 'operator'
   const role       = profile?.role ?? null
 
   return (

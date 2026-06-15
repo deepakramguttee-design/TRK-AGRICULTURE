@@ -17,7 +17,7 @@ const ACCOUNT_STYLES = {
 }
 const ROLE_STYLES = {
   admin:   { label: 'Admin',    cls: 'bg-red-50 text-red-700 border-red-200',       icon: ShieldCheck },
-  employe: { label: 'Employé',  cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: BriefcaseBusiness },
+  operator: { label: 'Employé',  cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: BriefcaseBusiness },
   client:  { label: 'Client',   cls: 'bg-blue-50 text-blue-700 border-blue-200',    icon: User },
 }
 function fmtDate(d) {
@@ -27,7 +27,7 @@ function fmtDate(d) {
 
 // ── Invite modal ──────────────────────────────────────────────────────────────
 function InviteModal({ onClose, onCreated }) {
-  const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'employe' })
+  const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'operator' })
   const [saving, setSaving] = useState(false)
 
   async function handleSubmit(e) {
@@ -86,7 +86,7 @@ function InviteModal({ onClose, onCreated }) {
                 onChange={e => setForm(p=>({...p,role:e.target.value}))}
                 className="w-full h-10 rounded-md border border-input bg-white px-3 py-2 text-sm appearance-none pr-8 focus:outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="employe">Employé</option>
+                <option value="operator">Employé</option>
                 <option value="admin">Admin</option>
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
@@ -128,7 +128,7 @@ export default function AdminUsersList() {
     const { data } = await supabase
       .from('profiles')
       .select('id, role, email, full_name, created_at')
-      .in('role', ['admin', 'employe'])
+      .in('role', ['admin', 'operator'])
       .order('created_at', { ascending: false })
     setTeam(data ?? [])
   }
@@ -309,7 +309,7 @@ export default function AdminUsersList() {
                               onChange={e => changeRole(m.id, e.target.value)}
                               className="text-xs border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-ring pr-6 appearance-none disabled:opacity-50"
                             >
-                              <option value="employe">Employé</option>
+                              <option value="operator">Employé</option>
                               <option value="admin">Admin</option>
                             </select>
                             <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
