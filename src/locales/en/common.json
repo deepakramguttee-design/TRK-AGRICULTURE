@@ -89,8 +89,8 @@
     "delivery": "Delivery",
     "deliveryEstimate": "Estimated (by district)",
     "free": "Free",
-    "freeDeliveryNote": "Free delivery on orders ≥ Rs 3,500",
-    "freeDeliveryProgress": "Only Rs {{amount}} more for free delivery!",
+    "freeDeliveryNote": "Free delivery on all orders",
+    "freeDeliveryProgress": "Free delivery on all orders",
     "freeDeliveryReached": "Free delivery 🎉",
     "total": "Total",
     "checkout": "Checkout"

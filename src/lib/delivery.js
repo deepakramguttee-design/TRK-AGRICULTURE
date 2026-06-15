@@ -1,4 +1,4 @@
-export const FREE_DELIVERY_THRESHOLD = 3500
+export const FREE_DELIVERY_THRESHOLD = 0
 
 export const DISTRICTS = [
   { name: 'Port Louis',          fee: 150 },
