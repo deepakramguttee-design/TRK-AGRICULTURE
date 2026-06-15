@@ -96,8 +96,9 @@ export default function Login() {
     if (Object.keys(errs).length) { setRegErrors(errs); return }
     setRegLoading(true)
 
+    const email = regForm.email.trim()
     const { data, error } = await supabase.auth.signUp({
-      email: regForm.email.trim(),
+      email,
       password: regForm.password,
       options: { data: { full_name: regForm.full_name.trim() } },
     })
@@ -116,6 +117,20 @@ export default function Login() {
         account_type: 'retail',
         preferred_lang: 'fr',
       })
+    }
+
+    // Si email confirmation activée dans Supabase, on connecte manuellement
+    if (!data.session) {
+      const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: regForm.password })
+      if (signInErr) {
+        toast({
+          title: 'Compte créé — vérifiez votre email',
+          description: 'Un email de confirmation a été envoyé. Connectez-vous après confirmation.',
+        })
+        setTab('login')
+        setRegLoading(false)
+        return
+      }
     }
 
     toast({ title: 'Compte créé !', description: 'Bienvenue chez TRK Agriculture.' })
