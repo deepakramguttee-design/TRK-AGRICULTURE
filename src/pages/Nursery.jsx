@@ -4,6 +4,21 @@ import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Loader2, Leaf } from 'lucide-react'
 
+const GALLERY = [
+  { src: '/products/brocoli.jpg',              alt: 'Plants de brocoli en pépinière TRK Agriculture' },
+  { src: '/products/chou-rouge.jpg',           alt: 'Plants de chou rouge en pépinière TRK Agriculture' },
+  { src: '/products/choufleur-cristalboy.jpg', alt: 'Plants de chou-fleur Cristalboy en pépinière TRK Agriculture' },
+  { src: '/products/laitue-tourbillon.jpg',    alt: 'Laitue Tourbillon en pépinière TRK Agriculture' },
+  { src: '/products/pomme-d-amour.jpg',        alt: 'Plants de tomate (pomme d\'amour) en pépinière TRK Agriculture' },
+  { src: '/products/petsai-pomme.jpg',         alt: 'Plants de petsai pommé en pépinière TRK Agriculture' },
+  { src: '/products/persil-plat.jpg',          alt: 'Persil plat en pépinière TRK Agriculture' },
+  { src: '/products/gros-piment.jpg',          alt: 'Plants de gros piment en pépinière TRK Agriculture' },
+  { src: '/products/oignon.jpg',               alt: 'Plants d\'oignon en pépinière TRK Agriculture' },
+  { src: '/products/patisson.jpg',             alt: 'Plants de pâtisson en pépinière TRK Agriculture' },
+  { src: '/products/concombre.jpg',            alt: 'Plants de concombre en pépinière TRK Agriculture' },
+  { src: '/products/poireaux.jpg',             alt: 'Plants de poireaux en pépinière TRK Agriculture' },
+]
+
 const CANOPY = '#1E4D2B'
 const CREAM  = '#FBF7EF'
 const MANGO  = '#E8A13D'
@@ -55,7 +70,24 @@ export default function Nursery() {
         </div>
       </div>
 
-      {/* Contenu */}
+      {/* Galerie photos */}
+      <div className="container mx-auto px-4 py-10">
+        <h2 className="text-xl font-bold mb-5" style={{ color: CANOPY }}>Notre pépinière</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          {GALLERY.map(({ src, alt }) => (
+            <div key={src} className="aspect-square rounded-xl overflow-hidden bg-stone-100">
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Suivi des semis */}
       <div className="container mx-auto px-4 py-12">
         {loading && (
           <div className="flex justify-center py-16">
