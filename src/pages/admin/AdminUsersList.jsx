@@ -8,6 +8,7 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const ACCOUNT_STYLES = {
@@ -238,7 +239,12 @@ export default function AdminUsersList() {
                             {c.account_type === 'b2b' ? <Building2 className="h-4 w-4 text-primary" /> : <User className="h-4 w-4 text-primary" />}
                           </div>
                           <div>
-                            <p className="font-medium text-zinc-900">{c.full_name || <span className="italic text-muted-foreground">Sans nom</span>}</p>
+                            <Link
+                              to={`/admin/utilisateurs/clients/${c.id}`}
+                              className="font-medium text-zinc-900 hover:text-primary hover:underline underline-offset-2 transition-colors"
+                            >
+                              {c.full_name || <span className="italic text-muted-foreground">Sans nom</span>}
+                            </Link>
                             {c.company_name && <p className="text-xs text-muted-foreground">{c.company_name}</p>}
                           </div>
                         </div>

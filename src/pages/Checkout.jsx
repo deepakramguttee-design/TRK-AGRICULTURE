@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { ChevronLeft, Loader2, CreditCard, Banknote, CheckCircle2, Smartphone, Copy, Check } from 'lucide-react'
+import { ChevronLeft, Loader2, CreditCard, Banknote, CheckCircle2, Smartphone, Copy, Check, MapPin, Truck } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useCart } from '@/contexts/CartContext'
 import { toast } from '@/hooks/use-toast'
@@ -16,6 +16,8 @@ import {
 
 const SLOTS = ['morning', 'afternoon', 'any']
 const inputClass = 'w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring'
+const PICKUP_LAT = -20.322619
+const PICKUP_LNG = 57.465368
 
 export default function Checkout() {
   const { t, i18n } = useTranslation()
@@ -24,6 +26,7 @@ export default function Checkout() {
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
   const [form, setForm] = useState({ name: '', phone: '', email: '', district: '', address: '', slot: 'any', notes: '' })
+  const [deliveryMode, setDeliveryMode] = useState('delivery')
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('cod')
@@ -32,7 +35,7 @@ export default function Checkout() {
   const [juiceTxnError, setJuiceTxnError] = useState(false)
   const [saving, setSaving] = useState(false)
 
-  const deliveryFee = getDeliveryFee(form.district, cartTotal)
+  const deliveryFee = deliveryMode === 'pickup' ? 0 : getDeliveryFee(form.district, cartTotal)
   const total = cartTotal + deliveryFee
   const juiceProvider = getProvider('juice')
 
@@ -54,8 +57,10 @@ export default function Checkout() {
     const e = {}
     if (!form.name.trim()) e.name = true
     if (!form.phone.trim() || !isValidMauritiusPhone(form.phone)) e.phone = true
-    if (!form.district) e.district = true
-    if (!form.address.trim()) e.address = true
+    if (deliveryMode === 'delivery') {
+      if (!form.district) e.district = true
+      if (!form.address.trim()) e.address = true
+    }
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = true
     return e
   }
@@ -68,11 +73,9 @@ export default function Checkout() {
     setSubmitting(true)
     try {
       const slotLabel = { morning: t('checkout.slotMorning'), afternoon: t('checkout.slotAfternoon'), any: t('checkout.slotAny') }[form.slot]
-      const notes = [
-        `Nom: ${form.name}`, `Tél: ${form.phone}`, `District: ${form.district}`,
-        `Adresse: ${form.address}`, `Créneau: ${slotLabel}`,
-        form.notes ? `Notes: ${form.notes}` : '',
-      ].filter(Boolean).join('\n')
+      const notes = deliveryMode === 'pickup'
+        ? [`Nom: ${form.name}`, `Tél: ${form.phone}`, `Mode: Retrait sur place`, form.notes ? `Notes: ${form.notes}` : ''].filter(Boolean).join('\n')
+        : [`Nom: ${form.name}`, `Tél: ${form.phone}`, `District: ${form.district}`, `Adresse: ${form.address}`, `Créneau: ${slotLabel}`, form.notes ? `Notes: ${form.notes}` : ''].filter(Boolean).join('\n')
 
       const paymentPayload = paymentMethod === 'juice'
         ? juiceProvider.buildOrderPayload()
@@ -207,46 +210,116 @@ export default function Checkout() {
             {/* Livraison */}
             <section>
               <h2 className="font-semibold text-base mb-4 pb-2 border-b">{t('checkout.delivery')}</h2>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Field label={`${t('checkout.district')} *`} error={errors.district}>
-                    <Select value={form.district} onValueChange={v => set('district', v)}>
-                      <SelectTrigger className={errors.district ? 'border-destructive ring-1 ring-destructive' : ''}>
-                        <SelectValue placeholder={t('checkout.selectDistrict')} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {DISTRICTS.map(d => (
-                          <SelectItem key={d.name} value={d.name}>
-                            {d.name}{cartTotal >= FREE_DELIVERY_THRESHOLD ? ` — ${t('cart.free')}` : ` — Rs ${d.fee}`}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                  <Field label={t('checkout.slot')}>
-                    <Select value={form.slot} onValueChange={v => set('slot', v)}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        {SLOTS.map(s => (
-                          <SelectItem key={s} value={s}>
-                            {t(`checkout.slot${s.charAt(0).toUpperCase() + s.slice(1)}`)}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+
+              {/* Mode toggle */}
+              <div className="grid grid-cols-2 gap-3 mb-5">
+                <button
+                  type="button"
+                  onClick={() => setDeliveryMode('delivery')}
+                  className={`flex items-center gap-2.5 p-3 rounded-lg border-2 text-sm text-left transition-all ${
+                    deliveryMode === 'delivery'
+                      ? 'border-primary bg-primary/5 font-medium text-primary'
+                      : 'border-border hover:border-stone-300 hover:bg-muted/30 text-foreground'
+                  }`}
+                >
+                  <Truck className={`h-4 w-4 shrink-0 ${deliveryMode === 'delivery' ? 'text-primary' : 'text-muted-foreground'}`} />
+                  <div>
+                    <p className="font-medium text-sm">{t('checkout.deliveryMode')}</p>
+                    <p className="text-xs text-muted-foreground">{t('checkout.deliveryModeDesc')}</p>
+                  </div>
+                  {deliveryMode === 'delivery' && (
+                    <span className="ml-auto text-xs bg-primary text-primary-foreground px-1.5 py-0.5 rounded">✓</span>
+                  )}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setDeliveryMode('pickup')}
+                  className={`flex items-center gap-2.5 p-3 rounded-lg border-2 text-sm text-left transition-all ${
+                    deliveryMode === 'pickup'
+                      ? 'border-green-500 bg-green-50 font-medium text-green-800'
+                      : 'border-border hover:border-stone-300 hover:bg-muted/30 text-foreground'
+                  }`}
+                >
+                  <MapPin className={`h-4 w-4 shrink-0 ${deliveryMode === 'pickup' ? 'text-green-600' : 'text-muted-foreground'}`} />
+                  <div>
+                    <p className="font-medium text-sm">{t('checkout.pickupMode')}</p>
+                    <p className="text-xs text-muted-foreground">{t('checkout.pickupModeDesc')}</p>
+                  </div>
+                  {deliveryMode === 'pickup' && (
+                    <span className="ml-auto text-xs bg-green-600 text-white px-1.5 py-0.5 rounded">✓</span>
+                  )}
+                </button>
+              </div>
+
+              {deliveryMode === 'pickup' ? (
+                /* Pickup info */
+                <div className="rounded-lg border border-green-200 bg-green-50/40 p-4 space-y-3">
+                  <div className="flex items-start gap-3">
+                    <MapPin className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+                    <div>
+                      <p className="font-semibold text-sm text-green-900">{t('checkout.pickupAddress')}</p>
+                      <p className="text-sm text-green-700">{t('checkout.pickupAddressDetail')}</p>
+                    </div>
+                  </div>
+                  <a
+                    href={`https://www.google.com/maps?q=${PICKUP_LAT},${PICKUP_LNG}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-green-700 hover:text-green-900 underline underline-offset-2"
+                  >
+                    <MapPin className="h-3 w-3" />
+                    {t('checkout.pickupGps')}
+                  </a>
+                  <p className="text-xs text-green-700 leading-relaxed">{t('checkout.pickupNote')}</p>
+                  <Field label={t('checkout.notes')}>
+                    <textarea rows={2} placeholder={t('checkout.notesPlaceholder')} value={form.notes}
+                      onChange={e => set('notes', e.target.value)}
+                      className={`${inputClass} resize-none`} />
                   </Field>
                 </div>
-                <Field label={`${t('checkout.address')} *`} error={errors.address}>
-                  <textarea rows={3} placeholder={t('checkout.addressPlaceholder')} value={form.address}
-                    onChange={e => set('address', e.target.value)}
-                    className={`${fieldClass('address')} resize-none`} />
-                </Field>
-                <Field label={t('checkout.notes')}>
-                  <textarea rows={2} placeholder={t('checkout.notesPlaceholder')} value={form.notes}
-                    onChange={e => set('notes', e.target.value)}
-                    className={`${inputClass} resize-none`} />
-                </Field>
-              </div>
+              ) : (
+                /* Delivery fields */
+                <div className="space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <Field label={`${t('checkout.district')} *`} error={errors.district}>
+                      <Select value={form.district} onValueChange={v => set('district', v)}>
+                        <SelectTrigger className={errors.district ? 'border-destructive ring-1 ring-destructive' : ''}>
+                          <SelectValue placeholder={t('checkout.selectDistrict')} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {DISTRICTS.map(d => (
+                            <SelectItem key={d.name} value={d.name}>
+                              {d.name}{cartTotal >= FREE_DELIVERY_THRESHOLD ? ` — ${t('cart.free')}` : ` — Rs ${d.fee}`}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                    <Field label={t('checkout.slot')}>
+                      <Select value={form.slot} onValueChange={v => set('slot', v)}>
+                        <SelectTrigger><SelectValue /></SelectTrigger>
+                        <SelectContent>
+                          {SLOTS.map(s => (
+                            <SelectItem key={s} value={s}>
+                              {t(`checkout.slot${s.charAt(0).toUpperCase() + s.slice(1)}`)}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Field>
+                  </div>
+                  <Field label={`${t('checkout.address')} *`} error={errors.address}>
+                    <textarea rows={3} placeholder={t('checkout.addressPlaceholder')} value={form.address}
+                      onChange={e => set('address', e.target.value)}
+                      className={`${fieldClass('address')} resize-none`} />
+                  </Field>
+                  <Field label={t('checkout.notes')}>
+                    <textarea rows={2} placeholder={t('checkout.notesPlaceholder')} value={form.notes}
+                      onChange={e => set('notes', e.target.value)}
+                      className={`${inputClass} resize-none`} />
+                  </Field>
+                </div>
+              )}
             </section>
 
             {/* Paiement */}
@@ -309,7 +382,13 @@ export default function Checkout() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">{t('cart.delivery')}</span>
-                  <span>{form.district ? (deliveryFee === 0 ? t('cart.free') : `Rs ${deliveryFee.toFixed(2)}`) : '—'}</span>
+                  <span>{
+                    deliveryMode === 'pickup'
+                      ? t('checkout.pickupFee')
+                      : form.district
+                        ? (deliveryFee === 0 ? t('cart.free') : `Rs ${deliveryFee.toFixed(2)}`)
+                        : '—'
+                  }</span>
                 </div>
               </div>
               <div className="border-t pt-3 flex justify-between">
