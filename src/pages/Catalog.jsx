@@ -1,6 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search, Leaf } from 'lucide-react'
+import { Search, Leaf, ArrowUpDown } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { Input } from '@/components/ui/input'
 import ProductCard, { CATEGORY_EMOJI } from '@/components/ProductCard'
@@ -14,6 +14,7 @@ export default function Catalog() {
   const [error, setError] = useState(null)
   const [search, setSearch] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
+  const [sort, setSort] = useState('default')
 
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
@@ -39,12 +40,20 @@ export default function Catalog() {
 
   const filtered = useMemo(() => {
     const q = search.toLowerCase().trim()
-    return products.filter(p => {
+    let result = products.filter(p => {
       const matchCat = activeCategory === 'all' || p.category === activeCategory
       const name = lang === 'en' ? (p.name_en || p.name_fr) : p.name_fr
       return matchCat && (!q || name.toLowerCase().includes(q))
     })
-  }, [products, activeCategory, search, lang])
+    if (sort === 'price_asc')  result = [...result].sort((a, b) => a.price_mur - b.price_mur)
+    if (sort === 'price_desc') result = [...result].sort((a, b) => b.price_mur - a.price_mur)
+    if (sort === 'alpha') result = [...result].sort((a, b) => {
+      const na = lang === 'en' ? (a.name_en || a.name_fr) : a.name_fr
+      const nb = lang === 'en' ? (b.name_en || b.name_fr) : b.name_fr
+      return na.localeCompare(nb, lang)
+    })
+    return result
+  }, [products, activeCategory, search, lang, sort])
 
   if (loading) {
     return (
@@ -105,31 +114,41 @@ export default function Catalog() {
 
       {/* Filters */}
       <div className="flex flex-col gap-3 mb-8">
-        <div className="relative max-w-xs">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
-          <Input
-            className="pl-9 rounded-full border-stone-200"
-            placeholder={t('catalog.search')}
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-          />
+        <div className="flex items-center gap-3 flex-wrap">
+          <div className="relative flex-1 min-w-[180px] max-w-xs">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+            <Input
+              className="pl-9 rounded-full border-stone-200"
+              placeholder={t('catalog.search')}
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="relative">
+            <ArrowUpDown className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" aria-hidden />
+            <select
+              value={sort}
+              onChange={e => setSort(e.target.value)}
+              className="h-9 pl-8 pr-8 rounded-full border border-stone-200 bg-background text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
+            >
+              <option value="default">{lang === 'fr' ? 'Trier' : 'Sort'}</option>
+              <option value="price_asc">{lang === 'fr' ? 'Prix croissant' : 'Price: Low → High'}</option>
+              <option value="price_desc">{lang === 'fr' ? 'Prix décroissant' : 'Price: High → Low'}</option>
+              <option value="alpha">A → Z</option>
+            </select>
+          </div>
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <FilterPill
-            active={activeCategory === 'all'}
-            onClick={() => { console.log('[FILTER] selectedCategory: all'); setActiveCategory('all') }}
-          >
+          <FilterPill active={activeCategory === 'all'} onClick={() => setActiveCategory('all')}>
             {t('catalog.all')}
           </FilterPill>
           {categories.map(cat => (
             <FilterPill
               key={cat.slug}
               active={activeCategory === cat.slug}
-              onClick={() => {
-                console.log('[FILTER] selectedCategory:', cat.slug)
-                setActiveCategory(cat.slug)
-              }}
+              onClick={() => setActiveCategory(cat.slug)}
             >
               {CATEGORY_EMOJI[cat.slug]} {lang === 'en' ? cat.name_en : cat.name_fr}
             </FilterPill>

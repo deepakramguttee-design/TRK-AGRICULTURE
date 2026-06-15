@@ -357,14 +357,60 @@
   },
   "nursery": {
     "title": "Live Nursery",
-    "subtitle": "Track our seedling batches in real time",
+    "subtitle": "Track our seedling batches in real time — from seed to ready-to-plant",
     "sownDaysAgo": "Sown {{days}} days ago",
     "readyIn": "Ready in {{days}}d",
     "readyNow": "Ready to sell 🎉",
     "plateaux": "{{count}} tray(s)",
     "progress": "Progress",
     "empty": "No active batches",
-    "emptyDesc": "Check back soon to see our seedling batches!"
+    "emptyDesc": "Check back soon to see our seedling batches!",
+    "filter": {
+      "all": "All",
+      "ready": "Ready now",
+      "growing": "Growing",
+      "soon": "Coming soon"
+    },
+    "stats": {
+      "ready": "Ready to sell",
+      "growing": "Growing",
+      "varieties": "Varieties"
+    },
+    "care": {
+      "sun": "Sunlight",
+      "water": "Watering",
+      "soil": "Soil",
+      "full": "Full sun",
+      "partial": "Partial shade",
+      "shade": "Shade",
+      "low": "Low",
+      "moderate": "Moderate",
+      "high": "Abundant",
+      "welldrained": "Well-drained",
+      "rich": "Rich",
+      "deep": "Deep",
+      "light": "Light"
+    },
+    "gallery": {
+      "title": "Our nursery",
+      "subtitle": "Every plant is carefully raised in Henrietta, Vacoas"
+    },
+    "cta": {
+      "preorder": "Pre-order",
+      "contact": "Contact us to reserve",
+      "catalogue": "View catalogue",
+      "whatsapp": "WhatsApp"
+    },
+    "preorderDesc": "This batch will be ready in {{days}} days. Contact us to reserve your plants.",
+    "seedDate": "Sown on {{date}}",
+    "harvestDate": "Available around {{date}}",
+    "liveBadge": "Live",
+    "homeSection": {
+      "tag": "Live Nursery",
+      "title": "Ready to plant this week",
+      "subtitle": "These varieties are available now at our nursery.",
+      "cta": "View all batches"
+    }
   },
   "home": {
     "hero": {

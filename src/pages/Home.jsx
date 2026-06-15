@@ -1,7 +1,10 @@
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Leaf, Truck, Award, Clock, Sun, ShoppingBag, ArrowRight, Droplets } from 'lucide-react'
+import FeaturedProducts from '@/components/FeaturedProducts'
+import { supabase } from '@/lib/supabase'
 
 const STATS_KEYS = [
   { value: '100%', labelKey: 'home.stats.local' },
@@ -36,6 +39,19 @@ const SEASONS = [
 
 export default function Home() {
   const { t } = useTranslation()
+  const [readyBatches, setReadyBatches] = useState([])
+
+  useEffect(() => {
+    supabase.from('sowing_batches').select('*').then(({ data }) => {
+      if (!data) return
+      const now = Date.now()
+      const ready = data
+        .map(b => ({ ...b, remaining: b.estimated_days - Math.floor((now - new Date(b.sown_date)) / 86400000) }))
+        .filter(b => b.remaining <= 0)
+        .slice(0, 3)
+      setReadyBatches(ready)
+    })
+  }, [])
 
   return (
     <div className="flex flex-col overflow-hidden">
@@ -152,6 +168,64 @@ export default function Home() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── PRODUITS VEDETTES ── */}
+      <FeaturedProducts />
+
+      {/* ── PÉPINIÈRE EN DIRECT ── */}
+      <section className="bg-white py-16 md:py-20 border-t border-stone-100">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 mb-10">
+            <div className="flex-1">
+              <p className="text-xs font-bold tracking-[0.25em] uppercase text-green-600 mb-3 flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                {t('nursery.homeSection.tag')}
+              </p>
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-stone-900">
+                {t('nursery.homeSection.title')}
+              </h2>
+              <p className="text-stone-500 text-sm mt-2 max-w-md">{t('nursery.homeSection.subtitle')}</p>
+            </div>
+            <Link
+              to="/pepiniere"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white hover:opacity-90 transition-opacity shrink-0"
+              style={{ backgroundColor: '#1E4D2B' }}
+            >
+              {t('nursery.homeSection.cta')}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {readyBatches.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {readyBatches.map(b => (
+                <Link
+                  key={b.id}
+                  to="/pepiniere"
+                  className="group flex items-center gap-4 p-4 rounded-xl border border-stone-200 bg-stone-50 hover:bg-green-50 hover:border-green-200 transition-all duration-200"
+                >
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ backgroundColor: '#E8F5E9' }}>
+                    <Leaf className="h-5 w-5" style={{ color: '#1E4D2B' }} />
+                  </div>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm text-stone-800 truncate">{b.variety_name}</p>
+                    <p className="text-xs text-green-600 font-medium mt-0.5">{t('nursery.readyNow')}</p>
+                  </div>
+                  <ArrowRight className="h-4 w-4 text-stone-300 group-hover:text-green-600 transition-colors ml-auto shrink-0" />
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-stone-200 bg-stone-50/60 p-8 text-center">
+              <Leaf className="h-8 w-8 mx-auto mb-3 opacity-20" style={{ color: '#1E4D2B' }} />
+              <p className="text-sm font-medium text-stone-500">{t('nursery.emptyDesc')}</p>
+              <Link to="/pepiniere" className="inline-block mt-4 text-xs font-semibold underline underline-offset-4" style={{ color: '#1E4D2B' }}>
+                {t('nursery.homeSection.cta')}
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 

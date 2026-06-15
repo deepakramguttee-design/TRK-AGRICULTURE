@@ -357,14 +357,60 @@
   },
   "nursery": {
     "title": "Pépinière en direct",
-    "subtitle": "Suivez en temps réel nos lots en cours de culture",
+    "subtitle": "Suivez en temps réel nos lots en cours de culture — de la graine au plant prêt à planter",
     "sownDaysAgo": "Semé il y a {{days}} jours",
     "readyIn": "Prêt dans {{days}} j",
     "readyNow": "Prêt à la vente 🎉",
     "plateaux": "{{count}} plateau(x)",
     "progress": "Progression",
     "empty": "Aucun lot en cours",
-    "emptyDesc": "Revenez bientôt pour voir nos semis en cours !"
+    "emptyDesc": "Revenez bientôt pour voir nos semis en cours !",
+    "filter": {
+      "all": "Tous",
+      "ready": "Prêts maintenant",
+      "growing": "En culture",
+      "soon": "Bientôt"
+    },
+    "stats": {
+      "ready": "Prêts à la vente",
+      "growing": "En culture",
+      "varieties": "Variétés"
+    },
+    "care": {
+      "sun": "Soleil",
+      "water": "Arrosage",
+      "soil": "Sol",
+      "full": "Plein soleil",
+      "partial": "Mi-ombre",
+      "shade": "Ombre",
+      "low": "Faible",
+      "moderate": "Modéré",
+      "high": "Abondant",
+      "welldrained": "Bien drainé",
+      "rich": "Riche",
+      "deep": "Profond",
+      "light": "Léger"
+    },
+    "gallery": {
+      "title": "Notre pépinière",
+      "subtitle": "Chaque plant est élevé avec soin à Henrietta, Vacoas"
+    },
+    "cta": {
+      "preorder": "Précommander",
+      "contact": "Contacter pour réserver",
+      "catalogue": "Voir le catalogue",
+      "whatsapp": "WhatsApp"
+    },
+    "preorderDesc": "Ce lot sera prêt dans {{days}} jours. Contactez-nous pour réserver vos plants.",
+    "seedDate": "Semé le {{date}}",
+    "harvestDate": "Disponible vers le {{date}}",
+    "liveBadge": "En direct",
+    "homeSection": {
+      "tag": "Pépinière en direct",
+      "title": "Prêts à planter cette semaine",
+      "subtitle": "Ces variétés sont disponibles dès maintenant en pépinière.",
+      "cta": "Voir tous les lots"
+    }
   },
   "home": {
     "hero": {

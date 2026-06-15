@@ -39,6 +39,7 @@ import Calendrier from './pages/Calendrier'
 import Nursery from './pages/Nursery'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
+import PromoBanner from './components/PromoBanner'
 
 function App() {
   return (
@@ -49,6 +50,7 @@ function App() {
             <ScrollToTop />
             <LanguageBar />
             <Header />
+            <PromoBanner />
             <main className="flex-1">
               <Routes>
                 <Route path="/" element={<Home />} />
