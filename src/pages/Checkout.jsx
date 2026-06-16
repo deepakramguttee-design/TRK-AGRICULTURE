@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeft, Loader2, CreditCard, Banknote, CheckCircle2, Smartphone, Copy, Check, MapPin, Truck } from 'lucide-react'
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
 import { DISTRICTS, FREE_DELIVERY_THRESHOLD, getDeliveryFee, isValidMauritiusPhone } from '@/lib/delivery'
 import { getProvider, MipsProvider } from '@/lib/payments'
+import { useAuth } from '@/contexts/AuthContext'
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@/components/ui/select'
@@ -22,6 +23,7 @@ const PICKUP_LNG = 57.465368
 export default function Checkout() {
   const { t, i18n } = useTranslation()
   const { items, cartTotal, clearCart } = useCart()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
@@ -34,9 +36,17 @@ export default function Checkout() {
   const [juiceTxnRef, setJuiceTxnRef] = useState('')
   const [juiceTxnError, setJuiceTxnError] = useState(false)
   const [saving, setSaving] = useState(false)
+  const [discountPct, setDiscountPct] = useState(0)
+
+  useEffect(() => {
+    if (!user) return
+    supabase.from('customers').select('discount_pct').eq('id', user.id).single()
+      .then(({ data }) => { if (data?.discount_pct) setDiscountPct(data.discount_pct) })
+  }, [user])
 
   const deliveryFee = deliveryMode === 'pickup' ? 0 : getDeliveryFee(form.district, cartTotal)
-  const total = cartTotal + deliveryFee
+  const discountMur = discountPct > 0 ? Math.round(cartTotal * discountPct) / 100 : 0
+  const total = cartTotal + deliveryFee - discountMur
   const juiceProvider = getProvider('juice')
   const mipsProvider  = MipsProvider
 
@@ -93,6 +103,8 @@ export default function Checkout() {
           ...paymentPayload,
           subtotal_mur: cartTotal,
           delivery_fee_mur: deliveryFee,
+          discount_pct: discountPct,
+          discount_mur: discountMur,
           total_mur: total,
           customer_notes: notes,
         })
@@ -413,6 +425,12 @@ export default function Checkout() {
                         : '—'
                   }</span>
                 </div>
+                {discountPct > 0 && (
+                  <div className="flex justify-between text-green-700">
+                    <span className="font-medium">{t('checkout.discountLabel', { pct: discountPct })}</span>
+                    <span className="font-medium">− Rs {discountMur.toFixed(2)}</span>
+                  </div>
+                )}
               </div>
               <div className="border-t pt-3 flex justify-between">
                 <span className="font-semibold">{t('cart.total')}</span>

@@ -134,6 +134,8 @@
     "pickupGps": "Voir sur Google Maps",
     "pickupNote": "Retrait gratuit à notre pépinière. Nous vous contacterons pour convenir d'un créneau de retrait après confirmation de votre commande.",
     "pickupFee": "Gratuit (retrait)",
+    "discountLabel": "Remise fidélité {{pct}}%",
+    "discountNone": "Aucune remise",
     "mipsSubmit": "Payer par carte bancaire",
     "mipsInfo": {
       "title": "Paiement sécurisé par carte",

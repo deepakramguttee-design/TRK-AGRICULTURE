@@ -162,6 +162,8 @@
     "pickupGps": "Get lor Google Maps",
     "pickupNote": "Ramase gratis dan nou pepinyer. Nou pou kontakte ou pou aranzer enn ler ramase apre konfirmasyon ou komand.",
     "pickupFee": "Gratis (Ramase)",
+    "discountLabel": "Remiz fidelite {{pct}}%",
+    "discountNone": "Okenn Remiz",
     "juice": "Pey par MCB Juice",
     "juiceInfo": {
       "title": "Peman Juice",

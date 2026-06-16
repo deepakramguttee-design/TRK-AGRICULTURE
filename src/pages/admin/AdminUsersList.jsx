@@ -122,7 +122,7 @@ export default function AdminUsersList() {
   async function loadCustomers() {
     const { data } = await supabase
       .from('customers')
-      .select('id, full_name, phone, account_type, company_name, preferred_lang, created_at')
+      .select('id, full_name, phone, account_type, company_name, preferred_lang, discount_pct, created_at')
       .order('created_at', { ascending: false })
     setCustomers(data ?? [])
   }
@@ -148,6 +148,18 @@ export default function AdminUsersList() {
     } else {
       toast({ title: 'Rôle mis à jour' })
       await loadTeam()
+    }
+    setUpdatingId(null)
+  }
+
+  async function changeDiscount(id, pct) {
+    setUpdatingId(id)
+    const { error } = await supabase.from('customers').update({ discount_pct: pct }).eq('id', id)
+    if (error) {
+      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+    } else {
+      toast({ title: `Remise ${pct}% appliquée` })
+      setCustomers(prev => prev.map(c => c.id === id ? { ...c, discount_pct: pct } : c))
     }
     setUpdatingId(null)
   }
@@ -227,7 +239,7 @@ export default function AdminUsersList() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/40 border-b">
-                  {['Utilisateur','Téléphone','Type','Langue','Inscrit le'].map(h => (
+                  {['Utilisateur','Téléphone','Type','Remise','Inscrit le'].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{h}</th>
                   ))}
                 </tr>
@@ -257,7 +269,27 @@ export default function AdminUsersList() {
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${type.cls}`}>{type.label}</span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground uppercase">{c.preferred_lang||'—'}</td>
+                      <td className="px-4 py-3">
+                        <div className="flex gap-1">
+                          {[0, 5, 10].map(pct => (
+                            <button
+                              key={pct}
+                              type="button"
+                              disabled={updatingId === c.id}
+                              onClick={() => changeDiscount(c.id, pct)}
+                              className={`px-2 py-0.5 rounded text-[10px] font-semibold border transition-colors disabled:opacity-40 ${
+                                (c.discount_pct ?? 0) === pct
+                                  ? pct === 0
+                                    ? 'bg-zinc-100 border-zinc-300 text-zinc-600'
+                                    : 'bg-green-100 border-green-400 text-green-700'
+                                  : 'bg-white border-zinc-200 text-zinc-400 hover:border-zinc-400 hover:text-zinc-600'
+                              }`}
+                            >
+                              {pct === 0 ? '—' : `${pct}%`}
+                            </button>
+                          ))}
+                        </div>
+                      </td>
                       <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(c.created_at)}</td>
                     </tr>
                   )
