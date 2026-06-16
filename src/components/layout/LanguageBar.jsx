@@ -1,13 +1,14 @@
 import { useTranslation } from 'react-i18next'
 
 const LANGS = [
-  { code: 'fr', label: 'FR', ariaLabel: 'Passer en français' },
-  { code: 'en', label: 'EN', ariaLabel: 'Switch to English' },
+  { code: 'fr',  label: 'FR', ariaLabel: 'Passer en français' },
+  { code: 'en',  label: 'EN', ariaLabel: 'Switch to English' },
+  { code: 'mfe', label: 'KR', ariaLabel: 'Vire ar Kreol' },
 ]
 
 export default function LanguageBar() {
   const { i18n } = useTranslation()
-  const active = i18n.language.slice(0, 2)
+  const active = i18n.language
 
   function switchLang(lang) {
     i18n.changeLanguage(lang)

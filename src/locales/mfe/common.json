@@ -1,0 +1,456 @@
+{
+  "nav": {
+    "catalog": "Katalog",
+    "process": "Nou Fason",
+    "calendar": "Kalanndriye",
+    "b2b": "B2B Lotel & Restoran",
+    "about": "Lor Nou",
+    "contact": "Kontakte Nou",
+    "cart": "Panye",
+    "account": "Mo Kont",
+    "signin": "Konekte",
+    "nursery": "Pepinyer"
+  },
+  "footer": {
+    "tagline": "Plante Mote dan Moris 🇲🇺",
+    "delivery": "Livrezon dan 9 Distrikt",
+    "legal": "Enfòmasyon Legal",
+    "legalNotice": "Mansyon Legal",
+    "privacy": "Konfidansyalite",
+    "terms": "CGV",
+    "links": "Navigasyon",
+    "explore": "Explor"
+  },
+  "home": {
+    "hero": {
+      "title": "Plant Fre Kiltive dan Moris",
+      "subtitle": "Komand direkteman depi produkter. Livrezon dan 24h dan tou distrikt.",
+      "cta": "Get Katalog"
+    },
+    "stats": {
+      "local": "Prodwi Lokal",
+      "districts": "Distrikt Livre",
+      "varieties": "Varyete Fre"
+    },
+    "why": {
+      "tag": "Nou Angajman",
+      "title": "Pourquoi Choisir TRK ?",
+      "items": [
+        { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
+        { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
+        { "title": "Kalite Garanti", "desc": "Seleksyon rigurez a chak rekolt. San prodwi chimi initil." },
+        { "title": "Touzour Saison", "desc": "Nou katalog evolu avek sezon pou donn ou sa ki pi bon." }
+      ]
+    },
+    "seasons": {
+      "tag": "Kalanndriye Rekolt",
+      "title": "Nou Prodwi, Tou Long Sezon",
+      "note": "* Indikatif. Katalog mis azour selon rekolt disponib."
+    },
+    "cta": {
+      "title": "Fresher Livre Lakaz",
+      "desc": "Komand online, resevwar ou plant fre direkteman depi nou sams. Partou dan Lil Moris."
+    },
+    "features": {
+      "b2c": {
+        "title": "Katalog B2C",
+        "desc": "Komand nou legim, fri ek plant aromatik fre, livre direkteman lakaz."
+      },
+      "b2b": {
+        "title": "Abonnman B2B",
+        "desc": "Solisyon sur-mezir pou lotel ek restoran. Komand rekilyer, fakter ek kondisyon negosiasyon."
+      },
+      "fresh": {
+        "title": "Garanti Fresher 24h",
+        "desc": "Tou nou prodwi rekolt le matin mem ek livre dan 24 zer. Fresher garanti."
+      },
+      "cta": "Konn Plis"
+    }
+  },
+  "catalog": {
+    "title": "Katalog",
+    "search": "Chersh enn prodwi...",
+    "all": "Tou",
+    "noResults": "Okenn prodwi trouve.",
+    "addToCart": "Met dan Panye",
+    "added": "Finn Azoute !",
+    "loading": "Sargement…",
+    "error": "Erer dan sargement prodwi.",
+    "status": {
+      "available": "Disponib",
+      "in_production": "An Produksyon",
+      "coming_soon": "Byento Disponib"
+    }
+  },
+  "product": {
+    "addToCart": "Met dan Panye",
+    "added": "Finn Azoute ✓",
+    "qty": "Kantite",
+    "backToCatalog": "Kontinie Shoping",
+    "notFound": "Prodwi Pa Trouve",
+    "notFoundDesc": "Sa prodwi la pa existe ou pa disponib.",
+    "similar": "Ou pou petet kontan sa osi",
+    "loading": "Sargement…",
+    "error": "Pa kapab sarz prodwi la."
+  },
+  "cart": {
+    "title": "Mo Panye",
+    "empty": "Ou panye finn vid",
+    "emptyDesc": "Azoute prodwi depi nou katalog.",
+    "discover": "Dekouver Katalog",
+    "clear": "Vide Panye",
+    "summary": "Rezime",
+    "subtotal": "So-total",
+    "delivery": "Livrezon",
+    "deliveryEstimate": "Estime (selon distrikt)",
+    "free": "Gratis",
+    "freeDeliveryNote": "Livrezon gratis lor tou komand",
+    "freeDeliveryProgress": "Livrezon gratis lor tou komand",
+    "freeDeliveryReached": "Livrezon Gratis 🎉",
+    "total": "Total",
+    "checkout": "Konfirme Komand"
+  },
+  "checkout": {
+    "title": "Finaliz Komand",
+    "contact": "Ou Detay",
+    "delivery": "Livrezon",
+    "name": "Non Konple",
+    "namePlaceholder": "Jean Dupont",
+    "phone": "Telefon",
+    "phonePlaceholder": "52 345 678",
+    "phoneError": "Nimewo Morisyen pa valab (8 chif, ex : 52345678)",
+    "email": "Email (Opsyonel)",
+    "district": "Distrikt",
+    "selectDistrict": "Choisir enn Distrikt",
+    "address": "Adres Konple",
+    "addressPlaceholder": "Nimewo, lari, kartye...",
+    "slot": "Ler Prefere",
+    "slotMorning": "Matin (6h – 12h)",
+    "slotAfternoon": "Apremidi (12h – 18h)",
+    "slotAny": "San Preferans",
+    "payment": "Peman",
+    "cod": "Cash on Delivery",
+    "mips": "Kart Banker",
+    "mipsSoon": "Byento Disponib",
+    "mipsSubmit": "Pey par Kart",
+    "mipsInfo": {
+      "title": "Peman Sekirize par Kart",
+      "notice": "Ou pou rediriz ver paz peman sekirize MIPS pou finaliz ou komand par kart Visa ou Mastercard."
+    },
+    "mipsReturn": {
+      "verifying": "Pe Verifye Peman…",
+      "success": "Peman Konfirme !",
+      "redirecting": "Redirizasyon…",
+      "fail": "Peman Pa Finn Abet",
+      "failDesc": "Peman pa finn kapab konplete.",
+      "failDescOrder": "Komand {{order}} finn anile. Ou panye finn gard."
+    },
+    "notes": "Not (Opsyonel)",
+    "notesPlaceholder": "Enstriksyon livrezon, kod lantrey...",
+    "submit": "Konfirme Komand",
+    "submitting": "Anvwaye…",
+    "juiceSubmit": "Kree Komand ek Pey par Juice",
+    "summary": "Ou Komand",
+    "backToCart": "Retour ar Panye",
+    "requiredFields": "Chan Obligatwar",
+    "deliveryMode": "Livrezon Lakaz",
+    "deliveryModeDesc": "Livre dan ou Distrikt",
+    "pickupMode": "Ramase lor Plas",
+    "pickupModeDesc": "Gratis — dan Nou Pepinyer",
+    "pickupAddress": "Pepinyer TRK Agriculture",
+    "pickupAddressDetail": "Henrietta, Vacoas",
+    "pickupGps": "Get lor Google Maps",
+    "pickupNote": "Ramase gratis dan nou pepinyer. Nou pou kontakte ou pou aranzer enn ler ramase apre konfirmasyon ou komand.",
+    "pickupFee": "Gratis (Ramase)",
+    "juice": "Pey par MCB Juice",
+    "juiceInfo": {
+      "title": "Peman Juice",
+      "notice": "Ou komand pou kree ek mete dan atant. Enstriksyon virement pou montre ou dan prochen etap."
+    },
+    "juiceStep": {
+      "title": "Komand Kree — Finaliz Peman",
+      "subtitle": "Fer virement Juice pou konfirm ou komand",
+      "beneficiary": "Benefisyer",
+      "juiceNumber": "Nimewo Juice",
+      "amount": "Montan Egzakt pou Vire",
+      "refLabel": "Referans pou Met dan Virement",
+      "refNote": "Kopye referans sa exakteman pou ki nou kapab identifye ou peman.",
+      "steps": "Koman Fer",
+      "step1": "Ouvrir ou Aplikasyon MCB Juice",
+      "step2": "Choisir Anvwaye Larzan → {{amount}} ar {{number}}",
+      "step3": "Dan chan Referans, ekrir : {{ref}}",
+      "step4": "Valide Peman",
+      "step5": "Kopye ou ID Tranzaksyon ek met li dan chan pi ba",
+      "txnLabel": "ID Tranzaksyon Juice *",
+      "txnPlaceholder": "ex : JUICE-XXXXXXXX",
+      "txnError": "Tanpri ekrir ou ID Tranzaksyon Juice",
+      "txnHint": "Visible dan ou Aplikasyon Juice apre valide Virement.",
+      "confirming": "Anrezistrement…",
+      "confirm": "Konfirme Peman",
+      "notice": "Ou komand pou rested dan atant ziska nou team valide peman.",
+      "copy": "Kopye",
+      "copied": "Kopye !"
+    }
+  },
+  "confirmation": {
+    "title": "Komand Konfirme !",
+    "subtitle": "Mersi pou Ou Komand",
+    "message": "Nou pou kontakte ou dan 24h pou organiz livrezon.",
+    "orderNumber": "Nimewo Komand",
+    "name": "Non",
+    "total": "Total",
+    "district": "Distrikt",
+    "backHome": "Retour Lakaz"
+  },
+  "account": {
+    "error": "Erer",
+    "cancel": "Anile",
+    "signout": "Dekonekte",
+    "profile": {
+      "title": "Mo Profil",
+      "name": "Non Konple",
+      "namePlaceholder": "Jean Dupont",
+      "phone": "Telefon",
+      "lang": "Lang Prefere",
+      "company": "Lantrepriz",
+      "edit": "Modifye",
+      "save": "Anrezistre",
+      "saved": "Profil Mis Azour"
+    },
+    "orders": {
+      "title": "Mo Komand",
+      "empty": "Okenn Komand Pou Linstant.",
+      "discover": "Explor Katalog",
+      "status": {
+        "pending": "An Atant",
+        "confirmed": "Konfirme",
+        "preparing": "An Preparasyon",
+        "out_for_delivery": "An Livrezon",
+        "delivered": "Livre",
+        "cancelled": "Anile"
+      }
+    },
+    "password": {
+      "title": "Mot de Paz",
+      "new": "Nouvo Mot de Paz",
+      "confirm": "Konfirm Mot de Paz",
+      "save": "Sanz Mot de Paz",
+      "success": "Mot de Paz Mis Azour",
+      "tooShort": "Mot de paz bizin o mwin 6 karakter",
+      "mismatch": "Mot de paz pa koresponn"
+    },
+    "admin": {
+      "title": "Administrasyon",
+      "link": "Aksede Back-office"
+    }
+  },
+  "b2b": {
+    "hero": {
+      "title": "Lotel, Restoran, Pezazist",
+      "subtitle": "Aprovizyonman regulye an plant fre, pri negosye",
+      "cta": "Demann enn Devi"
+    },
+    "advantages": {
+      "title": "Pourquoi Choisir TRK Agriculture ?",
+      "delivery": { "title": "Livrezon Ebdomader Programa", "desc": "Planifye ou livrezon selon ou ritm — chak semenn, zour ek ler ki konvyen ou." },
+      "pricing": { "title": "Pri B2B Degressif lor Volim", "desc": "Plis ou komand, plis ou pri bese. Devi personalize selon ou volim mensyel." },
+      "variety": { "title": "Varyete lor Komand Posib", "desc": "Bizin enn varyete spesifik ? Nou kapav kultive lor komand pou satisfer ou bezwen." }
+    },
+    "clients": {
+      "title": "Zot Fer Konfians Nou",
+      "placeholder": "Ou retour ek logo byenveni"
+    },
+    "form": {
+      "title": "Demann enn Devi",
+      "subtitle": "Ranpli sa fòm la ek nou pou kontakte ou dan 48h.",
+      "companyType": "Tip Lantrepriz",
+      "companyTypePlaceholder": "Choisir",
+      "companyName": "Non Lantrepriz",
+      "contactName": "Non Kontakt",
+      "email": "Email",
+      "phone": "Telefon",
+      "volume": "Volim Mensyel Estime",
+      "volumePlaceholder": "Choisir",
+      "categories": "Varyete Interese",
+      "message": "Mesaz Lib",
+      "contactNamePlaceholder": "Ou non konple",
+      "messagePlaceholder": "Spesifye ou bezwen, frekilite sousite, kontrante...",
+      "submit": "Demann enn Devi",
+      "submitting": "Anvwaye…",
+      "required": "Sa chan la obligatwar",
+      "errorTitle": "Erer",
+      "types": {
+        "hotel": "Lotel",
+        "restaurant": "Restoran",
+        "landscaper": "Pezazist",
+        "green_space": "Espas Ver",
+        "other": "Lot"
+      },
+      "volumes": {
+        "lt5": "Mwin 5 Plato / Mwa",
+        "5_20": "5 a 20 Plato / Mwa",
+        "20_50": "20 a 50 Plato / Mwa",
+        "gt50": "Plis 50 Plato / Mwa",
+        "unknown": "Mo Pa Kone Ankor"
+      }
+    },
+    "success": {
+      "title": "Mersi, Ou Demand Finn Resevwar !",
+      "message": "Nou team pou kontakte ou dan 48h pou diskite ou bezwen.",
+      "ref": "Referans :",
+      "back": "Retour Lakaz"
+    }
+  },
+  "contact": {
+    "title": "Kontakte Nou",
+    "intro": "Enn kestion lor nou plant, enn komand, ou enn proze ? Nou la pou ed ou.",
+    "email": "Email",
+    "phone": "Telefon",
+    "whatsapp": "WhatsApp",
+    "address": "Adres",
+    "note": "Pou nenpor komand, pli fasil se pase par nou katalog online. Pou komand an gro (lotel, restoran, revandir), kontakte nou direkteman par WhatsApp ou email.",
+    "viewCatalog": "Get Katalog"
+  },
+  "about": {
+    "title": "Lor TRK Agriculture",
+    "subtitle": "Plant kiltive dan Moris, par enn fami pasyone",
+    "intro": "TRK Agriculture se enn pepinyer familyal Morisyen. Nou kiltive lor plas, a Henrietta (Vacoas), enn large gam plant maraisher : epis ek aromatik, salade, bred, legim varye, melon ek pasteк.",
+    "body": "Nou konviksyon sinp : enn bon potaze komanse par enn bon plant. Se pou sa rezon la nou kiltive lokalement plant vigorye, pre pou repike, san pase par importasyon.",
+    "approach": {
+      "title": "Nou Apros",
+      "body": "Chak plato prepare avek swen dan nou pepinyer. Nou seleksyon varyete adapte ar klima Morisyen."
+    },
+    "delivery": {
+      "title": "Livrezon Partou dan Lil",
+      "body": "Nou livre ou plant dan 9 distrikt Moris, direkteman lakaz. Choisir ou plant, pase komand, ek resevwar zot fre, pre pou plante."
+    }
+  },
+  "process": {
+    "title": "Nou Fason",
+    "subtitle": "Depi substrat ziska ou zardin — koman nou plant nesann",
+    "plateauTitle": "Kiltir an Plato Alveyole",
+    "plateauDesc": "Tou nou plant kiltive an plato alveyole dan enn anviwonnman kontrole.",
+    "standard128": "Plato 128 Alveyol",
+    "standard128Desc": "Fòrma standard pou epis, salade, bred ek legim",
+    "cucu98": "Plato 98 Alveyol",
+    "cucu98Desc": "Alveyol pli gran pou kukurbitase : melon, pastek, konkombre",
+    "stepsTitle": "6 Etap Produksyon",
+    "steps": {
+      "substrat": { "title": "Preparasyon Substrat", "desc": "Seleksyon ek melanz tourb, perlit ek konpos orgenik adapte a chak famiy plant." },
+      "semis":    { "title": "Semis", "desc": "Enn grenn par alveyol, a profonder optimal selon espess." },
+      "germination": { "title": "Zerminasyon", "desc": "Dan kondisyon kontrole, grenn leve dan 3 a 14 zur selon varyete." },
+      "croissance":  { "title": "Kwasans dan Pepinyer", "desc": "Plantiil gran sou labri avek arozaz regulye." },
+      "durcissement":{ "title": "Dirsisement", "desc": "Avan vant, plant expose progressivman kondisyon exteyer." },
+      "vente":       { "title": "Pre pou Vann", "desc": "Plant vigorye, bien anrasine, pre pou repiкe dan ou zardin." }
+    },
+    "durationsTitle": "Dire Produksyon par Kategori",
+    "durationsNote": "Dire indikatif dan Moris. Sezon sho (nov – avr) akselere kwasans.",
+    "durationCols": {
+      "category": "Kategori",
+      "germination": "Zerminasyon",
+      "nursery": "Pepinyer",
+      "total": "Total",
+      "examples": "Exanp Varyete"
+    },
+    "durations": {
+      "epices":  { "germination": "5–10 z", "nursery": "3–4 sem", "total": "4–6 sem", "examples": "Bazlik, Tim, Koriandr, Sitronnel" },
+      "salades": { "germination": "3–7 z",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Leti, Roket, Mesklun" },
+      "bredes":  { "germination": "5–10 z", "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Bred Mouroum, Bred Tazard, Song" },
+      "legumes": { "germination": "7–14 z", "nursery": "4–6 sem", "total": "5–8 sem", "examples": "Tomat, Poivron, Brinzel, Sou" },
+      "melons":  { "germination": "5–7 z",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Melon, Pastek, Konkombre, Kourgett" }
+    },
+    "ideasTitle": "Lide pou Later",
+    "ideasContentTitle": "Konteni pou Devlope",
+    "ideasContent": [
+      "Artik konsey plantasyon — semenn par semenn",
+      "FAQ — ou kestion pli frekan : arozaz, substrat, parazit komen dan Moris",
+      "Paz 'Nou Listwar' — portray fami TRK, nou pepinyer a Henrietta",
+      "Video pepinyer — suiv produksyon depi grenn ziska plant an time-lapse"
+    ],
+    "ideasVarietiesTitle": "Nouvo Varyete pou Kiltive selon Sezon",
+    "ideasVarieties": [
+      "Zerb aromatik premium : mint, origan, romarin (sezon fre, me – okt)",
+      "Fler komestibl : kapusin, boras, tagetes (tou lane)",
+      "Bred sezon sho : bred mafan, kreso tropikal (nov – avr)",
+      "Piman kreol : piman zoizo, piman banann, piman dou (sezon sho)",
+      "Mikro-pouse ek grenn zerme (7–14 zur)"
+    ]
+  },
+  "calendrier": {
+    "title": "Kalanndriye Disponibilite",
+    "subtitle": "Pi bon mwa pou komand chak kategori dan Moris",
+    "climateNote": "Lil Moris · Sezon Sho & Plivier : nov → avr · Sezon Fre & Sek : me → okt",
+    "months": ["Zan", "Fev", "Mar", "Avr", "Me", "Zin", "Ziy", "Out", "Sep", "Okt", "Nov", "Des"],
+    "legend": {
+      "high": "Disponibilite Konple",
+      "medium": "Disponibilite Parsyel",
+      "low": "Disponibilite Limite"
+    },
+    "note": "Sa kalanndriye reflekte produksyon sezonyer dan pepinyer. Komand hor sezon posib lor demann.",
+    "orderCta": "Komand Konn",
+    "categories": {
+      "epices": "Epis & Aromatik",
+      "salades": "Salade",
+      "bredes": "Bred",
+      "legumes": "Legim",
+      "melons": "Melon & Pastek"
+    }
+  },
+  "nursery": {
+    "title": "Pepinyer an Direkt",
+    "subtitle": "Suiv an tan reel nou lo an kou de kiltir — depi grenn ziska plant pre pou plante",
+    "sownDaysAgo": "Seme il y a {{days}} zur",
+    "readyIn": "Pre dan {{days}} z",
+    "readyNow": "Pre pou Vann 🎉",
+    "plateaux": "{{count}} plato",
+    "progress": "Progresyon",
+    "empty": "Okenn Lo an Kou",
+    "emptyDesc": "Revinn byento pou get nou semis !",
+    "filter": {
+      "all": "Tou",
+      "ready": "Pre Konn",
+      "growing": "An Kiltir",
+      "soon": "Byento"
+    },
+    "stats": {
+      "ready": "Pre pou Vann",
+      "growing": "An Kiltir",
+      "varieties": "Varyete"
+    },
+    "care": {
+      "sun": "Soley",
+      "water": "Arozaz",
+      "soil": "Later",
+      "full": "Soley Konple",
+      "partial": "Mi-Lonbraz",
+      "shade": "Lonbraz",
+      "low": "Feb",
+      "moderate": "Modere",
+      "high": "Abondant",
+      "welldrained": "Bien Drene",
+      "rich": "Rich",
+      "deep": "Profonn",
+      "light": "Leger"
+    },
+    "gallery": {
+      "title": "Nou Pepinyer",
+      "subtitle": "Chak plant elve avek swen a Henrietta, Vacoas"
+    },
+    "cta": {
+      "preorder": "Pre-Komand",
+      "contact": "Kontakte pou Rezerve",
+      "catalogue": "Get Katalog",
+      "whatsapp": "WhatsApp"
+    },
+    "preorderDesc": "Sa lo la pou pre dan {{days}} zur. Kontakte nou pou rezerv ou plant.",
+    "seedDate": "Seme le {{date}}",
+    "harvestDate": "Disponib ver le {{date}}",
+    "liveBadge": "An Direkt",
+    "homeSection": {
+      "tag": "Pepinyer an Direkt",
+      "title": "Pre pou Plante Sa Semenn",
+      "subtitle": "Sa varyete la disponib depi konn dan pepinyer.",
+      "cta": "Get Tou Lo"
+    }
+  }
+}

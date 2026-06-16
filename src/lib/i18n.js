@@ -4,17 +4,19 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 
 import frCommon from '../locales/fr/common.json'
 import enCommon from '../locales/en/common.json'
+import mfeCommon from '../locales/mfe/common.json'
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      fr: { common: frCommon },
-      en: { common: enCommon },
+      fr:  { common: frCommon },
+      en:  { common: enCommon },
+      mfe: { common: mfeCommon },
     },
     defaultNS: 'common',
-    fallbackLng: 'en',
+    fallbackLng: { mfe: ['fr', 'en'], default: ['en'] },
     detection: {
       order: ['localStorage'],
       caches: ['localStorage'],
