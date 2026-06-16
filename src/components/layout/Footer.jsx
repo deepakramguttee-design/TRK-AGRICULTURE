@@ -6,22 +6,21 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Leaf, Mail, MapPin } from 'lucide-react'
 
-// TODO: remplacer ces URLs par les vraies pages TRK Agriculture
 const SOCIAL = [
   {
-    href: 'https://www.facebook.com/TRKAgricultureLimited', // ✓ URL officielle
+    href: 'https://www.facebook.com/dipraj.ramguttee',
     label: 'Facebook TRK Agriculture',
     icon: IconFacebook,
     hover: 'hover:bg-blue-100 hover:text-blue-700',
   },
   {
-    href: 'https://www.instagram.com/trk_agriculture', // ✓ URL officielle
+    href: 'https://www.instagram.com/trk_agriculture',
     label: 'Instagram TRK Agriculture',
     icon: IconInstagram,
     hover: 'hover:bg-pink-100 hover:text-pink-600',
   },
   {
-    href: 'https://wa.me/23052345678',
+    href: 'https://wa.me/23057745306',
     label: 'WhatsApp TRK Agriculture',
     icon: IconWhatsApp,
     hover: 'hover:bg-green-100 hover:text-green-700',
