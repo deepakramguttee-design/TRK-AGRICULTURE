@@ -40,8 +40,20 @@ export default function Checkout() {
 
   useEffect(() => {
     if (!user) return
-    supabase.from('customers').select('discount_pct').eq('id', user.id).single()
-      .then(({ data }) => { if (data?.discount_pct) setDiscountPct(data.discount_pct) })
+    supabase.from('customers')
+      .select('discount_pct, full_name, phone, address, district')
+      .eq('id', user.id).single()
+      .then(({ data }) => {
+        if (!data) return
+        if (data.discount_pct) setDiscountPct(data.discount_pct)
+        setForm(f => ({
+          ...f,
+          name:     data.full_name || f.name,
+          phone:    data.phone     || f.phone,
+          address:  data.address   || f.address,
+          district: data.district  || f.district,
+        }))
+      })
   }, [user])
 
   const deliveryFee = deliveryMode === 'pickup' ? 0 : getDeliveryFee(form.district, cartTotal)
@@ -97,6 +109,7 @@ export default function Checkout() {
       const { data: order, error: orderErr } = await supabase
         .from('orders')
         .insert({
+          customer_id: user?.id || null,
           guest_phone: form.phone,
           guest_email: form.email || null,
           status: 'pending',

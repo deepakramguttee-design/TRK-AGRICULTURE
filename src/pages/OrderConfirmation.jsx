@@ -1,12 +1,14 @@
 import { useParams, useLocation, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { CheckCircle2, Home } from 'lucide-react'
+import { CheckCircle2, Home, UserPlus } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/AuthContext'
 
 export default function OrderConfirmation() {
   const { orderNumber } = useParams()
   const { state } = useLocation()
   const { t } = useTranslation()
+  const { user } = useAuth()
 
   const name = state?.name || '—'
   const total = state?.total != null ? `Rs ${Number(state.total).toFixed(2)}` : '—'
@@ -32,6 +34,25 @@ export default function OrderConfirmation() {
         <InfoRow label={t('confirmation.district')} value={district} />
         <InfoRow label={t('confirmation.total')} value={total} bold />
       </div>
+
+      {/* Banner compte pour invités */}
+      {!user && (
+        <div className="rounded-xl border border-green-200 bg-green-50 p-5 text-left mb-6">
+          <div className="flex items-start gap-3">
+            <UserPlus className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="font-semibold text-green-900 text-sm mb-1">Suivez vos commandes</p>
+              <p className="text-xs text-green-700 mb-3">
+                Créez un compte gratuit avec votre téléphone pour retrouver toutes vos commandes et suivre vos livraisons.
+              </p>
+              <Button size="sm" variant="outline" asChild
+                className="border-green-400 text-green-800 hover:bg-green-100">
+                <Link to="/login">Créer un compte →</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Button size="lg" className="w-full" asChild>
         <Link to="/">
