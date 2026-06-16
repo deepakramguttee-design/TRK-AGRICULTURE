@@ -134,6 +134,19 @@
     "pickupGps": "Voir sur Google Maps",
     "pickupNote": "Retrait gratuit à notre pépinière. Nous vous contacterons pour convenir d'un créneau de retrait après confirmation de votre commande.",
     "pickupFee": "Gratuit (retrait)",
+    "mipsSubmit": "Payer par carte bancaire",
+    "mipsInfo": {
+      "title": "Paiement sécurisé par carte",
+      "notice": "Vous serez redirigé vers la page de paiement sécurisée MIPS pour finaliser votre commande par carte bancaire Visa ou Mastercard."
+    },
+    "mipsReturn": {
+      "verifying": "Vérification du paiement en cours…",
+      "success": "Paiement confirmé !",
+      "redirecting": "Redirection en cours…",
+      "fail": "Paiement non abouti",
+      "failDesc": "Le paiement n'a pas pu être complété.",
+      "failDescOrder": "La commande {{order}} a été annulée. Votre panier a été conservé."
+    },
     "juice": "Paiement par MCB Juice",
     "juiceInfo": {
       "title": "Paiement Juice",

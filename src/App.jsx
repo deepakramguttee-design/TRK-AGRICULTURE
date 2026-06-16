@@ -37,6 +37,7 @@ import Contact from './pages/Contact'
 import NosProcess from './pages/NosProcess'
 import Calendrier from './pages/Calendrier'
 import Nursery from './pages/Nursery'
+import MipsReturn from './pages/MipsReturn'
 import { Toaster } from './components/ui/toaster'
 import LanguageBar from './components/layout/LanguageBar'
 import PromoBanner from './components/PromoBanner'
@@ -59,6 +60,7 @@ function App() {
                 <Route path="/panier" element={<Cart />} />
                 <Route path="/commande" element={<Checkout />} />
                 <Route path="/commande/confirmee/:orderNumber" element={<OrderConfirmation />} />
+                <Route path="/commande/retour-mips" element={<MipsReturn />} />
                 <Route path="/b2b" element={<B2B />} />
                 <Route path="/compte" element={<Account />} />
                 <Route path="/login" element={<Login />} />

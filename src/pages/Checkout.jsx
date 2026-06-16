@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
 import { DISTRICTS, FREE_DELIVERY_THRESHOLD, getDeliveryFee, isValidMauritiusPhone } from '@/lib/delivery'
-import { getProvider } from '@/lib/payments'
+import { getProvider, MipsProvider } from '@/lib/payments'
 import {
   Select, SelectTrigger, SelectValue, SelectContent, SelectItem,
 } from '@/components/ui/select'
@@ -38,6 +38,7 @@ export default function Checkout() {
   const deliveryFee = deliveryMode === 'pickup' ? 0 : getDeliveryFee(form.district, cartTotal)
   const total = cartTotal + deliveryFee
   const juiceProvider = getProvider('juice')
+  const mipsProvider  = MipsProvider
 
   if (items.length === 0 && !juicePhase) {
     return (
@@ -79,7 +80,9 @@ export default function Checkout() {
 
       const paymentPayload = paymentMethod === 'juice'
         ? juiceProvider.buildOrderPayload()
-        : { payment_method: 'cod', payment_status: 'pending' }
+        : paymentMethod === 'mips'
+          ? mipsProvider.buildOrderPayload()
+          : { payment_method: 'cod', payment_status: 'pending' }
 
       const { data: order, error: orderErr } = await supabase
         .from('orders')
@@ -114,6 +117,11 @@ export default function Checkout() {
 
       if (paymentMethod === 'juice') {
         setJuicePhase({ orderId: order.id, orderNumber: order.order_number, total })
+        return
+      }
+
+      if (paymentMethod === 'mips') {
+        mipsProvider.redirectToGateway(order.order_number, total)
         return
       }
 
@@ -325,7 +333,7 @@ export default function Checkout() {
             {/* Paiement */}
             <section>
               <h2 className="font-semibold text-base mb-4 pb-2 border-b">{t('checkout.payment')}</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
                 <PaymentOption
                   icon={<Banknote className="h-5 w-5" />}
                   label={t('checkout.cod')}
@@ -339,12 +347,27 @@ export default function Checkout() {
                   onClick={() => setPaymentMethod('juice')}
                   accent
                 />
+                <PaymentOption
+                  icon={<CreditCard className="h-5 w-5" />}
+                  label={t('checkout.mips')}
+                  selected={paymentMethod === 'mips'}
+                  onClick={() => mipsProvider.isAvailable && setPaymentMethod('mips')}
+                  disabled={!mipsProvider.isAvailable}
+                  badge={!mipsProvider.isAvailable ? t('checkout.mipsSoon') : undefined}
+                />
               </div>
 
               {paymentMethod === 'juice' && (
                 <div className="rounded-lg border border-green-200 bg-green-50/60 p-4 text-sm text-green-800">
                   <p className="font-medium mb-1">💚 {t('checkout.juiceInfo.title')}</p>
                   <p className="text-green-700 text-xs leading-relaxed">{t('checkout.juiceInfo.notice')}</p>
+                </div>
+              )}
+
+              {paymentMethod === 'mips' && mipsProvider.isAvailable && (
+                <div className="rounded-lg border border-blue-200 bg-blue-50/60 p-4 text-sm text-blue-800">
+                  <p className="font-medium mb-1">💳 {t('checkout.mipsInfo.title')}</p>
+                  <p className="text-blue-700 text-xs leading-relaxed">{t('checkout.mipsInfo.notice')}</p>
                 </div>
               )}
             </section>
@@ -398,7 +421,9 @@ export default function Checkout() {
               <Button type="submit" className="w-full" size="lg" disabled={submitting}>
                 {submitting
                   ? <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t('checkout.submitting')}</>
-                  : paymentMethod === 'juice' ? t('checkout.juiceSubmit') : t('checkout.submit')}
+                  : paymentMethod === 'juice' ? t('checkout.juiceSubmit')
+                  : paymentMethod === 'mips'  ? t('checkout.mipsSubmit')
+                  : t('checkout.submit')}
               </Button>
             </div>
           </div>
@@ -555,22 +580,29 @@ function Field({ label, error, hint, children }) {
   )
 }
 
-function PaymentOption({ icon, label, selected, onClick, accent }) {
+function PaymentOption({ icon, label, selected, onClick, accent, disabled, badge }) {
   return (
-    <button type="button" onClick={onClick}
+    <button type="button" onClick={onClick} disabled={disabled}
       className={`flex items-center gap-3 p-3 rounded-lg border-2 text-sm w-full text-left transition-all duration-150
-        ${selected
-          ? accent
-            ? 'border-green-500 bg-green-50 font-medium text-green-800'
-            : 'border-primary bg-primary/5 font-medium'
-          : 'border-border hover:border-stone-300 hover:bg-muted/30'
+        ${disabled
+          ? 'border-border opacity-50 cursor-not-allowed'
+          : selected
+            ? accent
+              ? 'border-green-500 bg-green-50 font-medium text-green-800'
+              : 'border-primary bg-primary/5 font-medium'
+            : 'border-border hover:border-stone-300 hover:bg-muted/30'
         }`}
     >
-      <span className={selected && accent ? 'text-green-600' : selected ? 'text-primary' : 'text-muted-foreground'}>
+      <span className={disabled ? 'text-muted-foreground' : selected && accent ? 'text-green-600' : selected ? 'text-primary' : 'text-muted-foreground'}>
         {icon}
       </span>
       <span className="flex-1">{label}</span>
-      {selected && (
+      {badge && !selected && (
+        <span className="text-[10px] px-1.5 py-0.5 rounded bg-stone-200 text-stone-600 font-medium shrink-0">
+          {badge}
+        </span>
+      )}
+      {selected && !disabled && (
         <span className={`text-xs px-1.5 py-0.5 rounded ${accent ? 'bg-green-600 text-white' : 'bg-primary text-primary-foreground'}`}>
           ✓
         </span>

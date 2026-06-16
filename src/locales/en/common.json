@@ -134,6 +134,19 @@
     "pickupGps": "View on Google Maps",
     "pickupNote": "Free pickup at our nursery. We will contact you to arrange a pickup time after your order is confirmed.",
     "pickupFee": "Free (pickup)",
+    "mipsSubmit": "Pay by card",
+    "mipsInfo": {
+      "title": "Secure card payment",
+      "notice": "You will be redirected to the secure MIPS payment page to complete your order by Visa or Mastercard."
+    },
+    "mipsReturn": {
+      "verifying": "Verifying payment…",
+      "success": "Payment confirmed!",
+      "redirecting": "Redirecting…",
+      "fail": "Payment unsuccessful",
+      "failDesc": "The payment could not be completed.",
+      "failDescOrder": "Order {{order}} has been cancelled. Your cart has been kept."
+    },
     "juice": "Pay with MCB Juice",
     "juiceInfo": {
       "title": "Juice Payment",

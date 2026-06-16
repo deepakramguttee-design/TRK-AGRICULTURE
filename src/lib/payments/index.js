@@ -1,13 +1,13 @@
 import { JuiceManualProvider } from './JuiceManualProvider'
+import { MipsProvider } from './MipsProvider'
 
 const PROVIDERS = {
-  juice: JuiceManualProvider,
-  // juice_peach: PeachJuiceProvider,   // V2
-  // mips:        MipsProvider,         // V2
+  juice:     JuiceManualProvider,
+  mips_card: MipsProvider,
 }
 
 export function getProvider(method) {
   return PROVIDERS[method] ?? null
 }
 
-export { JuiceManualProvider }
+export { JuiceManualProvider, MipsProvider }
