@@ -64,6 +64,19 @@ const checkText = await page.textContent('main').catch(() => '');
 check('Page checkout charge', checkText.length > 50, checkText.substring(0,80).trim());
 await page.screenshot({ path: OUT + '/verify-06-checkout.png' });
 
+// 8. Kreol — bouton KR present et switch fonctionnel
+await page.goto(BASE, { waitUntil: 'networkidle', timeout: 20000 });
+const krBtn = page.locator('button[lang="mfe"], button:has-text("KR")').first();
+const krExists = await krBtn.count() > 0;
+check('Bouton KR present', krExists, krExists ? 'trouvé' : 'absent');
+if (krExists) {
+  await krBtn.click();
+  await page.waitForTimeout(800);
+  const navText = await page.textContent('nav').catch(() => '');
+  check('Nav bascule en Kreol', navText.includes('Katalog') || navText.includes('Panye'), navText.substring(0,100).trim());
+  await page.screenshot({ path: OUT + '/verify-07-kreol.png' });
+}
+
 await browser.close();
 
 const pass = results.every(r => r.ok);
