@@ -13,15 +13,15 @@ import { useAuth } from '@/contexts/AuthContext'
 const STATUS_LABELS = {
   pending:   'En attente',
   confirmed: 'Confirmée',
-  en_route:  'En route',
+  shipped:   'En route',
   delivered: 'Livrée',
   cancelled: 'Annulée',
 }
 
 const STATUS_NEXT = {
   pending:   { to: 'confirmed', label: 'Confirmer' },
-  confirmed: { to: 'en_route',  label: 'Marquer en route' },
-  en_route:  { to: 'delivered', label: 'Marquer livrée ✓' },
+  confirmed: { to: 'shipped',   label: 'Marquer en route' },
+  shipped:   { to: 'delivered', label: 'Marquer livrée ✓' },
 }
 
 function parseNotes(notes) {
