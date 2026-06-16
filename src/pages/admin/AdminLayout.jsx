@@ -16,6 +16,8 @@ const NAV_ADMIN = [
 const NAV_OPERATOR = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
+  { to: '/admin/b2b', label: 'B2B', icon: Users },
+  { to: '/admin/semis', label: 'Semis', icon: Leaf },
 ]
 
 export default function AdminLayout() {

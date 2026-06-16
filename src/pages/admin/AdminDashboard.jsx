@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
+import { useAuth } from '@/contexts/AuthContext'
 import {
   Package, ShoppingCart, Clock, Users, TrendingUp,
   Smartphone, AlertCircle, MapPin, Plus, Banknote,
@@ -64,6 +65,7 @@ function RevenueCard({ label, value, sub }) {
 }
 
 export default function AdminDashboard() {
+  const { isAdmin } = useAuth()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
 
@@ -158,7 +160,7 @@ export default function AdminDashboard() {
               {d.pendingOrders} commande{d.pendingOrders > 1 ? 's' : ''} en attente de confirmation
             </Link>
           )}
-          {d.juicePending > 0 && (
+          {isAdmin && d.juicePending > 0 && (
             <Link to="/admin/commandes" className="flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2.5 text-sm font-medium text-amber-800 hover:bg-amber-100 transition-colors">
               <Smartphone className="h-4 w-4" />
               {d.juicePending} paiement{d.juicePending > 1 ? 's' : ''} Juice à valider
@@ -169,21 +171,25 @@ export default function AdminDashboard() {
 
       {/* KPIs */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <KpiCard label="Produits actifs"     value={loading ? '—' : d.activeProducts} icon={Package}      color="text-green-600"  to="/admin/produits" />
+        {isAdmin && (
+          <KpiCard label="Produits actifs"     value={loading ? '—' : d.activeProducts} icon={Package}      color="text-green-600"  to="/admin/produits" />
+        )}
         <KpiCard label="Commandes totales"   value={loading ? '—' : d.totalOrders}    icon={ShoppingCart}  color="text-blue-600"   to="/admin/commandes" />
-        <KpiCard label="Clients enregistrés" value={loading ? '—' : d.totalClients}   icon={Users}         color="text-violet-600" to="/admin/utilisateurs" />
+        <KpiCard label="Clients enregistrés" value={loading ? '—' : d.totalClients}   icon={Users}         color="text-violet-600" to={isAdmin ? '/admin/utilisateurs' : undefined} />
         <KpiCard label="Devis B2B en attente" value={loading ? '—' : d.newB2B}        icon={TrendingUp}    color="text-orange-500" to="/admin/b2b" alert={!loading && d.newB2B > 0} />
       </div>
 
-      {/* Revenue */}
-      <div>
-        <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Chiffre d'affaires</h2>
-        <div className="grid grid-cols-3 gap-4">
-          <RevenueCard label="Aujourd'hui"  value={loading ? '—' : formatPrice(d.revenueToday)}  sub="commandes non annulées" />
-          <RevenueCard label="Ce mois"      value={loading ? '—' : formatPrice(d.revenueMonth)}  sub={new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} />
-          <RevenueCard label="Total (all time)" value={loading ? '—' : formatPrice(d.revenueTotal)} sub="depuis le lancement" />
+      {/* Revenue — admin uniquement */}
+      {isAdmin && (
+        <div>
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Chiffre d'affaires</h2>
+          <div className="grid grid-cols-3 gap-4">
+            <RevenueCard label="Aujourd'hui"  value={loading ? '—' : formatPrice(d.revenueToday)}  sub="commandes non annulées" />
+            <RevenueCard label="Ce mois"      value={loading ? '—' : formatPrice(d.revenueMonth)}  sub={new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} />
+            <RevenueCard label="Total (all time)" value={loading ? '—' : formatPrice(d.revenueTotal)} sub="depuis le lancement" />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Tables */}
       <div className="grid md:grid-cols-2 gap-6">
@@ -272,18 +278,22 @@ export default function AdminDashboard() {
           <div className="rounded-xl border p-4">
             <h2 className="font-semibold text-sm mb-3">Actions rapides</h2>
             <div className="grid grid-cols-2 gap-2">
-              <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                <Link to="/admin/produits/nouveau"><Plus className="h-3.5 w-3.5" /> Nouveau produit</Link>
-              </Button>
+              {isAdmin && (
+                <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
+                  <Link to="/admin/produits/nouveau"><Plus className="h-3.5 w-3.5" /> Nouveau produit</Link>
+                </Button>
+              )}
               <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
                 <Link to="/admin/commandes"><ShoppingCart className="h-3.5 w-3.5" /> Commandes</Link>
               </Button>
               <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
                 <Link to="/admin/semis"><Package className="h-3.5 w-3.5" /> Semis</Link>
               </Button>
-              <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                <Link to="/admin/utilisateurs"><Users className="h-3.5 w-3.5" /> Utilisateurs</Link>
-              </Button>
+              {isAdmin && (
+                <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
+                  <Link to="/admin/utilisateurs"><Users className="h-3.5 w-3.5" /> Utilisateurs</Link>
+                </Button>
+              )}
             </div>
           </div>
         </div>

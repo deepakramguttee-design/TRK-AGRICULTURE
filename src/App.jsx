@@ -29,6 +29,7 @@ import AdminB2BDetail from './pages/admin/AdminB2BDetail'
 import AdminSowingList from './pages/admin/AdminSowingList'
 import AdminUsersList from './pages/admin/AdminUsersList'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
+import RequireAdmin from './components/RequireAdmin'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -77,17 +78,17 @@ function App() {
                 <Route path="/admin/products" element={<AdminProducts />} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
-                  <Route path="produits" element={<AdminProductsList />} />
-                  <Route path="produits/nouveau" element={<AdminProductCreate />} />
-                  <Route path="produits/:sku" element={<AdminProductDetail />} />
-                  <Route path="produits/:sku/editer" element={<AdminProductEdit />} />
+                  <Route path="produits" element={<RequireAdmin><AdminProductsList /></RequireAdmin>} />
+                  <Route path="produits/nouveau" element={<RequireAdmin><AdminProductCreate /></RequireAdmin>} />
+                  <Route path="produits/:sku" element={<RequireAdmin><AdminProductDetail /></RequireAdmin>} />
+                  <Route path="produits/:sku/editer" element={<RequireAdmin><AdminProductEdit /></RequireAdmin>} />
                   <Route path="commandes" element={<AdminOrdersList />} />
                   <Route path="commandes/:order_number" element={<AdminOrderDetail />} />
                   <Route path="b2b" element={<AdminB2BList />} />
                   <Route path="b2b/:id" element={<AdminB2BDetail />} />
                   <Route path="semis" element={<AdminSowingList />} />
-                  <Route path="utilisateurs" element={<AdminUsersList />} />
-                  <Route path="utilisateurs/clients/:id" element={<AdminClientDetail />} />
+                  <Route path="utilisateurs" element={<RequireAdmin><AdminUsersList /></RequireAdmin>} />
+                  <Route path="utilisateurs/clients/:id" element={<RequireAdmin><AdminClientDetail /></RequireAdmin>} />
                 </Route>
               </Routes>
             </main>
