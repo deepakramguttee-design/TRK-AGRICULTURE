@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import ProtectedAdminRoute from '@/components/ProtectedAdminRoute'
 import { toast } from '@/hooks/use-toast'
 
-const NAV = [
+const NAV_ADMIN = [
   { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/produits', label: 'Produits', icon: Package },
   { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
@@ -13,9 +13,15 @@ const NAV = [
   { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UserCheck },
 ]
 
+const NAV_OPERATOR = [
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
+]
+
 export default function AdminLayout() {
-  const { user, signOut } = useAuth()
+  const { user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
+  const NAV = isAdmin ? NAV_ADMIN : NAV_OPERATOR
 
   async function handleSignOut() {
     await signOut()

@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { ChevronLeft, Loader2, CheckCircle2, Smartphone, Banknote } from 'lucide-react'
+import { ChevronLeft, Loader2, CheckCircle2, Smartphone, Banknote, ArrowRight, Lock } from 'lucide-react'
 import { getProvider } from '@/lib/payments'
+import { useAuth } from '@/contexts/AuthContext'
 
 const STATUS_LABELS = {
   pending:   'En attente',
@@ -15,6 +16,12 @@ const STATUS_LABELS = {
   en_route:  'En route',
   delivered: 'Livrée',
   cancelled: 'Annulée',
+}
+
+const STATUS_NEXT = {
+  pending:   { to: 'confirmed', label: 'Confirmer' },
+  confirmed: { to: 'en_route',  label: 'Marquer en route' },
+  en_route:  { to: 'delivered', label: 'Marquer livrée ✓' },
 }
 
 function parseNotes(notes) {
@@ -60,6 +67,7 @@ function InfoRow({ label, value }) {
 
 export default function AdminOrderDetail() {
   const { order_number } = useParams()
+  const { isAdmin } = useAuth()
   const [order, setOrder] = useState(null)
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -99,6 +107,20 @@ export default function AdminOrderDetail() {
     } else {
       setOrder(o => ({ ...o, status: newStatus }))
       toast({ title: 'Statut mis à jour ✓' })
+    }
+    setSaving(false)
+  }
+
+  async function handleNextStatus() {
+    const next = STATUS_NEXT[order.status]
+    if (!next) return
+    setSaving(true)
+    const { error } = await supabase.from('orders').update({ status: next.to }).eq('id', order.id)
+    if (error) {
+      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+    } else {
+      setOrder(o => ({ ...o, status: next.to }))
+      toast({ title: `Statut mis à jour : ${STATUS_LABELS[next.to]}` })
     }
     setSaving(false)
   }
@@ -146,16 +168,31 @@ export default function AdminOrderDetail() {
         <h1 className="text-xl font-bold flex-1">Commande {order.order_number}</h1>
         <div className="flex items-center gap-2">
           {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
-          <Select value={order.status} onValueChange={handleStatusChange} disabled={saving}>
-            <SelectTrigger className="w-44">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Object.entries(STATUS_LABELS).map(([v, l]) => (
-                <SelectItem key={v} value={v}>{l}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {isAdmin ? (
+            <Select value={order.status} onValueChange={handleStatusChange} disabled={saving}>
+              <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+              <SelectContent>
+                {Object.entries(STATUS_LABELS).map(([v, l]) => (
+                  <SelectItem key={v} value={v}>{l}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          ) : order.status === 'delivered' || order.status === 'cancelled' ? (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium bg-muted text-muted-foreground">
+              <Lock className="h-3.5 w-3.5" />
+              {STATUS_LABELS[order.status]}
+            </span>
+          ) : STATUS_NEXT[order.status] ? (
+            <Button
+              size="sm"
+              onClick={handleNextStatus}
+              disabled={saving}
+              className="gap-1.5"
+            >
+              {STATUS_NEXT[order.status].label}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          ) : null}
         </div>
       </div>
 
@@ -209,8 +246,8 @@ export default function AdminOrderDetail() {
         </div>
       </div>
 
-      {/* Paiement */}
-      <div className="mt-6 rounded-lg border p-5">
+      {/* Paiement — admin only */}
+      {isAdmin && <div className="mt-6 rounded-lg border p-5">
         <h2 className="font-semibold border-b pb-2 mb-3 flex items-center gap-2">
           {order.payment_method === 'juice'
             ? <><Smartphone className="h-4 w-4 text-green-600" /> Paiement Juice</>
@@ -261,9 +298,10 @@ export default function AdminOrderDetail() {
             </div>
           )}
         </div>
-      </div>
+      </div>}
 
-      {/* Récap financier */}
+      {/* Récap financier — admin only */}
+      {isAdmin && <>
       <div className="mt-6 rounded-lg border p-5 max-w-xs ml-auto space-y-2">
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Sous-total</span>
@@ -288,6 +326,7 @@ export default function AdminOrderDetail() {
           <span className="text-green-600 text-lg">{formatPrice(order.total_mur)}</span>
         </div>
       </div>
+      </>}
     </div>
   )
 }

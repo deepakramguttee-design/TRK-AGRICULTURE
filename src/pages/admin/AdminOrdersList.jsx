@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/select'
 import { DISTRICTS } from '@/lib/delivery'
 import { Loader2, Smartphone, Banknote } from 'lucide-react'
+import { useAuth } from '@/contexts/AuthContext'
 
 const STATUS_LABELS = {
   pending:   'En attente',
@@ -62,6 +63,7 @@ const PAYMENT_STATUS_LABELS = {
 }
 
 export default function AdminOrdersList() {
+  const { isAdmin } = useAuth()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -72,7 +74,7 @@ export default function AdminOrdersList() {
   useEffect(() => {
     supabase
       .from('orders')
-      .select('id, order_number, created_at, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status')
+      .select('id, order_number, created_at, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status, order_items(quantity)')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
@@ -161,8 +163,13 @@ export default function AdminOrdersList() {
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Client</th>
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Téléphone</th>
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">District</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground whitespace-nowrap">Total</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Paiement</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground whitespace-nowrap">Plateaux</th>
+              {isAdmin && (
+                <>
+                  <th className="px-4 py-3 text-right font-semibold text-muted-foreground whitespace-nowrap">Total</th>
+                  <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Paiement</th>
+                </>
+              )}
               <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Statut</th>
               <th className="px-4 py-3 text-right font-semibold text-muted-foreground">Actions</th>
             </tr>
@@ -170,6 +177,7 @@ export default function AdminOrdersList() {
           <tbody>
             {filtered.map(order => {
               const parsed = parseNotes(order.customer_notes)
+              const totalQty = (order.order_items ?? []).reduce((s, i) => s + (i.quantity ?? 0), 0)
               return (
                 <tr key={order.id} className="border-b last:border-0 hover:bg-muted/30 transition-colors">
                   <td className="px-4 py-3">
@@ -183,31 +191,40 @@ export default function AdminOrdersList() {
                   <td className="px-4 py-3 font-medium">{parsed.name || '—'}</td>
                   <td className="px-4 py-3">{order.guest_phone || '—'}</td>
                   <td className="px-4 py-3">{parsed.district || '—'}</td>
-                  <td className="px-4 py-3 text-right">
-                    <span className="font-semibold">{formatPrice(order.total_mur)}</span>
-                    {Number(order.discount_pct) > 0 && (
-                      <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">
-                        −{order.discount_pct}%
-                      </span>
-                    )}
-                  </td>
                   <td className="px-4 py-3 text-center">
-                    {order.payment_method === 'juice' ? (
-                      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
-                        order.payment_status === 'pending'
-                          ? 'bg-amber-100 text-amber-700 border-amber-200'
-                          : 'bg-green-100 text-green-700 border-green-200'
-                      }`}>
-                        <Smartphone className="h-3 w-3" />
-                        Juice {order.payment_status === 'paid' ? '✓' : '⏳'}
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-muted text-muted-foreground border-border">
-                        <Banknote className="h-3 w-3" />
-                        COD
-                      </span>
-                    )}
+                    <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-primary/10 text-primary font-bold text-xs">
+                      {totalQty}
+                    </span>
                   </td>
+                  {isAdmin && (
+                    <>
+                      <td className="px-4 py-3 text-right">
+                        <span className="font-semibold">{formatPrice(order.total_mur)}</span>
+                        {Number(order.discount_pct) > 0 && (
+                          <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">
+                            −{order.discount_pct}%
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        {order.payment_method === 'juice' ? (
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
+                            order.payment_status === 'pending'
+                              ? 'bg-amber-100 text-amber-700 border-amber-200'
+                              : 'bg-green-100 text-green-700 border-green-200'
+                          }`}>
+                            <Smartphone className="h-3 w-3" />
+                            Juice {order.payment_status === 'paid' ? '✓' : '⏳'}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-muted text-muted-foreground border-border">
+                            <Banknote className="h-3 w-3" />
+                            COD
+                          </span>
+                        )}
+                      </td>
+                    </>
+                  )}
                   <td className="px-4 py-3 text-center">
                     <span
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
