@@ -277,6 +277,12 @@ export default function AdminOrderDetail() {
               : formatPrice(order.delivery_fee_mur)}
           </span>
         </div>
+        {Number(order.discount_pct) > 0 && (
+          <div className="flex justify-between text-sm text-green-700">
+            <span className="font-medium">Remise fidélité {order.discount_pct}%</span>
+            <span className="font-medium">− {formatPrice(order.discount_mur)}</span>
+          </div>
+        )}
         <div className="flex justify-between text-base font-bold border-t pt-2">
           <span>TOTAL</span>
           <span className="text-green-600 text-lg">{formatPrice(order.total_mur)}</span>

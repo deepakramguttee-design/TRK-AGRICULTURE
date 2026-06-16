@@ -72,7 +72,7 @@ export default function AdminOrdersList() {
   useEffect(() => {
     supabase
       .from('orders')
-      .select('id, order_number, created_at, guest_phone, customer_notes, status, total_mur, payment_method, payment_status')
+      .select('id, order_number, created_at, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
@@ -183,7 +183,14 @@ export default function AdminOrdersList() {
                   <td className="px-4 py-3 font-medium">{parsed.name || '—'}</td>
                   <td className="px-4 py-3">{order.guest_phone || '—'}</td>
                   <td className="px-4 py-3">{parsed.district || '—'}</td>
-                  <td className="px-4 py-3 text-right font-semibold">{formatPrice(order.total_mur)}</td>
+                  <td className="px-4 py-3 text-right">
+                    <span className="font-semibold">{formatPrice(order.total_mur)}</span>
+                    {Number(order.discount_pct) > 0 && (
+                      <span className="ml-1.5 inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-green-100 text-green-700 border border-green-200 whitespace-nowrap">
+                        −{order.discount_pct}%
+                      </span>
+                    )}
+                  </td>
                   <td className="px-4 py-3 text-center">
                     {order.payment_method === 'juice' ? (
                       <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border ${
