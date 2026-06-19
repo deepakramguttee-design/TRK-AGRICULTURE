@@ -26,3 +26,6 @@ enable_confirmations = false
 
 [functions.create-team-member]
 verify_jwt = false
+
+[functions.place-order]
+verify_jwt = false

@@ -95,64 +95,47 @@ export default function Checkout() {
 
     setSubmitting(true)
     try {
-      const slotLabel = { morning: t('checkout.slotMorning'), afternoon: t('checkout.slotAfternoon'), any: t('checkout.slotAny') }[form.slot]
-      const notes = deliveryMode === 'pickup'
-        ? [`Nom: ${form.name}`, `Tél: ${form.phone}`, `Mode: Retrait sur place`, form.notes ? `Notes: ${form.notes}` : ''].filter(Boolean).join('\n')
-        : [`Nom: ${form.name}`, `Tél: ${form.phone}`, `District: ${form.district}`, `Adresse: ${form.address}`, `Créneau: ${slotLabel}`, form.notes ? `Notes: ${form.notes}` : ''].filter(Boolean).join('\n')
+      const { data: { session } } = await supabase.auth.getSession()
+      const headers = {
+        'Content-Type': 'application/json',
+        'apikey': import.meta.env.VITE_SUPABASE_ANON_KEY,
+      }
+      if (session?.access_token) {
+        headers['Authorization'] = `Bearer ${session.access_token}`
+      }
 
-      const paymentPayload = paymentMethod === 'juice'
-        ? juiceProvider.buildOrderPayload()
-        : paymentMethod === 'mips'
-          ? mipsProvider.buildOrderPayload()
-          : { payment_method: 'cod', payment_status: 'pending' }
+      const res = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/place-order`,
+        {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            items: items.map(i => ({ id: i.id, quantity: i.quantity })),
+            form,
+            deliveryMode,
+            paymentMethod,
+          }),
+        },
+      )
 
-      const { data: order, error: orderErr } = await supabase
-        .from('orders')
-        .insert({
-          customer_id: user?.id || null,
-          guest_phone: form.phone,
-          guest_email: form.email || null,
-          status: 'pending',
-          ...paymentPayload,
-          subtotal_mur: cartTotal,
-          delivery_fee_mur: deliveryFee,
-          discount_pct: discountPct,
-          discount_mur: discountMur,
-          total_mur: total,
-          customer_notes: notes,
-        })
-        .select('id, order_number')
-        .single()
-
-      if (orderErr) throw orderErr
-
-      const orderItems = items.map(item => ({
-        order_id: order.id,
-        product_id: item.id,
-        product_sku: item.sku,
-        product_name: item.name_fr,
-        unit_price_mur: item.price_mur,
-        quantity: item.quantity,
-        line_total_mur: Number((item.price_mur * item.quantity).toFixed(2)),
-      }))
-      const { error: itemsErr } = await supabase.from('order_items').insert(orderItems)
-      if (itemsErr) throw itemsErr
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Erreur lors de la commande')
 
       clearCart()
 
       if (paymentMethod === 'juice') {
-        setJuicePhase({ orderId: order.id, orderNumber: order.order_number, total })
+        setJuicePhase({ orderId: data.order_id, orderNumber: data.order_number, total: data.total_mur })
         return
       }
 
       if (paymentMethod === 'mips') {
-        mipsProvider.redirectToGateway(order.order_number, total)
+        mipsProvider.redirectToGateway(data.order_number, data.total_mur)
         return
       }
 
-      navigate(`/commande/confirmee/${order.order_number}`, {
+      navigate(`/commande/confirmee/${data.order_number}`, {
         replace: true,
-        state: { name: form.name, total, district: form.district, deliveryFee },
+        state: { name: form.name, total: data.total_mur, district: form.district, deliveryFee: data.delivery_fee_mur },
       })
     } catch (err) {
       toast({ title: 'Erreur', description: err.message, variant: 'destructive' })
