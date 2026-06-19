@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Upload, Image as ImageIcon, Loader2, ShieldAlert } from 'lucide-react'
+import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from '@/hooks/use-toast'
@@ -41,6 +41,7 @@ export default function AdminProducts() {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [uploading, setUploading] = useState(null) // sku of row being uploaded
+  const [deleting, setDeleting] = useState(null)   // sku of row being deleted
   const [dragOver, setDragOver] = useState(null)   // sku of row being dragged over
 
   useEffect(() => {
@@ -95,6 +96,36 @@ export default function AdminProducts() {
     }
   }
 
+  async function handleDeleteImage(product) {
+    if (!window.confirm(`Supprimer la photo de "${product.name_fr}" ?`)) return
+    setDeleting(product.sku)
+    try {
+      // Remove from Storage only if it's a Supabase Storage URL
+      if (product.image_url?.includes('/storage/v1/object/public/product-images/')) {
+        const filename = product.image_url.split('/product-images/').pop()
+        const { error: storageErr } = await supabase.storage
+          .from('product-images')
+          .remove([filename])
+        if (storageErr) throw storageErr
+      }
+
+      const { error: dbErr } = await supabase
+        .from('products')
+        .update({ image_url: null })
+        .eq('sku', product.sku)
+      if (dbErr) throw dbErr
+
+      setProducts(prev =>
+        prev.map(p => p.sku === product.sku ? { ...p, image_url: null } : p)
+      )
+      toast({ title: 'Photo supprimée', description: product.name_fr })
+    } catch (e) {
+      toast({ title: 'Erreur suppression', description: e.message, variant: 'destructive' })
+    } finally {
+      setDeleting(null)
+    }
+  }
+
   function openFilePicker(sku) {
     fileInputRefs.current[sku]?.click()
   }
@@ -137,6 +168,7 @@ export default function AdminProducts() {
           <tbody>
             {products.map(product => {
               const isUploading = uploading === product.sku
+              const isDeleting = deleting === product.sku
               const isDragTarget = dragOver === product.sku
               return (
                 <tr
@@ -193,29 +225,46 @@ export default function AdminProducts() {
                     </div>
                   </td>
 
-                  {/* Upload */}
-                  <td className="px-4 py-3 text-right">
-                    <input
-                      ref={el => { fileInputRefs.current[product.sku] = el }}
-                      type="file"
-                      accept="image/jpeg,image/png,image/webp"
-                      className="hidden"
-                      onChange={e => handleUpload(product, e.target.files[0])}
-                      onClick={e => { e.target.value = '' }}
-                    />
-                    <Button
-                      size="sm"
-                      variant={product.image_url ? 'outline' : 'default'}
-                      className="text-xs gap-1.5"
-                      disabled={isUploading}
-                      onClick={() => openFilePicker(product.sku)}
-                    >
-                      {isUploading
-                        ? <Loader2 className="h-3 w-3 animate-spin" />
-                        : <Upload className="h-3 w-3" />
-                      }
-                      {isUploading ? 'Upload…' : product.image_url ? 'Remplacer' : 'Upload photo'}
-                    </Button>
+                  {/* Upload / Delete */}
+                  <td className="px-4 py-3">
+                    <div className="flex items-center justify-end gap-2">
+                      <input
+                        ref={el => { fileInputRefs.current[product.sku] = el }}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp"
+                        className="hidden"
+                        onChange={e => handleUpload(product, e.target.files[0])}
+                        onClick={e => { e.target.value = '' }}
+                      />
+                      <Button
+                        size="sm"
+                        variant={product.image_url ? 'outline' : 'default'}
+                        className="text-xs gap-1.5"
+                        disabled={isUploading || isDeleting}
+                        onClick={() => openFilePicker(product.sku)}
+                      >
+                        {isUploading
+                          ? <Loader2 className="h-3 w-3 animate-spin" />
+                          : <Upload className="h-3 w-3" />
+                        }
+                        {isUploading ? 'Upload…' : product.image_url ? 'Remplacer' : 'Upload photo'}
+                      </Button>
+                      {product.image_url && (
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          className="text-xs gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                          disabled={isUploading || isDeleting}
+                          onClick={() => handleDeleteImage(product)}
+                        >
+                          {isDeleting
+                            ? <Loader2 className="h-3 w-3 animate-spin" />
+                            : <Trash2 className="h-3 w-3" />
+                          }
+                          {isDeleting ? '…' : 'Supprimer'}
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )

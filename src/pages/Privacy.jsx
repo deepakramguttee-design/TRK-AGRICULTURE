@@ -137,7 +137,8 @@ export default function Privacy() {
             {[
               'The TRK Agriculture team to process your order',
               'Our hosting provider (Supabase) for storage',
-              'The future payment provider (MIPS, for card payments upon integration)',
+              'MCB Juice (mobile payment): we store your transaction reference to reconcile the payment — no bank card data is ever stored',
+              'MIPS (card payments): redirects to a secure page — we do not receive or store card details',
             ].map(r => (
               <li key={r} className="flex items-start gap-2">
                 <span className="text-primary mt-0.5">→</span>

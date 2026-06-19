@@ -137,7 +137,8 @@ export default function Confidentialite() {
             {[
               "L'équipe TRK Agriculture pour traiter votre commande",
               'Notre prestataire d\'hébergement (Supabase) pour le stockage',
-              'Le prestataire de paiement (MIPS, lors de l\'intégration future)',
+              'MCB Juice (paiement mobile) : nous conservons la référence de transaction Juice pour rapprocher le paiement — aucune donnée bancaire n\'est stockée',
+              'MIPS (paiement par carte) : vous êtes redirigé vers une page sécurisée — nous ne recevons ni ne stockons les coordonnées de votre carte',
             ].map(r => (
               <li key={r} className="flex items-start gap-2">
                 <span className="text-primary mt-0.5">→</span>

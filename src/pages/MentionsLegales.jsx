@@ -7,8 +7,8 @@ export default function MentionsLegales() {
         <h1 className="text-3xl font-bold text-primary mb-1">Mentions légales</h1>
         <p className="text-muted-foreground mt-4">
           Mentions légales en cours de rédaction. Contactez-nous à{' '}
-          <a href="mailto:deepak.ramguttee@gmail.com" className="text-primary hover:underline">
-            deepak.ramguttee@gmail.com
+          <a href="mailto:kailashramguttee@gmail.com" className="text-primary hover:underline">
+            kailashramguttee@gmail.com
           </a>{' '}
           pour toute question.
         </p>
