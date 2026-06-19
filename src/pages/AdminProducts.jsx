@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2 } from 'lucide-react'
+import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2, Pencil, Check, X } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from '@/hooks/use-toast'
@@ -38,11 +38,15 @@ export default function AdminProducts() {
   const navigate = useNavigate()
   const fileInputRefs = useRef({})
 
+  const priceInputRef = useRef(null)
+
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [uploading, setUploading] = useState(null) // sku of row being uploaded
-  const [deleting, setDeleting] = useState(null)   // sku of row being deleted
-  const [dragOver, setDragOver] = useState(null)   // sku of row being dragged over
+  const [uploading, setUploading] = useState(null)          // sku being uploaded
+  const [deleting, setDeleting] = useState(null)            // sku being deleted
+  const [dragOver, setDragOver] = useState(null)            // sku being dragged over
+  const [editingPrice, setEditingPrice] = useState(null)    // { sku, value }
+  const [savingPrice, setSavingPrice] = useState(null)      // sku being saved
 
   useEffect(() => {
     if (!user) { navigate('/', { replace: true }); return }
@@ -126,6 +130,43 @@ export default function AdminProducts() {
     }
   }
 
+  function startEditPrice(product) {
+    setEditingPrice({ sku: product.sku, value: String(Number(product.price_mur)) })
+    setTimeout(() => priceInputRef.current?.select(), 0)
+  }
+
+  function cancelEditPrice() {
+    setEditingPrice(null)
+  }
+
+  async function savePrice(product) {
+    const parsed = parseFloat(editingPrice.value)
+    if (isNaN(parsed) || parsed < 0) {
+      toast({ title: 'Prix invalide', description: 'Entrez un nombre positif', variant: 'destructive' })
+      return
+    }
+    const rounded = Math.round(parsed * 100) / 100
+    if (rounded === Number(product.price_mur)) { setEditingPrice(null); return }
+
+    setSavingPrice(product.sku)
+    setEditingPrice(null)
+    try {
+      const { error } = await supabase
+        .from('products')
+        .update({ price_mur: rounded })
+        .eq('sku', product.sku)
+      if (error) throw error
+      setProducts(prev =>
+        prev.map(p => p.sku === product.sku ? { ...p, price_mur: rounded } : p)
+      )
+      toast({ title: 'Prix mis à jour ✓', description: `${product.name_fr} → Rs ${rounded}` })
+    } catch (e) {
+      toast({ title: 'Erreur prix', description: e.message, variant: 'destructive' })
+    } finally {
+      setSavingPrice(null)
+    }
+  }
+
   function openFilePicker(sku) {
     fileInputRefs.current[sku]?.click()
   }
@@ -146,9 +187,9 @@ export default function AdminProducts() {
       <div className="flex items-center gap-3 mb-6">
         <ShieldAlert className="h-5 w-5 text-primary" />
         <div>
-          <h1 className="text-2xl font-bold">Admin — Photos produits</h1>
+          <h1 className="text-2xl font-bold">Admin — Produits</h1>
           <p className="text-muted-foreground text-sm mt-0.5">
-            {products.length} produits · Glissez une image sur une ligne ou cliquez sur le bouton
+            {products.length} produits · Cliquez sur un prix pour le modifier · Glissez une image pour l'uploader
           </p>
         </div>
       </div>
@@ -169,6 +210,8 @@ export default function AdminProducts() {
             {products.map(product => {
               const isUploading = uploading === product.sku
               const isDeleting = deleting === product.sku
+              const isSavingPrice = savingPrice === product.sku
+              const isEditingPrice = editingPrice?.sku === product.sku
               const isDragTarget = dragOver === product.sku
               return (
                 <tr
@@ -202,12 +245,45 @@ export default function AdminProducts() {
                     </Badge>
                   </td>
 
-                  {/* Prix */}
-                  <td className="px-4 py-3 text-right font-semibold text-primary">
-                    Rs {Number(product.price_mur).toFixed(2)}
-                    <span className="text-xs font-normal text-muted-foreground ml-1">
-                      / {product.unit}
-                    </span>
+                  {/* Prix — éditable inline */}
+                  <td className="px-4 py-3 text-right">
+                    {isEditingPrice ? (
+                      <div className="flex items-center justify-end gap-1">
+                        <span className="text-xs text-muted-foreground">Rs</span>
+                        <input
+                          ref={priceInputRef}
+                          type="number"
+                          min="0"
+                          step="0.5"
+                          value={editingPrice.value}
+                          onChange={e => setEditingPrice(prev => ({ ...prev, value: e.target.value }))}
+                          onKeyDown={e => {
+                            if (e.key === 'Enter') savePrice(product)
+                            if (e.key === 'Escape') cancelEditPrice()
+                          }}
+                          onBlur={() => savePrice(product)}
+                          className="w-20 text-right text-sm font-semibold border rounded px-1.5 py-0.5 focus:outline-none focus:ring-1 focus:ring-primary bg-background"
+                        />
+                      </div>
+                    ) : (
+                      <button
+                        className="group inline-flex items-center justify-end gap-1.5 text-right w-full hover:text-primary transition-colors"
+                        onClick={() => startEditPrice(product)}
+                        disabled={isSavingPrice}
+                        title="Cliquer pour modifier le prix"
+                      >
+                        {isSavingPrice
+                          ? <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
+                          : <Pencil className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
+                        }
+                        <span className="font-semibold text-primary">
+                          Rs {Number(product.price_mur).toFixed(2)}
+                        </span>
+                        <span className="text-xs font-normal text-muted-foreground">
+                          / {product.unit}
+                        </span>
+                      </button>
+                    )}
                   </td>
 
                   {/* Aperçu */}
