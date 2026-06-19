@@ -11,6 +11,12 @@ const CATEGORY_EMOJI = {
   epices: '🌿', salades: '🥬', bredes: '🍃', legumes: '🥕', melons: '🍈',
 }
 
+const STATUS_OPTIONS = [
+  { value: 'available',    label: 'Disponible',    className: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
+  { value: 'in_production',label: 'En production', className: 'text-amber-700  bg-amber-50  border-amber-200'  },
+  { value: 'coming_soon',  label: 'Bientôt',       className: 'text-blue-700   bg-blue-50   border-blue-200'   },
+]
+
 async function resizeToMax(file, maxWidth = 1200) {
   return new Promise((resolve) => {
     const img = new Image()
@@ -47,12 +53,14 @@ export default function AdminProducts() {
   const [dragOver, setDragOver] = useState(null)            // sku being dragged over
   const [editingPrice, setEditingPrice] = useState(null)    // { sku, value }
   const [savingPrice, setSavingPrice] = useState(null)      // sku being saved
+  const [savingStatus, setSavingStatus] = useState(null)    // sku being saved
+  const [savingActive, setSavingActive] = useState(null)    // sku being toggled
 
   useEffect(() => {
     if (!user) { navigate('/', { replace: true }); return }
     supabase
       .from('products')
-      .select('id, sku, name_fr, category, price_mur, unit, image_url, is_active')
+      .select('id, sku, name_fr, category, price_mur, unit, image_url, is_active, status')
       .order('category')
       .order('name_fr')
       .then(({ data, error }) => {
@@ -167,6 +175,37 @@ export default function AdminProducts() {
     }
   }
 
+  async function handleStatusChange(product, newStatus) {
+    if (newStatus === product.status) return
+    setSavingStatus(product.sku)
+    try {
+      const { error } = await supabase.from('products').update({ status: newStatus }).eq('sku', product.sku)
+      if (error) throw error
+      setProducts(prev => prev.map(p => p.sku === product.sku ? { ...p, status: newStatus } : p))
+      const label = STATUS_OPTIONS.find(o => o.value === newStatus)?.label
+      toast({ title: 'Statut mis à jour ✓', description: `${product.name_fr} → ${label}` })
+    } catch (e) {
+      toast({ title: 'Erreur statut', description: e.message, variant: 'destructive' })
+    } finally {
+      setSavingStatus(null)
+    }
+  }
+
+  async function handleToggleActive(product) {
+    setSavingActive(product.sku)
+    try {
+      const next = !product.is_active
+      const { error } = await supabase.from('products').update({ is_active: next }).eq('sku', product.sku)
+      if (error) throw error
+      setProducts(prev => prev.map(p => p.sku === product.sku ? { ...p, is_active: next } : p))
+      toast({ title: next ? 'Produit activé ✓' : 'Produit masqué', description: product.name_fr })
+    } catch (e) {
+      toast({ title: 'Erreur activation', description: e.message, variant: 'destructive' })
+    } finally {
+      setSavingActive(null)
+    }
+  }
+
   function openFilePicker(sku) {
     fileInputRefs.current[sku]?.click()
   }
@@ -202,6 +241,8 @@ export default function AdminProducts() {
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Nom</th>
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">Catégorie</th>
               <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-24">Prix Rs</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">Statut</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-16">Actif</th>
               <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-20">Photo</th>
               <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-40">Action</th>
             </tr>
@@ -212,6 +253,8 @@ export default function AdminProducts() {
               const isDeleting = deleting === product.sku
               const isSavingPrice = savingPrice === product.sku
               const isEditingPrice = editingPrice?.sku === product.sku
+              const isSavingStatus = savingStatus === product.sku
+              const isSavingActive = savingActive === product.sku
               const isDragTarget = dragOver === product.sku
               return (
                 <tr
@@ -282,6 +325,46 @@ export default function AdminProducts() {
                         <span className="text-xs font-normal text-muted-foreground">
                           / {product.unit}
                         </span>
+                      </button>
+                    )}
+                  </td>
+
+                  {/* Statut */}
+                  <td className="px-4 py-3">
+                    <div className="relative">
+                      {isSavingStatus && (
+                        <Loader2 className="absolute right-2 top-1/2 -translate-y-1/2 h-3 w-3 animate-spin text-muted-foreground pointer-events-none" />
+                      )}
+                      <select
+                        value={product.status || 'available'}
+                        disabled={isSavingStatus}
+                        onChange={e => handleStatusChange(product, e.target.value)}
+                        className={`w-full text-xs font-medium rounded px-2 py-1 border appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary disabled:opacity-50 ${
+                          STATUS_OPTIONS.find(o => o.value === (product.status || 'available'))?.className ?? ''
+                        }`}
+                      >
+                        {STATUS_OPTIONS.map(o => (
+                          <option key={o.value} value={o.value}>{o.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </td>
+
+                  {/* Actif */}
+                  <td className="px-4 py-3 text-center">
+                    {isSavingActive ? (
+                      <Loader2 className="h-4 w-4 animate-spin text-muted-foreground mx-auto" />
+                    ) : (
+                      <button
+                        onClick={() => handleToggleActive(product)}
+                        title={product.is_active ? 'Cliquer pour masquer' : 'Cliquer pour activer'}
+                        className={`w-10 h-5 rounded-full transition-colors relative ${
+                          product.is_active ? 'bg-emerald-500' : 'bg-muted'
+                        }`}
+                      >
+                        <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white shadow transition-transform ${
+                          product.is_active ? 'translate-x-5' : 'translate-x-0.5'
+                        }`} />
                       </button>
                     )}
                   </td>
