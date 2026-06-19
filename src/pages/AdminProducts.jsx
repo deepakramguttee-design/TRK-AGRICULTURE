@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2, Pencil, Check, X } from 'lucide-react'
+import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2, Pencil } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog'
 
 const CATEGORY_EMOJI = {
   epices: '🌿', salades: '🥬', bredes: '🍃', legumes: '🥕', melons: '🍈',
@@ -55,12 +56,14 @@ export default function AdminProducts() {
   const [savingPrice, setSavingPrice] = useState(null)      // sku being saved
   const [savingStatus, setSavingStatus] = useState(null)    // sku being saved
   const [savingActive, setSavingActive] = useState(null)    // sku being toggled
+  const [editingProduct, setEditingProduct] = useState(null) // product being edited (names/desc)
+  const [savingProduct, setSavingProduct] = useState(false)
 
   useEffect(() => {
     if (!user) { navigate('/', { replace: true }); return }
     supabase
       .from('products')
-      .select('id, sku, name_fr, category, price_mur, unit, image_url, is_active, status')
+      .select('id, sku, name_fr, name_en, description_fr, description_en, category, price_mur, unit, image_url, is_active, status')
       .order('category')
       .order('name_fr')
       .then(({ data, error }) => {
@@ -135,6 +138,25 @@ export default function AdminProducts() {
       toast({ title: 'Erreur suppression', description: e.message, variant: 'destructive' })
     } finally {
       setDeleting(null)
+    }
+  }
+
+  async function handleSaveProduct() {
+    if (!editingProduct) return
+    const { sku, name_fr, name_en, description_fr, description_en } = editingProduct
+    if (!name_fr.trim()) { toast({ title: 'Nom FR requis', variant: 'destructive' }); return }
+    const patch = { name_fr: name_fr.trim(), name_en: name_en?.trim() || null, description_fr: description_fr?.trim() || null, description_en: description_en?.trim() || null }
+    setSavingProduct(true)
+    try {
+      const { error } = await supabase.from('products').update(patch).eq('sku', sku)
+      if (error) throw error
+      setProducts(prev => prev.map(p => p.sku === sku ? { ...p, ...patch } : p))
+      toast({ title: 'Produit mis à jour ✓', description: patch.name_fr })
+      setEditingProduct(null)
+    } catch (e) {
+      toast({ title: 'Erreur', description: e.message, variant: 'destructive' })
+    } finally {
+      setSavingProduct(false)
     }
   }
 
@@ -228,7 +250,7 @@ export default function AdminProducts() {
         <div>
           <h1 className="text-2xl font-bold">Admin — Produits</h1>
           <p className="text-muted-foreground text-sm mt-0.5">
-            {products.length} produits · Cliquez sur un prix pour le modifier · Glissez une image pour l'uploader
+            {products.length} produits · Cliquez sur un nom pour modifier · Cliquez sur un prix pour modifier · Glissez une image pour l'uploader
           </p>
         </div>
       </div>
@@ -278,8 +300,17 @@ export default function AdminProducts() {
                     </code>
                   </td>
 
-                  {/* Nom */}
-                  <td className="px-4 py-3 font-medium">{product.name_fr}</td>
+                  {/* Nom — clic pour éditer */}
+                  <td className="px-4 py-3">
+                    <button
+                      className="group flex items-center gap-1.5 text-left font-medium hover:text-primary transition-colors"
+                      onClick={() => setEditingProduct({ ...product })}
+                      title="Modifier nom et description"
+                    >
+                      {product.name_fr}
+                      <Pencil className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+                    </button>
+                  </td>
 
                   {/* Catégorie */}
                   <td className="px-4 py-3">
@@ -431,6 +462,65 @@ export default function AdminProducts() {
           </tbody>
         </table>
       </div>
+
+      {/* Modal édition nom + description */}
+      <Dialog open={!!editingProduct} onOpenChange={open => { if (!open) setEditingProduct(null) }}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Modifier le produit</DialogTitle>
+          </DialogHeader>
+          {editingProduct && (
+            <div className="grid gap-4 py-2">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-medium text-muted-foreground">Nom FR *</label>
+                  <input
+                    className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background"
+                    value={editingProduct.name_fr || ''}
+                    onChange={e => setEditingProduct(p => ({ ...p, name_fr: e.target.value }))}
+                    autoFocus
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-medium text-muted-foreground">Nom EN</label>
+                  <input
+                    className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background"
+                    value={editingProduct.name_en || ''}
+                    onChange={e => setEditingProduct(p => ({ ...p, name_en: e.target.value }))}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Description FR</label>
+                <textarea
+                  rows={3}
+                  className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background resize-none"
+                  value={editingProduct.description_fr || ''}
+                  onChange={e => setEditingProduct(p => ({ ...p, description_fr: e.target.value }))}
+                />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-medium text-muted-foreground">Description EN</label>
+                <textarea
+                  rows={3}
+                  className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background resize-none"
+                  value={editingProduct.description_en || ''}
+                  onChange={e => setEditingProduct(p => ({ ...p, description_en: e.target.value }))}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline" size="sm">Annuler</Button>
+            </DialogClose>
+            <Button size="sm" disabled={savingProduct} onClick={handleSaveProduct}>
+              {savingProduct ? <Loader2 className="h-3 w-3 animate-spin mr-1.5" /> : null}
+              Enregistrer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
