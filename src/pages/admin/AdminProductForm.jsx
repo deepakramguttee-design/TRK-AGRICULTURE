@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
-import { Loader2 } from 'lucide-react'
+import { Image as ImageIcon, Loader2, Trash2, Upload } from 'lucide-react'
 
 const CATEGORIES = [
   { value: 'epices', label: '🌿 Épices' },
@@ -15,9 +15,18 @@ const CATEGORIES = [
   { value: 'melons', label: '🍈 Melons' },
 ]
 
-export default function AdminProductForm({ initialValues, onSubmit, isEdit = false }) {
+export default function AdminProductForm({
+  initialValues,
+  onSubmit,
+  isEdit = false,
+  imageUrl,
+  uploading = false,
+  onImageUpload,
+  onImageDelete,
+}) {
   const [values, setValues] = useState(initialValues)
   const [loading, setLoading] = useState(false)
+  const fileInputRef = useRef(null)
 
   function set(field, value) {
     setValues(prev => {
@@ -123,6 +132,71 @@ export default function AdminProductForm({ initialValues, onSubmit, isEdit = fal
         />
       </div>
 
+      {isEdit && (
+        <div className="space-y-1.5">
+          <label className="text-sm font-medium">Photo du produit</label>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="hidden"
+            onChange={e => { if (e.target.files[0]) onImageUpload(e.target.files[0]) }}
+            onClick={e => { e.target.value = '' }}
+          />
+          {imageUrl ? (
+            <div className="flex items-center gap-3">
+              <img
+                src={imageUrl}
+                alt="Aperçu"
+                className="w-[100px] h-[100px] rounded-md object-cover border bg-muted flex-shrink-0"
+              />
+              <div className="flex flex-col gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={uploading}
+                  onClick={() => fileInputRef.current?.click()}
+                  className="gap-1.5"
+                >
+                  {uploading
+                    ? <Loader2 className="h-3 w-3 animate-spin" />
+                    : <Upload className="h-3 w-3" />
+                  }
+                  {uploading ? 'En cours…' : 'Remplacer'}
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  disabled={uploading}
+                  onClick={onImageDelete}
+                  className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-3 w-3" />
+                  Supprimer
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Button
+              type="button"
+              size="sm"
+              variant="outline"
+              disabled={uploading}
+              onClick={() => fileInputRef.current?.click()}
+              className="gap-1.5"
+            >
+              {uploading
+                ? <Loader2 className="h-3 w-3 animate-spin" />
+                : <ImageIcon className="h-3 w-3" />
+              }
+              {uploading ? 'En cours…' : 'Ajouter une photo'}
+            </Button>
+          )}
+        </div>
+      )}
+
       <div className="flex items-center gap-3">
         <button
           type="button"
@@ -148,7 +222,7 @@ export default function AdminProductForm({ initialValues, onSubmit, isEdit = fal
       </div>
 
       <div className="flex gap-3 pt-2">
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading || uploading}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {isEdit ? 'Mettre à jour' : 'Créer le produit'}
         </Button>
