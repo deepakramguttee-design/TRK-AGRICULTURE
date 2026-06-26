@@ -1,9 +1,18 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useState, useEffect } from 'react'
 
 const CartContext = createContext(null)
+const CART_KEY = 'trk_cart'
+
+function loadCart() {
+  try { return JSON.parse(localStorage.getItem(CART_KEY) ?? '[]') } catch { return [] }
+}
 
 export function CartProvider({ children }) {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState(loadCart)
+
+  useEffect(() => {
+    try { localStorage.setItem(CART_KEY, JSON.stringify(items)) } catch {}
+  }, [items])
 
   const cartCount = items.reduce((sum, item) => sum + item.quantity, 0)
 

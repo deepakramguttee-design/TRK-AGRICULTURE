@@ -1,15 +1,29 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const CORS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+const ALLOWED_ORIGINS = [
+  'https://trk-agriculture.netlify.app',
+  'http://localhost:5174',
+  'http://localhost:4173',
+]
+
+function corsHeaders(req: Request) {
+  const origin = req.headers.get('Origin') ?? ''
+  const allowedOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0]
+  return {
+    'Access-Control-Allow-Origin': allowedOrigin,
+    'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Vary': 'Origin',
+  }
 }
 
-function json(body: unknown, status = 200) {
+const MAX_ITEM_QUANTITY = 500
+
+function json(body: unknown, status = 200, req?: Request) {
+  const headers = req ? corsHeaders(req) : { 'Access-Control-Allow-Origin': ALLOWED_ORIGINS[0] }
   return new Response(JSON.stringify(body), {
     status,
-    headers: { ...CORS, 'Content-Type': 'application/json' },
+    headers: { ...headers, 'Content-Type': 'application/json' },
   })
 }
 
@@ -39,8 +53,8 @@ const SLOT_LABELS: Record<string, string> = {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
-  if (req.method !== 'POST') return json({ error: 'Méthode non autorisée' }, 405)
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders(req) })
+  if (req.method !== 'POST') return json({ error: 'Méthode non autorisée' }, 405, req)
 
   // Admin client (service role) — bypasses RLS for trusted inserts
   const supabaseAdmin = createClient(
@@ -106,7 +120,7 @@ Deno.serve(async (req) => {
     const product = products?.find((p) => p.id === item.id)
     if (!product) return json({ error: `Produit introuvable: ${item.id}` }, 400)
     if (!product.is_active) return json({ error: `Produit indisponible: ${product.name_fr}` }, 400)
-    if (item.quantity < 1) return json({ error: `Quantité invalide pour ${product.name_fr}` }, 400)
+    if (item.quantity < 1 || item.quantity > MAX_ITEM_QUANTITY) return json({ error: `Quantité invalide pour ${product.name_fr} (max ${MAX_ITEM_QUANTITY})` }, 400, req)
   }
 
   // Compute totals from trusted DB prices — client-submitted prices are ignored

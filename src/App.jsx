@@ -75,7 +75,7 @@ function App() {
                 <Route path="/calendrier" element={<Calendrier />} />
                 <Route path="/pepiniere" element={<Nursery />} />
                 <Route path="/admin/login" element={<AdminLoginPage />} />
-                <Route path="/admin/products" element={<AdminProducts />} />
+                <Route path="/admin/products" element={<RequireAdmin><AdminProducts /></RequireAdmin>} />
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="produits" element={<RequireAdmin><AdminProductsList /></RequireAdmin>} />

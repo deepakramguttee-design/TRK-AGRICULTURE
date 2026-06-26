@@ -5,8 +5,17 @@ import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Loader2, Leaf, Eye, EyeOff, User, Phone, Mail, Lock } from 'lucide-react'
+import { Loader2, Leaf, Eye, EyeOff, User, Phone, Mail, Lock, KeyRound } from 'lucide-react'
 import { isValidMauritiusPhone } from '@/lib/delivery'
+
+const PASSWORD_RULES = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/
+function validatePassword(p) {
+  if (p.length < 8) return 'Au moins 8 caractères requis'
+  if (!/[A-Z]/.test(p)) return 'Au moins une majuscule requise'
+  if (!/[0-9]/.test(p)) return 'Au moins un chiffre requis'
+  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(p)) return 'Au moins un caractère spécial requis (!@#$…)'
+  return null
+}
 
 function Field({ label, icon: Icon, error, children }) {
   return (
@@ -43,6 +52,9 @@ export default function Login() {
 
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [loginLoading, setLoginLoading] = useState(false)
+  const [forgotLoading, setForgotLoading] = useState(false)
+  const [showForgot, setShowForgot] = useState(false)
+  const [forgotEmail, setForgotEmail] = useState('')
   const [regForm, setRegForm] = useState({ full_name: '', phone: '', email: '', password: '', confirm: '' })
   const [regErrors, setRegErrors] = useState({})
   const [regLoading, setRegLoading] = useState(false)
@@ -67,12 +79,29 @@ export default function Login() {
     navigate('/compte', { replace: true })
   }
 
+  async function handleForgotPassword(e) {
+    e.preventDefault()
+    if (!forgotEmail.trim()) return
+    setForgotLoading(true)
+    const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail.trim().toLowerCase(), {
+      redirectTo: `${window.location.origin}/reset-password`,
+    })
+    setForgotLoading(false)
+    if (error) {
+      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+    } else {
+      toast({ title: 'Email envoyé', description: 'Vérifiez votre boîte mail pour réinitialiser votre mot de passe.' })
+      setShowForgot(false)
+    }
+  }
+
   function validateReg() {
     const e = {}
     if (!regForm.full_name.trim()) e.full_name = 'Nom requis'
     if (!regForm.phone.trim() || !isValidMauritiusPhone(regForm.phone)) e.phone = 'Numéro mauricien invalide'
     if (!regForm.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regForm.email)) e.email = 'Email invalide'
-    if (regForm.password.length < 6) e.password = 'Au moins 6 caractères'
+    const pwdErr = validatePassword(regForm.password)
+    if (pwdErr) e.password = pwdErr
     if (regForm.password !== regForm.confirm) e.confirm = 'Les mots de passe ne correspondent pas'
     return e
   }
@@ -144,6 +173,28 @@ export default function Login() {
 
           <div className="p-6">
             {sub === 'login' ? (
+              showForgot ? (
+                <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <KeyRound className="h-4 w-4 text-primary" />
+                    <p className="text-sm font-semibold text-zinc-800">Réinitialiser le mot de passe</p>
+                  </div>
+                  <p className="text-xs text-zinc-500 -mt-2">Entrez votre email — vous recevrez un lien de réinitialisation.</p>
+                  <Field label="Email" icon={Mail}>
+                    <Input type="email" placeholder="votre@email.com" value={forgotEmail}
+                      onChange={e => setForgotEmail(e.target.value)}
+                      autoComplete="email" className="pl-9" required />
+                  </Field>
+                  <Button type="submit" className="w-full" disabled={forgotLoading}>
+                    {forgotLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    Envoyer le lien
+                  </Button>
+                  <button type="button" onClick={() => setShowForgot(false)}
+                    className="text-xs text-zinc-400 hover:text-zinc-600 text-center mt-1">
+                    ← Retour à la connexion
+                  </button>
+                </form>
+              ) : (
               <form onSubmit={handleLogin} className="flex flex-col gap-4">
                 <Field label="Email" icon={Mail}>
                   <Input type="email" placeholder="votre@email.com" value={loginForm.email}
@@ -155,11 +206,18 @@ export default function Login() {
                     onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
                     placeholder="••••••••" autoComplete="current-password" />
                 </Field>
+                <div className="flex justify-end -mt-2">
+                  <button type="button" onClick={() => { setShowForgot(true); setForgotEmail(loginForm.email) }}
+                    className="text-xs text-primary hover:underline">
+                    Mot de passe oublié ?
+                  </button>
+                </div>
                 <Button type="submit" className="w-full mt-1" disabled={loginLoading}>
                   {loginLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Se connecter
                 </Button>
               </form>
+              )
             ) : (
               <form onSubmit={handleRegister} className="flex flex-col gap-4">
                 <Field label="Nom complet *" icon={User} error={regErrors.full_name}>
