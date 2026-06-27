@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
@@ -9,13 +10,6 @@ import { Loader2, Leaf, Eye, EyeOff, User, Phone, Mail, Lock, KeyRound } from 'l
 import { isValidMauritiusPhone } from '@/lib/delivery'
 
 const PASSWORD_RULES = /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]).{8,}$/
-function validatePassword(p) {
-  if (p.length < 8) return 'Au moins 8 caractères requis'
-  if (!/[A-Z]/.test(p)) return 'Au moins une majuscule requise'
-  if (!/[0-9]/.test(p)) return 'Au moins un chiffre requis'
-  if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(p)) return 'Au moins un caractère spécial requis (!@#$…)'
-  return null
-}
 
 function Field({ label, icon: Icon, error, children }) {
   return (
@@ -46,6 +40,7 @@ function PasswordInput({ value, onChange, placeholder, autoComplete }) {
 }
 
 export default function Login() {
+  const { t } = useTranslation()
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const [sub, setSub] = useState('login')
@@ -59,12 +54,20 @@ export default function Login() {
   const [regErrors, setRegErrors] = useState({})
   const [regLoading, setRegLoading] = useState(false)
 
+  function validatePassword(p) {
+    if (p.length < 8) return t('login.passwordMin')
+    if (!/[A-Z]/.test(p)) return t('login.passwordUppercase')
+    if (!/[0-9]/.test(p)) return t('login.passwordDigit')
+    if (!/[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(p)) return t('login.passwordSpecial')
+    return null
+  }
+
   async function handleLogin(e) {
     e.preventDefault()
     setLoginLoading(true)
     const { data, error } = await signIn(loginForm.email, loginForm.password)
     if (error) {
-      toast({ title: 'Connexion impossible', description: error.message, variant: 'destructive' })
+      toast({ title: t('login.signInError'), description: error.message, variant: 'destructive' })
       setLoginLoading(false)
       return
     }
@@ -88,21 +91,21 @@ export default function Login() {
     })
     setForgotLoading(false)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('login.errorTitle'), description: error.message, variant: 'destructive' })
     } else {
-      toast({ title: 'Email envoyé', description: 'Vérifiez votre boîte mail pour réinitialiser votre mot de passe.' })
+      toast({ title: t('login.emailSent'), description: t('login.checkEmail') })
       setShowForgot(false)
     }
   }
 
   function validateReg() {
     const e = {}
-    if (!regForm.full_name.trim()) e.full_name = 'Nom requis'
-    if (!regForm.phone.trim() || !isValidMauritiusPhone(regForm.phone)) e.phone = 'Numéro mauricien invalide'
-    if (!regForm.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regForm.email)) e.email = 'Email invalide'
+    if (!regForm.full_name.trim()) e.full_name = t('login.fullNameRequired')
+    if (!regForm.phone.trim() || !isValidMauritiusPhone(regForm.phone)) e.phone = t('login.phoneInvalid')
+    if (!regForm.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(regForm.email)) e.email = t('login.emailInvalid')
     const pwdErr = validatePassword(regForm.password)
     if (pwdErr) e.password = pwdErr
-    if (regForm.password !== regForm.confirm) e.confirm = 'Les mots de passe ne correspondent pas'
+    if (regForm.password !== regForm.confirm) e.confirm = t('login.passwordMismatch')
     return e
   }
 
@@ -118,7 +121,7 @@ export default function Login() {
       options: { data: { full_name: regForm.full_name.trim() } },
     })
     if (error) {
-      toast({ title: 'Erreur création compte', description: error.message, variant: 'destructive' })
+      toast({ title: t('login.errorTitle'), description: error.message, variant: 'destructive' })
       setRegLoading(false)
       return
     }
@@ -135,13 +138,13 @@ export default function Login() {
     if (!data.session) {
       const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: regForm.password })
       if (signInErr) {
-        toast({ title: 'Compte créé — vérifiez votre email', description: 'Connectez-vous après confirmation.' })
+        toast({ title: t('login.verifyEmail'), description: t('login.verifyEmailDesc') })
         setSub('login')
         setRegLoading(false)
         return
       }
     }
-    toast({ title: 'Compte créé !', description: 'Bienvenue chez TRK Agriculture.' })
+    toast({ title: t('login.accountCreated'), description: t('login.welcome') })
     navigate('/compte', { replace: true })
   }
 
@@ -159,16 +162,16 @@ export default function Login() {
             <Leaf className="h-7 w-7 text-white" />
           </div>
           <h1 className="font-display text-2xl font-bold text-zinc-900">TRK Agriculture</h1>
-          <p className="text-sm text-zinc-500 mt-1">Votre espace personnel</p>
+          <p className="text-sm text-zinc-500 mt-1">{t('login.title')}</p>
         </div>
 
         <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm overflow-hidden">
 
           <div className="flex border-b">
             <button type="button" onClick={() => { setSub('login'); setRegErrors({}) }}
-              className={tabCls(sub === 'login')}>Se connecter</button>
+              className={tabCls(sub === 'login')}>{t('login.signin')}</button>
             <button type="button" onClick={() => { setSub('register'); setRegErrors({}) }}
-              className={tabCls(sub === 'register')}>Créer un compte</button>
+              className={tabCls(sub === 'register')}>{t('login.register')}</button>
           </div>
 
           <div className="p-6">
@@ -177,31 +180,31 @@ export default function Login() {
                 <form onSubmit={handleForgotPassword} className="flex flex-col gap-4">
                   <div className="flex items-center gap-2 mb-1">
                     <KeyRound className="h-4 w-4 text-primary" />
-                    <p className="text-sm font-semibold text-zinc-800">Réinitialiser le mot de passe</p>
+                    <p className="text-sm font-semibold text-zinc-800">{t('login.resetPassword')}</p>
                   </div>
-                  <p className="text-xs text-zinc-500 -mt-2">Entrez votre email — vous recevrez un lien de réinitialisation.</p>
+                  <p className="text-xs text-zinc-500 -mt-2">{t('login.resetHint')}</p>
                   <Field label="Email" icon={Mail}>
-                    <Input type="email" placeholder="votre@email.com" value={forgotEmail}
+                    <Input type="email" placeholder="your@email.com" value={forgotEmail}
                       onChange={e => setForgotEmail(e.target.value)}
                       autoComplete="email" className="pl-9" required />
                   </Field>
                   <Button type="submit" className="w-full" disabled={forgotLoading}>
                     {forgotLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                    Envoyer le lien
+                    {t('login.sendLink')}
                   </Button>
                   <button type="button" onClick={() => setShowForgot(false)}
                     className="text-xs text-zinc-400 hover:text-zinc-600 text-center mt-1">
-                    ← Retour à la connexion
+                    {t('login.backToLogin')}
                   </button>
                 </form>
               ) : (
               <form onSubmit={handleLogin} className="flex flex-col gap-4">
                 <Field label="Email" icon={Mail}>
-                  <Input type="email" placeholder="votre@email.com" value={loginForm.email}
+                  <Input type="email" placeholder="your@email.com" value={loginForm.email}
                     onChange={e => setLoginForm(f => ({ ...f, email: e.target.value }))}
                     autoComplete="email" className="pl-9" required />
                 </Field>
-                <Field label="Mot de passe">
+                <Field label={t('login.password')}>
                   <PasswordInput value={loginForm.password}
                     onChange={e => setLoginForm(f => ({ ...f, password: e.target.value }))}
                     placeholder="••••••••" autoComplete="current-password" />
@@ -209,45 +212,45 @@ export default function Login() {
                 <div className="flex justify-end -mt-2">
                   <button type="button" onClick={() => { setShowForgot(true); setForgotEmail(loginForm.email) }}
                     className="text-xs text-primary hover:underline">
-                    Mot de passe oublié ?
+                    {t('login.forgotPassword')}
                   </button>
                 </div>
                 <Button type="submit" className="w-full mt-1" disabled={loginLoading}>
                   {loginLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Se connecter
+                  {t('login.signin')}
                 </Button>
               </form>
               )
             ) : (
               <form onSubmit={handleRegister} className="flex flex-col gap-4">
-                <Field label="Nom complet *" icon={User} error={regErrors.full_name}>
-                  <Input placeholder="Prénom Nom" value={regForm.full_name}
+                <Field label={t('login.fullName')} icon={User} error={regErrors.full_name}>
+                  <Input placeholder="John Doe" value={regForm.full_name}
                     onChange={e => { setRegForm(f => ({ ...f, full_name: e.target.value })); setRegErrors(er => ({ ...er, full_name: undefined })) }}
                     autoComplete="name" className={`pl-9 ${regErrors.full_name ? 'border-destructive' : ''}`} />
                 </Field>
-                <Field label="Téléphone *" icon={Phone} error={regErrors.phone}>
+                <Field label={t('login.phone')} icon={Phone} error={regErrors.phone}>
                   <Input type="tel" placeholder="52 345 678" value={regForm.phone}
                     onChange={e => { setRegForm(f => ({ ...f, phone: e.target.value })); setRegErrors(er => ({ ...er, phone: undefined })) }}
                     autoComplete="tel" className={`pl-9 ${regErrors.phone ? 'border-destructive' : ''}`} />
                 </Field>
-                <Field label="Email *" icon={Mail} error={regErrors.email}>
-                  <Input type="email" placeholder="votre@email.com" value={regForm.email}
+                <Field label={t('login.emailField')} icon={Mail} error={regErrors.email}>
+                  <Input type="email" placeholder="your@email.com" value={regForm.email}
                     onChange={e => { setRegForm(f => ({ ...f, email: e.target.value })); setRegErrors(er => ({ ...er, email: undefined })) }}
                     autoComplete="email" className={`pl-9 ${regErrors.email ? 'border-destructive' : ''}`} />
                 </Field>
-                <Field label="Mot de passe *" error={regErrors.password}>
+                <Field label={t('login.passwordField')} error={regErrors.password}>
                   <PasswordInput value={regForm.password}
                     onChange={e => { setRegForm(f => ({ ...f, password: e.target.value })); setRegErrors(er => ({ ...er, password: undefined })) }}
-                    placeholder="Min. 6 caractères" autoComplete="new-password" />
+                    placeholder="Min. 8 chars" autoComplete="new-password" />
                 </Field>
-                <Field label="Confirmer *" error={regErrors.confirm}>
+                <Field label={t('login.confirm')} error={regErrors.confirm}>
                   <PasswordInput value={regForm.confirm}
                     onChange={e => { setRegForm(f => ({ ...f, confirm: e.target.value })); setRegErrors(er => ({ ...er, confirm: undefined })) }}
                     placeholder="••••••••" autoComplete="new-password" />
                 </Field>
                 <Button type="submit" className="w-full mt-1" disabled={regLoading}>
                   {regLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                  Créer mon compte
+                  {t('login.createAccount')}
                 </Button>
               </form>
             )}
@@ -255,8 +258,8 @@ export default function Login() {
         </div>
 
         <p className="text-center text-xs text-zinc-400 mt-6">
-          Équipe TRK ?{' '}
-          <Link to="/admin/login" className="text-primary hover:underline">Espace équipe</Link>
+          {t('login.teamSpace')}{' '}
+          <Link to="/admin/login" className="text-primary hover:underline">{t('login.teamLink')}</Link>
         </p>
       </div>
     </div>

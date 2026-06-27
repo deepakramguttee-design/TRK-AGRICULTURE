@@ -14,31 +14,21 @@ const STATS_KEYS = [
 
 const WHY_ICON_MAP = [Leaf, Truck, Award, Clock]
 
-const SEASONS = [
-  {
-    label: 'Jan–Mar', tag: '☀️ Été',
-    items: ['Brèdes mourongue', 'Laitue', 'Citronnelle'],
-    bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500',
-  },
-  {
-    label: 'Avr–Jun', tag: '🌧 Cyclone',
-    items: ['Épices robustes', 'Herbes aromatiques', 'Cresson'],
-    bg: 'bg-lime-50', border: 'border-lime-200', dot: 'bg-lime-500',
-  },
-  {
-    label: 'Jul–Sep', tag: '💨 Hiver',
-    items: ['Brèdes chouchou', 'Laitue boston', 'Thym'],
-    bg: 'bg-sky-50', border: 'border-sky-200', dot: 'bg-sky-500',
-  },
-  {
-    label: 'Oct–Déc', tag: '🌱 Printemps',
-    items: ['Salades variées', 'Tomates cerise', 'Basilic'],
-    bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500',
-  },
+const SEASON_KEYS = [
+  { key: 'summer',  bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' },
+  { key: 'cyclone', bg: 'bg-lime-50',    border: 'border-lime-200',    dot: 'bg-lime-500' },
+  { key: 'winter',  bg: 'bg-sky-50',     border: 'border-sky-200',     dot: 'bg-sky-500' },
+  { key: 'spring',  bg: 'bg-amber-50',   border: 'border-amber-200',   dot: 'bg-amber-500' },
 ]
 
 export default function Home() {
   const { t } = useTranslation()
+  const SEASONS = SEASON_KEYS.map(s => ({
+    ...s,
+    label: t(`home.seasons.${s.key}.label`),
+    tag:   t(`home.seasons.${s.key}.tag`),
+    items: t(`home.seasons.${s.key}.items`, { returnObjects: true }),
+  }))
   const [readyBatches, setReadyBatches] = useState([])
 
   useEffect(() => {
@@ -84,7 +74,7 @@ export default function Home() {
             {/* Pill badge */}
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-green-100 border border-green-200/80 text-green-800 text-xs font-semibold tracking-wider mb-8 animate-trk-fade-up">
               <Leaf className="h-3 w-3" />
-              Agriculture locale · Île Maurice
+              {t('home.hero.badge')}
             </div>
 
             {/* Headline */}

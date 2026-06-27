@@ -78,7 +78,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
               <MapPin className="h-3.5 w-3.5 shrink-0" />
-              Île Maurice
+              {t('footer.location')}
             </div>
 
             {/* Social links */}
@@ -143,21 +143,21 @@ export default function Footer() {
           {/* Newsletter */}
           <div>
             <h4 className="font-semibold mb-1 text-xs uppercase tracking-widest text-stone-500">
-              Restez informé
+              {t('footer.newsletter.title')}
             </h4>
             <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
-              Nouveaux produits, promotions et actualités de la ferme.
+              {t('footer.newsletter.desc')}
             </p>
             {subscribed ? (
               <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
                 <Leaf className="h-4 w-4 shrink-0" />
-                Merci ! On vous tient au courant.
+                {t('footer.newsletter.success')}
               </div>
             ) : (
               <form onSubmit={handleSubscribe} className="flex gap-2">
                 <Input
                   type="email"
-                  placeholder="votre@email.mu"
+                  placeholder={t('footer.newsletter.placeholder')}
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   className="text-sm rounded-lg h-9 flex-1 min-w-0"

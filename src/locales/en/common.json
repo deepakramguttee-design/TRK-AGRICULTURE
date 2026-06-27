@@ -19,7 +19,14 @@
     "privacy": "Privacy Policy",
     "terms": "Terms & Conditions",
     "links": "Navigation",
-    "explore": "Explore"
+    "explore": "Explore",
+    "location": "Mauritius",
+    "newsletter": {
+      "title": "Stay informed",
+      "desc": "New products, promotions and farm news.",
+      "success": "Thank you! We'll keep you posted.",
+      "placeholder": "your@email.com"
+    }
   },
   "b2b": {
     "hero": {
@@ -187,7 +194,10 @@
     "name": "Name",
     "total": "Total",
     "district": "District",
-    "backHome": "Back to home"
+    "backHome": "Back to home",
+    "trackOrders": "Track your orders",
+    "createAccountDesc": "Create a free account with your phone number to track all your orders and deliveries.",
+    "createAccount": "Create an account →"
   },
   "product": {
     "addToCart": "Add to cart",
@@ -431,7 +441,8 @@
     "hero": {
       "title": "Fresh plants grown in Mauritius",
       "subtitle": "Order directly from the producer. Delivery within 24h across all districts.",
-      "cta": "View catalogue"
+      "cta": "View catalogue",
+      "badge": "Local Agriculture · Mauritius"
     },
     "stats": {
       "local": "Local Products",
@@ -451,7 +462,11 @@
     "seasons": {
       "tag": "Harvest Calendar",
       "title": "Our products, through the seasons",
-      "note": "* Indicative. The catalogue is updated according to available harvests."
+      "note": "* Indicative. The catalogue is updated according to available harvests.",
+      "summer":  { "tag": "☀️ Summer",  "label": "Jan–Mar", "items": ["Moringa leaves", "Lettuce", "Lemongrass"] },
+      "cyclone": { "tag": "🌧 Cyclone", "label": "Apr–Jun", "items": ["Robust spices", "Aromatic herbs", "Watercress"] },
+      "winter":  { "tag": "💨 Winter",  "label": "Jul–Sep", "items": ["Chouchou leaves", "Boston lettuce", "Thyme"] },
+      "spring":  { "tag": "🌱 Spring",  "label": "Oct–Dec", "items": ["Assorted salads", "Cherry tomatoes", "Basil"] }
     },
     "cta": {
       "title": "Freshness delivered to your door",
@@ -472,5 +487,45 @@
       },
       "cta": "Learn more"
     }
+  },
+  "login": {
+    "title": "Your personal space",
+    "signin": "Sign in",
+    "register": "Create an account",
+    "resetPassword": "Reset password",
+    "resetHint": "Enter your email — you'll receive a reset link.",
+    "sendLink": "Send link",
+    "backToLogin": "← Back to sign in",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "createAccount": "Create my account",
+    "teamSpace": "TRK Team?",
+    "teamLink": "Team login",
+    "fullName": "Full name *",
+    "phone": "Phone *",
+    "emailField": "Email *",
+    "passwordField": "Password *",
+    "confirm": "Confirm *",
+    "passwordMin": "At least 8 characters required",
+    "passwordUppercase": "At least one uppercase letter required",
+    "passwordDigit": "At least one digit required",
+    "passwordSpecial": "At least one special character required (!@#$…)",
+    "fullNameRequired": "Full name required",
+    "phoneInvalid": "Invalid Mauritian number",
+    "emailInvalid": "Invalid email",
+    "passwordMismatch": "Passwords do not match",
+    "errorTitle": "Error",
+    "signInError": "Sign in failed",
+    "emailSent": "Email sent",
+    "checkEmail": "Check your inbox to reset your password.",
+    "accountCreated": "Account created!",
+    "welcome": "Welcome to TRK Agriculture.",
+    "verifyEmail": "Account created — check your email",
+    "verifyEmailDesc": "Sign in after confirmation."
+  },
+  "admin": {
+    "accessDenied": "Access denied",
+    "accessDeniedDesc": "You do not have permission to access this page.",
+    "backHome": "Back to home"
   }
 }

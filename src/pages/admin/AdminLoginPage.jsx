@@ -69,7 +69,12 @@ export default function AdminLoginPage() {
     // TOTP enrolled — get factors and challenge
     const { data: factors } = await supabase.auth.mfa.listFactors()
     const totp = factors?.totp?.[0]
-    if (!totp) { navigate('/admin', { replace: true }); return }
+    if (!totp) {
+      toast({ title: 'Authentication Error', description: 'No TOTP factor found. Please contact your administrator.', variant: 'destructive' })
+      await supabase.auth.signOut()
+      setLoading(false)
+      return
+    }
 
     setFactorId(totp.id)
     const { data: ch, error: chErr } = await supabase.auth.mfa.challenge({ factorId: totp.id })

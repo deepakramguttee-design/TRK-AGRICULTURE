@@ -19,7 +19,14 @@
     "privacy": "Confidentialité",
     "terms": "CGV",
     "links": "Navigation",
-    "explore": "Explorer"
+    "explore": "Explorer",
+    "location": "Île Maurice",
+    "newsletter": {
+      "title": "Restez informé",
+      "desc": "Nouveaux produits, promotions et actualités de la ferme.",
+      "success": "Merci ! On vous tient au courant.",
+      "placeholder": "votre@email.mu"
+    }
   },
   "b2b": {
     "hero": {
@@ -187,7 +194,10 @@
     "name": "Nom",
     "total": "Total",
     "district": "District",
-    "backHome": "Retour à l'accueil"
+    "backHome": "Retour à l'accueil",
+    "trackOrders": "Suivez vos commandes",
+    "createAccountDesc": "Créez un compte gratuit avec votre téléphone pour retrouver toutes vos commandes et suivre vos livraisons.",
+    "createAccount": "Créer un compte →"
   },
   "product": {
     "addToCart": "Ajouter au panier",
@@ -431,7 +441,8 @@
     "hero": {
       "title": "Plants frais cultivés à Maurice",
       "subtitle": "Commandez directement auprès du producteur. Livraison en 24h dans tous les districts.",
-      "cta": "Voir le catalogue"
+      "cta": "Voir le catalogue",
+      "badge": "Agriculture locale · Île Maurice"
     },
     "stats": {
       "local": "Produits locaux",
@@ -451,7 +462,11 @@
     "seasons": {
       "tag": "Calendrier des récoltes",
       "title": "Nos produits, au fil des saisons",
-      "note": "* Indicatif. Le catalogue est mis à jour selon les récoltes disponibles."
+      "note": "* Indicatif. Le catalogue est mis à jour selon les récoltes disponibles.",
+      "summer":  { "tag": "☀️ Été",      "label": "Jan–Mar", "items": ["Brèdes mourongue", "Laitue", "Citronnelle"] },
+      "cyclone": { "tag": "🌧 Cyclone",  "label": "Avr–Jun", "items": ["Épices robustes", "Herbes aromatiques", "Cresson"] },
+      "winter":  { "tag": "💨 Hiver",    "label": "Jul–Sep", "items": ["Brèdes chouchou", "Laitue boston", "Thym"] },
+      "spring":  { "tag": "🌱 Printemps","label": "Oct–Déc", "items": ["Salades variées", "Tomates cerise", "Basilic"] }
     },
     "cta": {
       "title": "Fraîcheur livrée chez vous",
@@ -472,5 +487,45 @@
       },
       "cta": "En savoir plus"
     }
+  },
+  "login": {
+    "title": "Votre espace personnel",
+    "signin": "Se connecter",
+    "register": "Créer un compte",
+    "resetPassword": "Réinitialiser le mot de passe",
+    "resetHint": "Entrez votre email — vous recevrez un lien de réinitialisation.",
+    "sendLink": "Envoyer le lien",
+    "backToLogin": "← Retour à la connexion",
+    "password": "Mot de passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "createAccount": "Créer mon compte",
+    "teamSpace": "Équipe TRK ?",
+    "teamLink": "Espace équipe",
+    "fullName": "Nom complet *",
+    "phone": "Téléphone *",
+    "emailField": "Email *",
+    "passwordField": "Mot de passe *",
+    "confirm": "Confirmer *",
+    "passwordMin": "Au moins 8 caractères requis",
+    "passwordUppercase": "Au moins une majuscule requise",
+    "passwordDigit": "Au moins un chiffre requis",
+    "passwordSpecial": "Au moins un caractère spécial requis (!@#$…)",
+    "fullNameRequired": "Nom requis",
+    "phoneInvalid": "Numéro mauricien invalide",
+    "emailInvalid": "Email invalide",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "errorTitle": "Erreur",
+    "signInError": "Connexion impossible",
+    "emailSent": "Email envoyé",
+    "checkEmail": "Vérifiez votre boîte mail pour réinitialiser votre mot de passe.",
+    "accountCreated": "Compte créé !",
+    "welcome": "Bienvenue chez TRK Agriculture.",
+    "verifyEmail": "Compte créé — vérifiez votre email",
+    "verifyEmailDesc": "Connectez-vous après confirmation."
+  },
+  "admin": {
+    "accessDenied": "Accès refusé",
+    "accessDeniedDesc": "Vous n'avez pas les droits pour accéder à cette page.",
+    "backHome": "Retour à l'accueil"
   }
 }

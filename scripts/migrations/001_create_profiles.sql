@@ -15,28 +15,58 @@ CREATE TABLE IF NOT EXISTS profiles (
 
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 
+-- SECURITY DEFINER helper — avoids recursive RLS self-reference
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS boolean
+LANGUAGE sql STABLE SECURITY DEFINER
+SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'admin'
+  );
+$$;
+REVOKE EXECUTE ON FUNCTION public.is_admin() FROM public;
+GRANT  EXECUTE ON FUNCTION public.is_admin() TO authenticated;
+
+-- Trigger: prevent role self-escalation on own profile
+CREATE OR REPLACE FUNCTION prevent_role_self_change()
+RETURNS trigger LANGUAGE plpgsql SECURITY DEFINER AS $$
+BEGIN
+  IF NEW.id = auth.uid() AND NEW.role <> OLD.role THEN
+    RAISE EXCEPTION 'Users cannot change their own role';
+  END IF;
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_prevent_role_self_change ON profiles;
+CREATE TRIGGER trg_prevent_role_self_change
+  BEFORE UPDATE ON profiles
+  FOR EACH ROW EXECUTE FUNCTION prevent_role_self_change();
+
 -- Users read own profile
 DROP POLICY IF EXISTS "profiles_select_own" ON profiles;
 CREATE POLICY "profiles_select_own" ON profiles
   FOR SELECT TO authenticated USING (id = auth.uid());
 
--- Admins read all profiles
+-- Admins read all profiles (uses SECURITY DEFINER fn — no recursion)
 DROP POLICY IF EXISTS "profiles_select_admin" ON profiles;
 CREATE POLICY "profiles_select_admin" ON profiles
   FOR SELECT TO authenticated
-  USING (EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.role = 'admin'));
+  USING (public.is_admin());
 
--- Admins update any profile
+-- Admins update any profile (uses SECURITY DEFINER fn — no recursion)
 DROP POLICY IF EXISTS "profiles_update_admin" ON profiles;
 CREATE POLICY "profiles_update_admin" ON profiles
   FOR UPDATE TO authenticated
-  USING (EXISTS (SELECT 1 FROM profiles p WHERE p.id = auth.uid() AND p.role = 'admin'));
+  USING (public.is_admin());
 
--- Users update own profile (but role protected by trigger)
+-- Users update own profile — role field protected by trigger above
 DROP POLICY IF EXISTS "profiles_update_own" ON profiles;
 CREATE POLICY "profiles_update_own" ON profiles
   FOR UPDATE TO authenticated
-  USING (id = auth.uid()) WITH CHECK (id = auth.uid());
+  USING (id = auth.uid())
+  WITH CHECK (id = auth.uid());
 
 -- Trigger: auto-create profile on signup
 CREATE OR REPLACE FUNCTION handle_new_profile()

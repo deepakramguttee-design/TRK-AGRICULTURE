@@ -19,13 +19,21 @@
     "privacy": "Konfidansyalite",
     "terms": "CGV",
     "links": "Navigasyon",
-    "explore": "Explor"
+    "explore": "Explor",
+    "location": "Moris",
+    "newsletter": {
+      "title": "Reste Informe",
+      "desc": "Nouvo prodwi, promosyon ek nuvel depi nou ferm.",
+      "success": "Mersi ! Nou pou tini ou okouran.",
+      "placeholder": "ou@email.mu"
+    }
   },
   "home": {
     "hero": {
       "title": "Plant Fre Kiltive dan Moris",
       "subtitle": "Komand direkteman depi produkter. Livrezon dan 24h dan tou distrikt.",
-      "cta": "Get Katalog"
+      "cta": "Get Katalog",
+      "badge": "Agrikilti Lokal · Moris"
     },
     "stats": {
       "local": "Prodwi Lokal",
@@ -45,7 +53,11 @@
     "seasons": {
       "tag": "Kalanndriye Rekolt",
       "title": "Nou Prodwi, Tou Long Sezon",
-      "note": "* Indikatif. Katalog mis azour selon rekolt disponib."
+      "note": "* Indikatif. Katalog mis azour selon rekolt disponib.",
+      "summer":  { "tag": "☀️ Ete",      "label": "Zan–Mar", "items": ["Bred Mouroum", "Leti", "Sitronnel"] },
+      "cyclone": { "tag": "🌧 Siklonn",  "label": "Avr–Zin", "items": ["Epis Fort", "Zerb Aromatik", "Kreso"] },
+      "winter":  { "tag": "💨 Liver",    "label": "Ziy–Sep", "items": ["Bred Sousou", "Leti Boston", "Tim"] },
+      "spring":  { "tag": "🌱 Prentan",  "label": "Okt–Des", "items": ["Salade Varye", "Tomat Serize", "Bazlik"] }
     },
     "cta": {
       "title": "Fresher Livre Lakaz",
@@ -202,7 +214,10 @@
     "name": "Non",
     "total": "Total",
     "district": "Distrikt",
-    "backHome": "Retour Lakaz"
+    "backHome": "Retour Lakaz",
+    "trackOrders": "Suiv Ou Komand",
+    "createAccountDesc": "Kree enn kont gratis avek ou nimewo telefon pou retrouv tou ou komand ek suiv ou livrezon.",
+    "createAccount": "Kree enn Kont →"
   },
   "account": {
     "error": "Erer",
@@ -454,5 +469,100 @@
       "subtitle": "Sa varyete la disponib depi konn dan pepinyer.",
       "cta": "Get Tou Lo"
     }
+  },
+  "home": {
+    "hero": {
+      "title": "Plant Fre Kiltive dan Moris",
+      "subtitle": "Komand direkteman depi produkter. Livrezon dan 24h dan tou distrikt.",
+      "cta": "Get Katalog",
+      "badge": "Agrikilti Lokal · Moris"
+    },
+    "stats": {
+      "local": "Prodwi Lokal",
+      "districts": "Distrikt Livre",
+      "varieties": "Varyete Fre"
+    },
+    "why": {
+      "tag": "Nou Angajman",
+      "title": "Pourquoi Choisir TRK ?",
+      "items": [
+        { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
+        { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
+        { "title": "Kalite Garanti", "desc": "Seleksyon rigurez a chak rekolt. San prodwi chimi initil." },
+        { "title": "Touzour Saison", "desc": "Nou katalog evolu avek sezon pou donn ou sa ki pi bon." }
+      ]
+    },
+    "seasons": {
+      "tag": "Kalanndriye Rekolt",
+      "title": "Nou Prodwi, Tou Long Sezon",
+      "note": "* Indikatif. Katalog mis azour selon rekolt disponib.",
+      "summer":  { "tag": "☀️ Ete",      "label": "Zan–Mar", "items": ["Bred Mouroum", "Leti", "Sitronnel"] },
+      "cyclone": { "tag": "🌧 Siklonn",  "label": "Avr–Zin", "items": ["Epis Fort", "Zerb Aromatik", "Kreso"] },
+      "winter":  { "tag": "💨 Liver",    "label": "Ziy–Sep", "items": ["Bred Sousou", "Leti Boston", "Tim"] },
+      "spring":  { "tag": "🌱 Prentan",  "label": "Okt–Des", "items": ["Salade Varye", "Tomat Serize", "Bazlik"] }
+    },
+    "cta": {
+      "title": "Fresher Livre Lakaz",
+      "desc": "Komand online, resevwar ou plant fre direkteman depi nou sams. Partou dan Lil Moris."
+    },
+    "features": {
+      "b2c": { "title": "Katalog B2C", "desc": "Komand nou legim, fri ek plant aromatik fre, livre direkteman lakaz." },
+      "b2b": { "title": "Abonnman B2B", "desc": "Solisyon sur-mezir pou lotel ek restoran. Komand rekilyer, fakter ek kondisyon negosiasyon." },
+      "fresh": { "title": "Garanti Fresher 24h", "desc": "Tou nou prodwi rekolt le matin mem ek livre dan 24 zer. Fresher garanti." },
+      "cta": "Konn Plis"
+    }
+  },
+  "confirmation": {
+    "title": "Komand Konfirme !",
+    "subtitle": "Mersi pou Ou Komand",
+    "message": "Nou pou kontakte ou dan 24h pou organiz livrezon.",
+    "orderNumber": "Nimewo Komand",
+    "name": "Non",
+    "total": "Total",
+    "district": "Distrikt",
+    "backHome": "Retour Lakaz",
+    "trackOrders": "Suiv Ou Komand",
+    "createAccountDesc": "Kree enn kont gratis avek ou nimewo telefon pou retrouv tou ou komand ek suiv ou livrezon.",
+    "createAccount": "Kree enn Kont →"
+  },
+  "login": {
+    "title": "Ou Espas Personal",
+    "signin": "Konekte",
+    "register": "Kree enn Kont",
+    "resetPassword": "Reinitialize Mot de Paz",
+    "resetHint": "Ekrir ou email — ou pou resevwar enn lien reinitializasyon.",
+    "sendLink": "Anvwaye Lien",
+    "backToLogin": "← Retour Koneksyon",
+    "password": "Mot de Paz",
+    "forgotPassword": "Mot de Paz Bliye ?",
+    "createAccount": "Kree Mo Kont",
+    "teamSpace": "Ekip TRK ?",
+    "teamLink": "Espas Ekip",
+    "fullName": "Non Konple *",
+    "phone": "Telefon *",
+    "emailField": "Email *",
+    "passwordField": "Mot de Paz *",
+    "confirm": "Konfirm *",
+    "passwordMin": "Ominim 8 karakter bizin",
+    "passwordUppercase": "Ominim enn letmazyiskil bizin",
+    "passwordDigit": "Ominim enn chif bizin",
+    "passwordSpecial": "Ominim enn karakter spesyal bizin (!@#$…)",
+    "fullNameRequired": "Non Obligatwar",
+    "phoneInvalid": "Nimewo Morisyen Pa Valab",
+    "emailInvalid": "Email Pa Valab",
+    "passwordMismatch": "Mot de Paz Pa Koresponn",
+    "errorTitle": "Erer",
+    "signInError": "Koneksyon Pa Posib",
+    "emailSent": "Email Anvwaye",
+    "checkEmail": "Get ou bwat email pou reinitialize ou mot de paz.",
+    "accountCreated": "Kont Kree !",
+    "welcome": "Byenveni dan TRK Agriculture.",
+    "verifyEmail": "Kont Kree — Verifye Ou Email",
+    "verifyEmailDesc": "Konekte apre konfirmasyon."
+  },
+  "admin": {
+    "accessDenied": "Akse Refize",
+    "accessDeniedDesc": "Ou pa ena droit pou akse sa paz la.",
+    "backHome": "Retour Lakaz"
   }
 }

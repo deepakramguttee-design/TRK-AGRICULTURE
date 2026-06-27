@@ -30,6 +30,7 @@ import AdminSowingList from './pages/admin/AdminSowingList'
 import AdminUsersList from './pages/admin/AdminUsersList'
 import AdminLoginPage from './pages/admin/AdminLoginPage'
 import RequireAdmin from './components/RequireAdmin'
+import ProtectedAdminRoute from './components/ProtectedAdminRoute'
 import Confidentialite from './pages/Confidentialite'
 import Privacy from './pages/Privacy'
 import MentionsLegales from './pages/MentionsLegales'
@@ -76,7 +77,7 @@ function App() {
                 <Route path="/pepiniere" element={<Nursery />} />
                 <Route path="/admin/login" element={<AdminLoginPage />} />
                 <Route path="/admin/products" element={<RequireAdmin><AdminProducts /></RequireAdmin>} />
-                <Route path="/admin" element={<AdminLayout />}>
+                <Route path="/admin" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
                   <Route index element={<AdminDashboard />} />
                   <Route path="produits" element={<RequireAdmin><AdminProductsList /></RequireAdmin>} />
                   <Route path="produits/nouveau" element={<RequireAdmin><AdminProductCreate /></RequireAdmin>} />

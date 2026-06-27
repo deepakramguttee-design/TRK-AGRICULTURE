@@ -41,13 +41,13 @@ export default function OrderConfirmation() {
           <div className="flex items-start gap-3">
             <UserPlus className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="font-semibold text-green-900 text-sm mb-1">Suivez vos commandes</p>
+              <p className="font-semibold text-green-900 text-sm mb-1">{t('confirmation.trackOrders')}</p>
               <p className="text-xs text-green-700 mb-3">
-                Créez un compte gratuit avec votre téléphone pour retrouver toutes vos commandes et suivre vos livraisons.
+                {t('confirmation.createAccountDesc')}
               </p>
               <Button size="sm" variant="outline" asChild
                 className="border-green-400 text-green-800 hover:bg-green-100">
-                <Link to="/login">Créer un compte →</Link>
+                <Link to="/login">{t('confirmation.createAccount')}</Link>
               </Button>
             </div>
           </div>

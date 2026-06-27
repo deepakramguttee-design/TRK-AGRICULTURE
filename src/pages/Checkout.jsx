@@ -78,13 +78,14 @@ export default function Checkout() {
 
   function validate() {
     const e = {}
-    if (!form.name.trim()) e.name = true
-    if (!form.phone.trim() || !isValidMauritiusPhone(form.phone)) e.phone = true
+    const req = t('b2b.form.required')
+    if (!form.name.trim()) e.name = req
+    if (!form.phone.trim() || !isValidMauritiusPhone(form.phone)) e.phone = t('checkout.phoneError')
     if (deliveryMode === 'delivery') {
-      if (!form.district) e.district = true
-      if (!form.address.trim()) e.address = true
+      if (!form.district) e.district = req
+      if (!form.address.trim()) e.address = req
     }
-    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = true
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = req
     return e
   }
 
@@ -589,7 +590,7 @@ function Field({ label, error, hint, children }) {
       <label className="block text-sm font-medium mb-1.5">{label}</label>
       {children}
       {hint && <p className="text-xs text-destructive mt-1">{hint}</p>}
-      {error && !hint && <p className="text-xs text-destructive mt-1">Ce champ est requis</p>}
+      {error && !hint && typeof error === 'string' && <p className="text-xs text-destructive mt-1">{error}</p>}
     </div>
   )
 }
