@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext'
 import { toast } from '@/hooks/use-toast'
 import {
   UserCheck, Search, Building2, User, Users, ShieldCheck,
-  BriefcaseBusiness, Plus, X, Loader2, ChevronDown,
+  BriefcaseBusiness, Plus, X, Loader2, ChevronDown, Trash2,
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -110,7 +110,7 @@ function InviteModal({ onClose, onCreated }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function AdminUsersList() {
-  const { isAdmin } = useAuth()
+  const { user, isAdmin } = useAuth()
   const [tab, setTab]           = useState('clients')
   const [customers, setCustomers] = useState([])
   const [team, setTeam]           = useState([])
@@ -148,6 +148,20 @@ export default function AdminUsersList() {
     } else {
       toast({ title: 'Rôle mis à jour' })
       await loadTeam()
+    }
+    setUpdatingId(null)
+  }
+
+  async function deleteUser(id, label) {
+    if (!window.confirm(`Supprimer définitivement le compte « ${label} » ?\n\nSes commandes éventuelles seront conservées en tant que commandes invité. Cette action est irréversible.`)) return
+    setUpdatingId(id)
+    const { data, error } = await supabase.functions.invoke('delete-user', { body: { user_id: id } })
+    const errMsg = data?.error ?? error?.message
+    if (errMsg) {
+      toast({ title: 'Erreur', description: errMsg, variant: 'destructive' })
+    } else {
+      toast({ title: 'Compte supprimé', description: label })
+      await Promise.all([loadCustomers(), loadTeam()])
     }
     setUpdatingId(null)
   }
@@ -239,7 +253,7 @@ export default function AdminUsersList() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/40 border-b">
-                  {['Utilisateur','Téléphone','Type','Remise','Inscrit le'].map(h => (
+                  {['Utilisateur','Téléphone','Type','Remise','Inscrit le',...(isAdmin ? ['Action'] : [])].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{h}</th>
                   ))}
                 </tr>
@@ -291,6 +305,19 @@ export default function AdminUsersList() {
                         </div>
                       </td>
                       <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(c.created_at)}</td>
+                      {isAdmin && (
+                        <td className="px-4 py-3">
+                          <button
+                            type="button"
+                            disabled={updatingId === c.id}
+                            onClick={() => deleteUser(c.id, c.full_name || c.phone || 'Sans nom')}
+                            title="Supprimer ce compte"
+                            className="rounded-md p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
+                          >
+                            {updatingId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   )
                 })}
@@ -337,17 +364,30 @@ export default function AdminUsersList() {
                       <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(m.created_at)}</td>
                       {isAdmin && (
                         <td className="px-4 py-3">
-                          <div className="relative">
-                            <select
-                              value={m.role}
-                              disabled={updatingId === m.id}
-                              onChange={e => changeRole(m.id, e.target.value)}
-                              className="text-xs border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-ring pr-6 appearance-none disabled:opacity-50"
-                            >
-                              <option value="operator">Employé</option>
-                              <option value="admin">Admin</option>
-                            </select>
-                            <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
+                          <div className="flex items-center gap-2">
+                            <div className="relative">
+                              <select
+                                value={m.role}
+                                disabled={updatingId === m.id}
+                                onChange={e => changeRole(m.id, e.target.value)}
+                                className="text-xs border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-ring pr-6 appearance-none disabled:opacity-50"
+                              >
+                                <option value="operator">Employé</option>
+                                <option value="admin">Admin</option>
+                              </select>
+                              <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
+                            </div>
+                            {m.id !== user?.id && (
+                              <button
+                                type="button"
+                                disabled={updatingId === m.id}
+                                onClick={() => deleteUser(m.id, m.full_name || m.email)}
+                                title={m.role === 'admin' ? 'Rétrograder en Employé avant de supprimer' : 'Supprimer ce compte'}
+                                className="rounded-md p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
+                              >
+                                {updatingId === m.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                              </button>
+                            )}
                           </div>
                         </td>
                       )}
