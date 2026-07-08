@@ -33,3 +33,9 @@ dev-dist/
 
 # Local Netlify folder
 .netlify
+
+# Artefacts de test locaux
+scripts/*.png
+photos/
+supabase/.temp/
+.playwright-mcp/
