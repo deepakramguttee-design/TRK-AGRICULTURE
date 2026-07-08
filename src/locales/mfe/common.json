@@ -120,7 +120,8 @@
     "freeDeliveryProgress": "Livrezon gratis lor tou komand",
     "freeDeliveryReached": "Livrezon Gratis 🎉",
     "total": "Total",
-    "checkout": "Konfirme Komand"
+    "checkout": "Konfirme Komand",
+    "addToCart": "Azout {{name}} dan panier"
   },
   "checkout": {
     "title": "Finaliz Komand",
@@ -564,5 +565,38 @@
     "accessDenied": "Akse Refize",
     "accessDeniedDesc": "Ou pa ena droit pou akse sa paz la.",
     "backHome": "Retour Lakaz"
+  },
+  "promo": {
+    "freeDelivery": "Livrezon gratuit",
+    "freeDeliveryDesc": " lor tou ou komand",
+    "orderNow": "Komand asterla",
+    "close": "Ferm"
+  },
+  "featured": {
+    "subtitle": "Rekolte zordi matin",
+    "title": "Nou prodwi vedett",
+    "viewAll": "Get tou",
+    "viewAllMobile": "Get tou katalog"
+  },
+  "adminLogin": {
+    "title": "Lespas lekip — 2FA aktive",
+    "signin": "Konekte",
+    "password": "Mot de pass",
+    "continue": "Kontinie →",
+    "customerLink": "Ou enn klient ?",
+    "customerAccount": "Ale dan ou kont",
+    "enrollRequired": "Konfigurasion 2FA obligatwar",
+    "enrollDesc": "Skan sa QR kod-la avek Google Authenticator ou Authy, lerla rant kod 6 chif.",
+    "manualKey": "Kle maniel :",
+    "sixDigit": "Kod 6 chif",
+    "activate2fa": "Aktiv 2FA",
+    "verify2fa": "Verifie 2FA",
+    "verifyDesc": "Rant kod 6 chif depi ou zaplikasion authenticator.",
+    "confirmCode": "Konfirme",
+    "invalidCode": "Kod pa bon",
+    "invalidCodeDesc": "Verifie ou zaplikasion authenticator.",
+    "totpError": "Erler TOTP",
+    "connectionError": "Koneksion rat",
+    "noTotp": "Okenn fakteur TOTP trouve. Kontakte ou administrater."
   }
 }

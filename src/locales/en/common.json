@@ -100,7 +100,8 @@
     "freeDeliveryProgress": "Free delivery on all orders",
     "freeDeliveryReached": "Free delivery 🎉",
     "total": "Total",
-    "checkout": "Checkout"
+    "checkout": "Checkout",
+    "addToCart": "Add {{name}} to cart"
   },
   "checkout": {
     "title": "Complete your order",
@@ -527,5 +528,38 @@
     "accessDenied": "Access denied",
     "accessDeniedDesc": "You do not have permission to access this page.",
     "backHome": "Back to home"
+  },
+  "promo": {
+    "freeDelivery": "Free delivery",
+    "freeDeliveryDesc": " on all your orders",
+    "orderNow": "Order now",
+    "close": "Close banner"
+  },
+  "featured": {
+    "subtitle": "Freshly harvested",
+    "title": "Featured products",
+    "viewAll": "View all",
+    "viewAllMobile": "Browse all products"
+  },
+  "adminLogin": {
+    "title": "Team space — 2FA enabled",
+    "signin": "Sign in",
+    "password": "Password",
+    "continue": "Continue →",
+    "customerLink": "Customer?",
+    "customerAccount": "Access your account",
+    "enrollRequired": "2FA Setup Required",
+    "enrollDesc": "Scan this QR code with Google Authenticator or Authy, then enter the 6-digit code.",
+    "manualKey": "Manual key:",
+    "sixDigit": "6-digit code",
+    "activate2fa": "Activate 2FA",
+    "verify2fa": "2FA Verification",
+    "verifyDesc": "Enter the 6-digit code from your authenticator app.",
+    "confirmCode": "Confirm",
+    "invalidCode": "Invalid code",
+    "invalidCodeDesc": "Check your authenticator app.",
+    "totpError": "TOTP Error",
+    "connectionError": "Connection failed",
+    "noTotp": "No TOTP factor found. Please contact your administrator."
   }
 }

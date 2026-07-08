@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
@@ -9,6 +10,7 @@ import { Loader2, Leaf, ShieldCheck, Eye, EyeOff, ShieldAlert } from 'lucide-rea
 
 // Phase: 'credentials' → 'totp' → done
 export default function AdminLoginPage() {
+  const { t } = useTranslation()
   const { signIn } = useAuth()
   const navigate = useNavigate()
   const [email, setEmail] = useState('')
@@ -26,7 +28,7 @@ export default function AdminLoginPage() {
     setLoading(true)
     const { error } = await signIn(email, password)
     if (error) {
-      toast({ title: 'Connexion impossible', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminLogin.connectionError'), description: error.message, variant: 'destructive' })
       setLoading(false)
       return
     }
@@ -52,7 +54,7 @@ export default function AdminLoginPage() {
       // No TOTP enrolled yet — force enrollment
       const { data: enroll, error: enrollErr } = await supabase.auth.mfa.enroll({ factorType: 'totp', issuer: 'TRK Agriculture', friendlyName: 'Authenticator' })
       if (enrollErr) {
-        toast({ title: 'Erreur TOTP', description: enrollErr.message, variant: 'destructive' })
+        toast({ title: t('adminLogin.totpError'), description: enrollErr.message, variant: 'destructive' })
         setLoading(false)
         return
       }
@@ -79,7 +81,7 @@ export default function AdminLoginPage() {
     setFactorId(totp.id)
     const { data: ch, error: chErr } = await supabase.auth.mfa.challenge({ factorId: totp.id })
     if (chErr) {
-      toast({ title: 'Erreur TOTP', description: chErr.message, variant: 'destructive' })
+      toast({ title: t('adminLogin.totpError'), description: chErr.message, variant: 'destructive' })
       setLoading(false)
       return
     }
@@ -94,7 +96,7 @@ export default function AdminLoginPage() {
     setLoading(true)
     const { error } = await supabase.auth.mfa.verify({ factorId, challengeId, code: totpCode.trim() })
     if (error) {
-      toast({ title: 'Code invalide', description: 'Vérifiez votre application authenticator.', variant: 'destructive' })
+      toast({ title: t('adminLogin.invalidCode'), description: t('adminLogin.invalidCodeDesc'), variant: 'destructive' })
       setTotpCode('')
       setLoading(false)
       return
@@ -108,20 +110,20 @@ export default function AdminLoginPage() {
         <div className="w-full max-w-sm bg-white rounded-2xl border border-zinc-200 shadow-sm p-8 space-y-5">
           <div className="flex items-center gap-2 text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
             <ShieldAlert className="h-5 w-5 shrink-0" />
-            <p className="text-sm font-medium">Configuration 2FA requise</p>
+            <p className="text-sm font-medium">{t('adminLogin.enrollRequired')}</p>
           </div>
-          <p className="text-xs text-zinc-500">Scannez ce QR code avec Google Authenticator ou Authy, puis entrez le code à 6 chiffres.</p>
+          <p className="text-xs text-zinc-500">{t('adminLogin.enrollDesc')}</p>
           {enrollData?.totp?.qr_code && (
             <img src={enrollData.totp.qr_code} alt="QR TOTP" className="w-48 h-48 mx-auto border rounded-lg" />
           )}
           {enrollData?.totp?.secret && (
-            <p className="text-xs text-center text-zinc-500 font-mono break-all">Clé manuelle : {enrollData.totp.secret}</p>
+            <p className="text-xs text-center text-zinc-500 font-mono break-all">{t('adminLogin.manualKey')} {enrollData.totp.secret}</p>
           )}
           <form onSubmit={handleTOTP} className="space-y-3">
-            <Input placeholder="Code à 6 chiffres" value={totpCode} onChange={e => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
+            <Input placeholder={t('adminLogin.sixDigit')} value={totpCode} onChange={e => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
               maxLength={6} inputMode="numeric" autoComplete="one-time-code" className="text-center text-lg tracking-widest" />
             <Button type="submit" className="w-full" disabled={loading || totpCode.length < 6}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Activer le 2FA
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {t('adminLogin.activate2fa')}
             </Button>
           </form>
         </div>
@@ -135,15 +137,15 @@ export default function AdminLoginPage() {
         <div className="w-full max-w-sm bg-white rounded-2xl border border-zinc-200 shadow-sm p-8 space-y-5">
           <div className="flex flex-col items-center mb-2">
             <ShieldCheck className="h-10 w-10 text-primary mb-2" />
-            <h2 className="font-semibold text-zinc-800">Vérification 2FA</h2>
-            <p className="text-xs text-zinc-500 mt-1 text-center">Entrez le code à 6 chiffres de votre application authenticator.</p>
+            <h2 className="font-semibold text-zinc-800">{t('adminLogin.verify2fa')}</h2>
+            <p className="text-xs text-zinc-500 mt-1 text-center">{t('adminLogin.verifyDesc')}</p>
           </div>
           <form onSubmit={handleTOTP} className="space-y-3">
             <Input placeholder="000000" value={totpCode} onChange={e => setTotpCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
               maxLength={6} inputMode="numeric" autoComplete="one-time-code" autoFocus
               className="text-center text-2xl tracking-widest font-mono" />
             <Button type="submit" className="w-full h-10 font-semibold" disabled={loading || totpCode.length < 6}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} Confirmer
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />} {t('adminLogin.confirmCode')}
             </Button>
           </form>
         </div>
@@ -161,11 +163,11 @@ export default function AdminLoginPage() {
           <h1 className="font-display text-2xl font-bold text-zinc-900">TRK Agriculture</h1>
           <div className="flex items-center gap-1.5 mt-1.5 text-xs text-zinc-500">
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
-            Espace équipe — 2FA activé
+            {t('adminLogin.title')}
           </div>
         </div>
         <div className="bg-white rounded-2xl border border-zinc-200 shadow-sm p-8">
-          <h2 className="text-base font-semibold text-zinc-800 mb-5">Connexion</h2>
+          <h2 className="text-base font-semibold text-zinc-800 mb-5">{t('adminLogin.signin')}</h2>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wide">Email</label>
@@ -173,7 +175,7 @@ export default function AdminLoginPage() {
                 onChange={e => setEmail(e.target.value)} required autoComplete="email" className="h-10" />
             </div>
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wide">Mot de passe</label>
+              <label className="text-xs font-semibold text-zinc-600 uppercase tracking-wide">{t('adminLogin.password')}</label>
               <div className="relative">
                 <Input type={showPassword ? 'text' : 'password'} value={password}
                   onChange={e => setPassword(e.target.value)} required autoComplete="current-password" className="h-10 pr-10" />
@@ -185,12 +187,12 @@ export default function AdminLoginPage() {
             </div>
             <Button type="submit" className="w-full h-10 mt-1 font-semibold" disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Continuer →
+              {t('adminLogin.continue')}
             </Button>
           </form>
         </div>
         <p className="text-center text-xs text-zinc-400 mt-6">
-          Client ? <Link to="/compte" className="text-primary hover:underline">Accéder à votre compte</Link>
+          {t('adminLogin.customerLink')} <Link to="/compte" className="text-primary hover:underline">{t('adminLogin.customerAccount')}</Link>
         </p>
       </div>
     </div>

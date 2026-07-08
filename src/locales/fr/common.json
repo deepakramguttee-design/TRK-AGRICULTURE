@@ -100,7 +100,8 @@
     "freeDeliveryProgress": "Livraison gratuite sur toutes les commandes",
     "freeDeliveryReached": "Livraison gratuite 🎉",
     "total": "Total",
-    "checkout": "Passer commande"
+    "checkout": "Passer commande",
+    "addToCart": "Ajouter {{name}} au panier"
   },
   "checkout": {
     "title": "Finaliser la commande",
@@ -527,5 +528,38 @@
     "accessDenied": "Accès refusé",
     "accessDeniedDesc": "Vous n'avez pas les droits pour accéder à cette page.",
     "backHome": "Retour à l'accueil"
+  },
+  "promo": {
+    "freeDelivery": "Livraison gratuite",
+    "freeDeliveryDesc": " sur toutes vos commandes",
+    "orderNow": "Commander maintenant",
+    "close": "Fermer la bannière"
+  },
+  "featured": {
+    "subtitle": "Cueillis ce matin",
+    "title": "Nos produits vedettes",
+    "viewAll": "Voir tout",
+    "viewAllMobile": "Voir tout le catalogue"
+  },
+  "adminLogin": {
+    "title": "Espace équipe — 2FA activé",
+    "signin": "Connexion",
+    "password": "Mot de passe",
+    "continue": "Continuer →",
+    "customerLink": "Client ?",
+    "customerAccount": "Accéder à votre compte",
+    "enrollRequired": "Configuration 2FA requise",
+    "enrollDesc": "Scannez ce QR code avec Google Authenticator ou Authy, puis entrez le code à 6 chiffres.",
+    "manualKey": "Clé manuelle :",
+    "sixDigit": "Code à 6 chiffres",
+    "activate2fa": "Activer le 2FA",
+    "verify2fa": "Vérification 2FA",
+    "verifyDesc": "Entrez le code à 6 chiffres de votre application authenticator.",
+    "confirmCode": "Confirmer",
+    "invalidCode": "Code invalide",
+    "invalidCodeDesc": "Vérifiez votre application authenticator.",
+    "totpError": "Erreur TOTP",
+    "connectionError": "Connexion impossible",
+    "noTotp": "Aucun facteur TOTP trouvé. Veuillez contacter votre administrateur."
   }
 }
