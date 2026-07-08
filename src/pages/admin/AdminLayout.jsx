@@ -33,9 +33,49 @@ export default function AdminLayout() {
 
   return (
     <ProtectedAdminRoute>
-      <div className="flex" style={{ minHeight: 'calc(100vh - 100px)' }}>
-        {/* Sidebar */}
-        <aside className="w-56 border-r bg-muted/30 flex flex-col shrink-0">
+      <div className="flex flex-col md:flex-row" style={{ minHeight: 'calc(100vh - 100px)' }}>
+        {/* Nav mobile — barre horizontale scrollable */}
+        <nav className="md:hidden border-b bg-muted/30 overflow-x-auto">
+          <div className="flex items-center gap-1 px-2 py-2 min-w-max">
+            {NAV.map(({ to, label, icon: Icon, end, disabled }) =>
+              disabled ? (
+                <span
+                  key={label}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md text-muted-foreground/40 whitespace-nowrap"
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </span>
+              ) : (
+                <NavLink
+                  key={to}
+                  to={to}
+                  end={end}
+                  className={({ isActive }) =>
+                    `flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md whitespace-nowrap transition-colors ${
+                      isActive
+                        ? 'bg-primary/10 text-primary font-medium'
+                        : 'hover:bg-muted text-foreground'
+                    }`
+                  }
+                >
+                  <Icon className="h-4 w-4" />
+                  {label}
+                </NavLink>
+              )
+            )}
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md hover:bg-muted text-muted-foreground whitespace-nowrap"
+            >
+              <LogOut className="h-4 w-4" />
+              Déconnexion
+            </button>
+          </div>
+        </nav>
+
+        {/* Sidebar desktop */}
+        <aside className="hidden md:flex w-56 border-r bg-muted/30 flex-col shrink-0">
           <div className="flex flex-col gap-1 p-3 flex-1">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 py-2">
               Administration
@@ -85,7 +125,7 @@ export default function AdminLayout() {
         </aside>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4 md:p-6">
           <Outlet />
         </div>
       </div>

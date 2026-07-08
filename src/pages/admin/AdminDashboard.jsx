@@ -170,7 +170,7 @@ export default function AdminDashboard() {
       )}
 
       {/* KPIs */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {isAdmin && (
           <KpiCard label="Produits actifs"     value={loading ? '—' : d.activeProducts} icon={Package}      color="text-green-600"  to="/admin/produits" />
         )}
@@ -183,7 +183,7 @@ export default function AdminDashboard() {
       {isAdmin && (
         <div>
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Chiffre d'affaires</h2>
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <RevenueCard label="Aujourd'hui"  value={loading ? '—' : formatPrice(d.revenueToday)}  sub="commandes non annulées" />
             <RevenueCard label="Ce mois"      value={loading ? '—' : formatPrice(d.revenueMonth)}  sub={new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} />
             <RevenueCard label="Total (all time)" value={loading ? '—' : formatPrice(d.revenueTotal)} sub="depuis le lancement" />
@@ -201,6 +201,7 @@ export default function AdminDashboard() {
               <Link to="/admin/commandes">Voir tout →</Link>
             </Button>
           </div>
+          <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <tbody>
               {!loading && d.recentOrders?.length === 0 && (
@@ -232,6 +233,7 @@ export default function AdminDashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Colonne droite */}
@@ -244,6 +246,7 @@ export default function AdminDashboard() {
                 <Link to="/admin/b2b">Voir tout →</Link>
               </Button>
             </div>
+            <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <tbody>
                 {!loading && d.recentB2B?.length === 0 && (
@@ -272,6 +275,7 @@ export default function AdminDashboard() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Actions rapides */}
