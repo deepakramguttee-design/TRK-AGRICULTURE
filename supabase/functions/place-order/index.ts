@@ -103,6 +103,16 @@ Deno.serve(async (req) => {
   if (!items?.length) return json({ error: 'Panier vide' }, 400)
   if (!form?.name?.trim()) return json({ error: 'Nom requis' }, 400)
   if (!form?.phone?.trim()) return json({ error: 'Téléphone requis' }, 400)
+
+  // Livraison suspendue globalement (flag app_settings) → rejet serveur, non contournable côté client
+  if (deliveryMode === 'delivery') {
+    const { data: cfg } = await supabaseAdmin
+      .from('app_settings').select('value').eq('key', 'delivery_enabled').single()
+    if (cfg?.value !== true) {
+      return json({ error: 'Livraison temporairement suspendue — retrait uniquement' }, 403, req)
+    }
+  }
+
   if (deliveryMode === 'delivery' && !form?.district) return json({ error: 'District requis' }, 400)
   if (deliveryMode === 'delivery' && !form?.address?.trim()) return json({ error: 'Adresse requise' }, 400)
 
@@ -167,6 +177,7 @@ Deno.serve(async (req) => {
       guest_phone: form!.phone,
       guest_email: form?.email || null,
       status: 'pending',
+      fulfillment_type: deliveryMode,
       ...paymentPayload,
       subtotal_mur: subtotalMur,
       delivery_fee_mur: deliveryFee,

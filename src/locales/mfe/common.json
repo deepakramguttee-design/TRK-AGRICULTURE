@@ -168,6 +168,7 @@
     "requiredFields": "Chan Obligatwar",
     "deliveryMode": "Livrezon Lakaz",
     "deliveryModeDesc": "Livre dan ou Distrikt",
+    "deliveryPaused": "Livrezon sispann pou lemoman — ramase lor plas selman",
     "pickupMode": "Ramase lor Plas",
     "pickupModeDesc": "Gratis — dan Nou Pepinyer",
     "pickupAddress": "Pepinyer TRK Agriculture",

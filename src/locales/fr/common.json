@@ -135,6 +135,7 @@
     "requiredFields": "Champs obligatoires",
     "deliveryMode": "Livraison à domicile",
     "deliveryModeDesc": "Livré dans votre district",
+    "deliveryPaused": "Livraison temporairement suspendue — retrait uniquement",
     "pickupMode": "Retrait sur place",
     "pickupModeDesc": "Gratuit — à notre pépinière",
     "pickupAddress": "Pépinière TRK Agriculture",

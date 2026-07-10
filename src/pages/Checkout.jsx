@@ -29,6 +29,7 @@ export default function Checkout() {
 
   const [form, setForm] = useState({ name: '', phone: '', email: '', district: '', address: '', slot: 'any', notes: '' })
   const [deliveryMode, setDeliveryMode] = useState('delivery')
+  const [deliveryEnabled, setDeliveryEnabled] = useState(true)
   const [errors, setErrors] = useState({})
   const [submitting, setSubmitting] = useState(false)
   const [paymentMethod, setPaymentMethod] = useState('cod')
@@ -55,6 +56,16 @@ export default function Checkout() {
         }))
       })
   }, [user])
+
+  // Flag global : la livraison peut être suspendue (retrait uniquement)
+  useEffect(() => {
+    supabase.from('app_settings').select('value').eq('key', 'delivery_enabled').single()
+      .then(({ data }) => {
+        const on = data?.value === true
+        setDeliveryEnabled(on)
+        if (!on) setDeliveryMode('pickup')   // force le retrait
+      })
+  }, [])
 
   const deliveryFee = deliveryMode === 'pickup' ? 0 : getDeliveryFee(form.district, cartTotal)
   const discountMur = discountPct > 0 ? Math.round(cartTotal * discountPct) / 100 : 0
@@ -228,13 +239,23 @@ export default function Checkout() {
             <section>
               <h2 className="font-semibold text-base mb-4 pb-2 border-b">{t('checkout.delivery')}</h2>
 
+              {!deliveryEnabled && (
+                <div className="mb-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 flex items-start gap-2">
+                  <Truck className="h-4 w-4 shrink-0 mt-0.5 text-amber-600" />
+                  <span>{t('checkout.deliveryPaused')}</span>
+                </div>
+              )}
+
               {/* Mode toggle */}
               <div className="grid grid-cols-2 gap-3 mb-5">
                 <button
                   type="button"
-                  onClick={() => setDeliveryMode('delivery')}
+                  disabled={!deliveryEnabled}
+                  onClick={() => deliveryEnabled && setDeliveryMode('delivery')}
                   className={`flex items-center gap-2.5 p-3 rounded-lg border-2 text-sm text-left transition-all ${
-                    deliveryMode === 'delivery'
+                    !deliveryEnabled
+                      ? 'border-border opacity-50 cursor-not-allowed'
+                      : deliveryMode === 'delivery'
                       ? 'border-primary bg-primary/5 font-medium text-primary'
                       : 'border-border hover:border-stone-300 hover:bg-muted/30 text-foreground'
                   }`}

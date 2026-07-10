@@ -135,6 +135,7 @@
     "requiredFields": "Required fields",
     "deliveryMode": "Home delivery",
     "deliveryModeDesc": "Delivered to your district",
+    "deliveryPaused": "Delivery temporarily suspended — pickup only",
     "pickupMode": "Pickup",
     "pickupModeDesc": "Free — at our nursery",
     "pickupAddress": "TRK Agriculture Nursery",
