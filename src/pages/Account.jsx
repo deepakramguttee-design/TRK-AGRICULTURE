@@ -104,7 +104,7 @@ export default function Account() {
   }
 
   async function changePassword() {
-    if (pwForm.new_pw.length < 6) {
+    if (pwForm.new_pw.length < 8) {
       toast({ title: t('account.password.tooShort'), variant: 'destructive' }); return
     }
     if (pwForm.new_pw !== pwForm.confirm_pw) {

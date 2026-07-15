@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
+import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { Loader2, ShieldX } from 'lucide-react'
 
@@ -9,7 +11,20 @@ export default function ProtectedAdminRoute({ children }) {
   const { t } = useTranslation()
   const { user, isAdmin, isEmployee, loading } = useAuth()
 
-  if (loading) {
+  // Vérifie que la session est élevée en MFA (aal2). La RLS l'exige côté serveur ;
+  // ce gate évite d'afficher une coquille admin dont toutes les requêtes échoueraient.
+  const [aalOk, setAalOk] = useState(null) // null = vérification en cours
+
+  useEffect(() => {
+    let active = true
+    if (!user) { setAalOk(null); return }
+    supabase.auth.mfa.getAuthenticatorAssuranceLevel()
+      .then(({ data }) => { if (active) setAalOk(data?.currentLevel === 'aal2') })
+      .catch(() => { if (active) setAalOk(false) })
+    return () => { active = false }
+  }, [user])
+
+  if (loading || (user && aalOk === null)) {
     return (
       <div className="min-h-[calc(100vh-6.25rem)] flex items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
@@ -18,6 +33,11 @@ export default function ProtectedAdminRoute({ children }) {
   }
 
   if (!user) return <Navigate to="/admin/login" replace />
+
+  // Session non élevée en MFA → retour au login admin pour finir le TOTP
+  if ((isAdmin || isEmployee) && aalOk === false) {
+    return <Navigate to="/admin/login" replace />
+  }
 
   if (!isAdmin && !isEmployee) {
     return (

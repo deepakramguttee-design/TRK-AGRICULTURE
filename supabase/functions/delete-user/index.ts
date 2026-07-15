@@ -13,6 +13,19 @@ function json(body: unknown, status = 200) {
   })
 }
 
+// Lit le niveau d'assurance (aal) depuis le JWT déjà validé par getUser().
+// aal2 = l'utilisateur a franchi une étape MFA (TOTP) dans cette session.
+function getAal(authHeader: string): string | null {
+  try {
+    const token = authHeader.replace(/^Bearer\s+/i, '')
+    const payload = token.split('.')[1]
+    const claims = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')))
+    return claims.aal ?? null
+  } catch {
+    return null
+  }
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: CORS })
 
@@ -43,6 +56,11 @@ Deno.serve(async (req) => {
     .single()
 
   if (callerProfile?.role !== 'admin') return json({ error: 'Réservé aux admins' }, 403)
+
+  // 2b. Exiger MFA (aal2) — un mot de passe seul (aal1) ne suffit pas pour cette action sensible
+  if (getAal(authHeader) !== 'aal2') {
+    return json({ error: 'Authentification à deux facteurs (2FA) requise pour cette action' }, 403)
+  }
 
   // 3. Lire et valider le body
   let body: { user_id?: string }
