@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { useProducts } from '@/hooks/useProducts'
 import { useCart } from '@/contexts/CartContext'
 import { CATEGORY_EMOJI } from '@/components/ProductCard'
+import { optimizedSources } from '@/lib/optimizedImages'
 
 const CATEGORY_HUE = {
   epices:  { bg: 'from-amber-50 to-amber-100/70',    chip: 'text-amber-700 bg-amber-50' },
@@ -23,6 +24,7 @@ function ProductSlide({ product, lang, t }) {
   const [added, setAdded] = useState(false)
   const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
   const hue = CATEGORY_HUE[product.category] || DEFAULT_HUE
+  const optimized = optimizedSources(product.sku)
 
   function handleAdd(e) {
     e.preventDefault()
@@ -38,9 +40,16 @@ function ProductSlide({ product, lang, t }) {
       className="group snap-start flex-none w-[192px] sm:w-[214px]"
       aria-label={name}
     >
-      <div className="overflow-hidden rounded-2xl border border-stone-100 bg-white transition-all duration-300 hover:shadow-xl hover:shadow-green-100/50 hover:-translate-y-1 hover:border-green-200/70">
+      <div className="overflow-hidden rounded-2xl border border-forest-800/10 bg-card transition-all duration-300 hover:shadow-leafy hover:-translate-y-1 hover:border-forest-800/20">
         <div className={`relative bg-gradient-to-br ${hue.bg} h-[192px] sm:h-[214px] overflow-hidden`}>
-          {product.image_url ? (
+          {optimized ? (
+            <picture>
+              <source type="image/webp" srcSet={optimized.webp} sizes="214px" />
+              <source type="image/jpeg" srcSet={optimized.jpg} sizes="214px" />
+              <img src={optimized.fallback} alt={name} loading="lazy" width="800" height="800"
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.07]" />
+            </picture>
+          ) : product.image_url ? (
             <img src={product.image_url} alt={name} loading="lazy"
               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.07]" />
           ) : (
@@ -56,14 +65,14 @@ function ProductSlide({ product, lang, t }) {
           </div>
         </div>
         <div className="p-3.5">
-          <h3 className="font-display text-[13.5px] font-bold text-stone-900 leading-snug line-clamp-2 min-h-[34px] mb-2.5">{name}</h3>
+          <h3 className="font-display text-[13.5px] font-semibold text-forest-800 leading-snug line-clamp-2 min-h-[34px] mb-2.5">{name}</h3>
           <div className="flex items-center justify-between">
             <div>
-              <span className="font-bold text-green-700 text-[15px]">Rs {Math.round(product.price_mur)}</span>
+              <span className="font-bold text-forest-700 text-[15px]">Rs {Math.round(product.price_mur)}</span>
               <span className="text-stone-400 text-[11px] ml-1">/{product.unit}</span>
             </div>
             <button type="button" onClick={handleAdd} aria-label={t('cart.addToCart', { name })}
-              className={`w-8 h-8 rounded-xl flex items-center justify-center text-white transition-all duration-200 shrink-0 ${added ? 'bg-green-500 scale-90' : 'bg-stone-900 hover:bg-green-700 hover:scale-110 active:scale-95'}`}>
+              className={`w-8 h-8 rounded-xl flex items-center justify-center text-white transition-all duration-200 shrink-0 ${added ? 'bg-leaf scale-90' : 'bg-forest-800 hover:bg-mango hover:text-forest-900 hover:scale-110 active:scale-95'}`}>
               {added ? <CheckCircle className="h-3.5 w-3.5 animate-trk-check-pop" /> : <ShoppingCart className="h-3.5 w-3.5" />}
             </button>
           </div>
@@ -85,10 +94,10 @@ export default function FeaturedProducts() {
       <div className="container mx-auto px-4">
         <div className="flex items-end justify-between mb-8">
           <div>
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-green-600 mb-2">{t('featured.subtitle')}</p>
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-stone-900 leading-tight">{t('featured.title')}</h2>
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-leaf mb-2">{t('featured.subtitle')}</p>
+            <h2 className="font-display text-3xl md:text-4xl font-semibold text-forest-800 leading-tight">{t('featured.title')}</h2>
           </div>
-          <Link to="/catalogue" className="hidden sm:flex items-center gap-1.5 text-sm font-medium text-stone-400 hover:text-green-700 transition-colors shrink-0 group mb-0.5">
+          <Link to="/catalogue" className="hidden sm:flex items-center gap-1.5 text-sm font-medium text-stone-400 hover:text-mango transition-colors shrink-0 group mb-0.5">
             {t('featured.viewAll')}
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
           </Link>

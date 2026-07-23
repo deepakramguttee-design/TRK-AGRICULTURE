@@ -5,6 +5,7 @@ import { ShoppingCart, CheckCircle } from 'lucide-react'
 import { useCart } from '@/contexts/CartContext'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { optimizedSources } from '@/lib/optimizedImages'
 
 export const CATEGORY_EMOJI = {
   epices:  '🌿',
@@ -45,6 +46,8 @@ export default function ProductCard({ product, categories = [] }) {
   const styles = CATEGORY_STYLES[product.category] || DEFAULT_STYLES
   const status = product.status || 'available'
   const statusClass = STATUS_STYLES[status] || STATUS_STYLES.available
+  // Variantes photo optimisées (WebP/JPG 800/400) partagées avec la vitrine.
+  const optimized = optimizedSources(product.sku)
 
   function stop(e) { e.preventDefault(); e.stopPropagation() }
 
@@ -71,11 +74,24 @@ export default function ProductCard({ product, categories = [] }) {
 
   return (
     <Link to={`/produit/${product.sku}`} className="block group h-full">
-      <Card className="flex flex-col overflow-hidden h-full border-border/60 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:border-green-200/70">
+      <Card className="flex flex-col overflow-hidden h-full rounded-2xl border-forest-800/10 transition-all duration-300 hover:shadow-leafy hover:-translate-y-1 hover:border-forest-800/20">
 
         {/* Image */}
         <div className={`aspect-square overflow-hidden relative bg-gradient-to-br ${styles.placeholder}`}>
-          {product.image_url ? (
+          {optimized ? (
+            <picture>
+              <source type="image/webp" srcSet={optimized.webp} sizes="(max-width:768px) 45vw, 220px" />
+              <source type="image/jpeg" srcSet={optimized.jpg} sizes="(max-width:768px) 45vw, 220px" />
+              <img
+                src={optimized.fallback}
+                alt={name}
+                className="w-full h-full object-cover group-hover:scale-[1.07] transition-transform duration-500 ease-out"
+                loading="lazy"
+                width="800"
+                height="800"
+              />
+            </picture>
+          ) : product.image_url ? (
             <img
               src={product.image_url}
               alt={name}
@@ -92,6 +108,8 @@ export default function ProductCard({ product, categories = [] }) {
               </span>
             </div>
           )}
+          {/* Voile dégradé bas (lisibilité + profondeur, style vitrine) */}
+          <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-forest-900/25 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
         </div>
 
         {/* Category badge + status */}
