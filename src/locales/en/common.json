@@ -544,6 +544,17 @@
     "viewAll": "View all",
     "viewAllMobile": "Browse all products"
   },
+  "orderDelete": {
+    "button": "Delete",
+    "confirmTitle": "Delete this order?",
+    "warning": "This will permanently delete this order and all its line items. This action cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "deleted": "Order deleted",
+    "error": "Deletion failed",
+    "notAllowed": "Deletion refused",
+    "notAllowedDesc": "Admins only, with verified 2FA (AAL2). Sign in again with your TOTP code and retry."
+  },
   "payments": {
     "title": "Payments",
     "subtitle": "Collect payments for pending orders",

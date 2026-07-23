@@ -581,6 +581,17 @@
     "viewAll": "Get tou",
     "viewAllMobile": "Get tou katalog"
   },
+  "orderDelete": {
+    "button": "Efase",
+    "confirmTitle": "Efas sa komann la ?",
+    "warning": "Sa komann la pou efase net, ek tou so bann liyn artik. Pa kapav defer sa aksyon la.",
+    "cancel": "Anile",
+    "confirm": "Efase",
+    "deleted": "Komann efase",
+    "error": "Sipresyon pa pase",
+    "notAllowed": "Sipresyon refize",
+    "notAllowedDesc": "Zis admin ar 2FA valide (AAL2). Rekonekte ar ou kod TOTP apre reesaye."
+  },
   "payments": {
     "title": "Lankesman",
     "subtitle": "Ankes peyman bann komann an atant",

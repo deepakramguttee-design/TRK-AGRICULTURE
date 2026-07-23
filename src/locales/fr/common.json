@@ -544,6 +544,17 @@
     "viewAll": "Voir tout",
     "viewAllMobile": "Voir tout le catalogue"
   },
+  "orderDelete": {
+    "button": "Supprimer",
+    "confirmTitle": "Supprimer la commande ?",
+    "warning": "Cette commande sera définitivement supprimée, ainsi que toutes ses lignes d'articles. Cette action est irréversible.",
+    "cancel": "Annuler",
+    "confirm": "Supprimer",
+    "deleted": "Commande supprimée",
+    "error": "Échec de la suppression",
+    "notAllowed": "Suppression refusée",
+    "notAllowedDesc": "Réservé aux admins avec 2FA validée (AAL2). Reconnectez-vous avec votre code TOTP puis réessayez."
+  },
   "payments": {
     "title": "Encaissements",
     "subtitle": "Encaissez les paiements des commandes en attente",

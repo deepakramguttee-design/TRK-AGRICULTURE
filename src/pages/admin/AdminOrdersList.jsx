@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -7,8 +8,11 @@ import { Input } from '@/components/ui/input'
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select'
+import {
+  Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
+} from '@/components/ui/dialog'
 import { DISTRICTS } from '@/lib/delivery'
-import { Loader2, Smartphone, Banknote } from 'lucide-react'
+import { Loader2, Smartphone, Banknote, Trash2, AlertTriangle } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
 
 const STATUS_LABELS = {
@@ -64,17 +68,20 @@ const PAYMENT_STATUS_LABELS = {
 
 export default function AdminOrdersList() {
   const { isAdmin } = useAuth()
+  const { t } = useTranslation()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [filterStatus, setFilterStatus] = useState('all')
   const [filterDistrict, setFilterDistrict] = useState('all')
   const [filterPayment, setFilterPayment] = useState('all')
+  const [deleteOrder, setDeleteOrder] = useState(null) // commande ciblée par la suppression
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     supabase
       .from('orders')
-      .select('id, order_number, created_at, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status, order_items(quantity)')
+      .select('id, order_number, created_at, customer_name, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status, order_items(quantity)')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
         if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
@@ -95,6 +102,30 @@ export default function AdminOrdersList() {
     const matchPayment  = filterPayment === 'all' || o.payment_method === filterPayment
     return matchSearch && matchStatus && matchDistrict && matchPayment
   })
+
+  async function confirmDelete() {
+    if (!deleteOrder) return
+    setDeleting(true)
+    // .select() force le retour des lignes supprimées : si la RLS bloque
+    // (admin en AAL1), DELETE "réussit" avec 0 ligne — on doit le détecter.
+    const { data, error } = await supabase
+      .from('orders')
+      .delete()
+      .eq('id', deleteOrder.id)
+      .select('id')
+    setDeleting(false)
+    if (error) {
+      toast({ title: t('orderDelete.error'), description: error.message, variant: 'destructive' })
+      return
+    }
+    if (!data || data.length === 0) {
+      toast({ title: t('orderDelete.notAllowed'), description: t('orderDelete.notAllowedDesc'), variant: 'destructive' })
+      return
+    }
+    setOrders(prev => prev.filter(o => o.id !== deleteOrder.id))
+    toast({ title: t('orderDelete.deleted'), description: deleteOrder.order_number })
+    setDeleteOrder(null)
+  }
 
   if (loading) {
     return (
@@ -235,9 +266,17 @@ export default function AdminOrdersList() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Button size="sm" variant="outline" asChild>
-                      <Link to={`/admin/commandes/${order.order_number}`}>Voir détails</Link>
-                    </Button>
+                    <div className="inline-flex items-center gap-2">
+                      <Button size="sm" variant="outline" asChild>
+                        <Link to={`/admin/commandes/${order.order_number}`}>Voir détails</Link>
+                      </Button>
+                      {isAdmin && (
+                        <Button size="sm" variant="destructive" onClick={() => setDeleteOrder(order)}>
+                          <Trash2 className="h-4 w-4 mr-1.5" />
+                          {t('orderDelete.button')}
+                        </Button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               )
@@ -248,6 +287,37 @@ export default function AdminOrdersList() {
           <p className="text-center text-muted-foreground py-8 text-sm">Aucune commande trouvée</p>
         )}
       </div>
+
+      {isAdmin && (
+        <Dialog open={!!deleteOrder} onOpenChange={open => { if (!open) setDeleteOrder(null) }}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2 text-destructive">
+                <AlertTriangle className="h-5 w-5" />
+                {t('orderDelete.confirmTitle')}
+              </DialogTitle>
+              <DialogDescription>{t('orderDelete.warning')}</DialogDescription>
+            </DialogHeader>
+            {deleteOrder && (
+              <div className="rounded-lg bg-muted/50 border px-4 py-3 space-y-1">
+                <p className="font-mono text-sm font-semibold">{deleteOrder.order_number}</p>
+                <p className="text-sm">{deleteOrder.customer_name || parseNotes(deleteOrder.customer_notes).name || '—'}</p>
+                <p className="text-sm font-bold">{formatPrice(deleteOrder.total_mur)}</p>
+              </div>
+            )}
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button variant="outline" onClick={() => setDeleteOrder(null)} disabled={deleting}>
+                {t('orderDelete.cancel')}
+              </Button>
+              <Button variant="destructive" onClick={confirmDelete} disabled={deleting}>
+                {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                <Trash2 className="h-4 w-4 mr-1.5" />
+                {t('orderDelete.confirm')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   )
 }
