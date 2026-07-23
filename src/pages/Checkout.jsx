@@ -274,41 +274,42 @@ export default function Checkout() {
                   onClick={() => setDeliveryMode('pickup')}
                   className={`flex items-center gap-2.5 p-3 rounded-lg border-2 text-sm text-left transition-all ${
                     deliveryMode === 'pickup'
-                      ? 'border-green-500 bg-green-50 font-medium text-green-800'
+                      ? 'border-forest-800 bg-forest-800/5 font-medium text-forest-800'
                       : 'border-border hover:border-stone-300 hover:bg-muted/30 text-foreground'
                   }`}
                 >
-                  <MapPin className={`h-4 w-4 shrink-0 ${deliveryMode === 'pickup' ? 'text-green-600' : 'text-muted-foreground'}`} />
+                  <MapPin className={`h-4 w-4 shrink-0 ${deliveryMode === 'pickup' ? 'text-leaf' : 'text-muted-foreground'}`} />
                   <div>
                     <p className="font-medium text-sm">{t('checkout.pickupMode')}</p>
                     <p className="text-xs text-muted-foreground">{t('checkout.pickupModeDesc')}</p>
                   </div>
                   {deliveryMode === 'pickup' && (
-                    <span className="ml-auto text-xs bg-green-600 text-white px-1.5 py-0.5 rounded">✓</span>
+                    <span className="ml-auto text-xs bg-forest-800 text-cream-50 px-1.5 py-0.5 rounded">✓</span>
                   )}
                 </button>
               </div>
 
               {deliveryMode === 'pickup' ? (
                 /* Pickup info */
-                <div className="rounded-lg border border-green-200 bg-green-50/40 p-4 space-y-3">
+                <div className="rounded-lg border border-forest-800/15 bg-forest-800/5 p-4 space-y-3">
                   <div className="flex items-start gap-3">
-                    <MapPin className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+                    <MapPin className="h-5 w-5 text-leaf shrink-0 mt-0.5" />
                     <div>
-                      <p className="font-semibold text-sm text-green-900">{t('checkout.pickupAddress')}</p>
-                      <p className="text-sm text-green-700">{t('checkout.pickupAddressDetail')}</p>
+                      <p className="font-semibold text-sm text-forest-800">{t('checkout.pickupAddress')}</p>
+                      <p className="text-sm text-forest-700/80">{t('checkout.pickupAddressDetail')}</p>
+                      <p className="text-xs text-forest-700/60 mt-0.5 tabular-nums">{PICKUP_LAT}, {PICKUP_LNG}</p>
                     </div>
                   </div>
                   <a
-                    href={`https://www.google.com/maps?q=${PICKUP_LAT},${PICKUP_LNG}`}
+                    href={`https://www.google.com/maps/search/?api=1&query=${PICKUP_LAT},${PICKUP_LNG}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-green-700 hover:text-green-900 underline underline-offset-2"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-forest-800 hover:text-mango underline underline-offset-2"
                   >
                     <MapPin className="h-3 w-3" />
                     {t('checkout.pickupGps')}
                   </a>
-                  <p className="text-xs text-green-700 leading-relaxed">{t('checkout.pickupNote')}</p>
+                  <p className="text-xs text-forest-700/80 leading-relaxed">{t('checkout.pickupNote')}</p>
                   <Field label={t('checkout.notes')}>
                     <textarea rows={2} placeholder={t('checkout.notesPlaceholder')} value={form.notes}
                       onChange={e => set('notes', e.target.value)}

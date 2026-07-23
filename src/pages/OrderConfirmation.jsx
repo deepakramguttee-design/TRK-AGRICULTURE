@@ -37,16 +37,16 @@ export default function OrderConfirmation() {
 
       {/* Banner compte pour invités */}
       {!user && (
-        <div className="rounded-xl border border-green-200 bg-green-50 p-5 text-left mb-6">
+        <div className="rounded-xl border border-forest-800/15 bg-forest-800/5 p-5 text-left mb-6">
           <div className="flex items-start gap-3">
-            <UserPlus className="h-5 w-5 text-green-600 shrink-0 mt-0.5" />
+            <UserPlus className="h-5 w-5 text-leaf shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="font-semibold text-green-900 text-sm mb-1">{t('confirmation.trackOrders')}</p>
-              <p className="text-xs text-green-700 mb-3">
+              <p className="font-semibold text-forest-800 text-sm mb-1">{t('confirmation.trackOrders')}</p>
+              <p className="text-xs text-forest-700/80 mb-3">
                 {t('confirmation.createAccountDesc')}
               </p>
               <Button size="sm" variant="outline" asChild
-                className="border-green-400 text-green-800 hover:bg-green-100">
+                className="border-forest-800/30 text-forest-800 hover:bg-forest-800/10">
                 <Link to="/login">{t('confirmation.createAccount')}</Link>
               </Button>
             </div>

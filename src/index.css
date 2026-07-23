@@ -1,63 +1,85 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,700;1,6..12,400&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Polices de repli à métriques ajustées : substitution webfont quasi sans
+   décalage (CLS ~0), identiques au site vitrine Kailash Farming. Les webfonts
+   Fraunces + Inter sont chargées en non-bloquant depuis index.html. */
+@font-face {
+  font-family: 'Fraunces Fallback';
+  src: local('Georgia'), local('Times New Roman');
+  size-adjust: 97%;
+  ascent-override: 92%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial'), local('Helvetica');
+  size-adjust: 107%;
+  ascent-override: 90%;
+  descent-override: 22%;
+  line-gap-override: 0%;
+}
+
 @layer base {
+  /* ── Design system Kailash Farming ─────────────────────────────────────
+     Palette dérivée du site vitrine : vert forêt profond (#163a24) en primary,
+     fond crème kraft, mangue en accent focus, terre cuite pour les alertes
+     douces. Tous les composants shadcn héritent automatiquement de ces tokens. */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --primary: 142.1 76.2% 36.3%;
-    --primary-foreground: 355.7 100% 97.3%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
+    --background: 41 52% 92%;         /* crème #f6efe0 */
+    --foreground: 130 24% 15%;        /* encre vert sombre #20301d */
+    --card: 42 46% 97%;               /* crème clair (cartes surélevées) */
+    --card-foreground: 130 24% 15%;
+    --popover: 42 46% 97%;
+    --popover-foreground: 130 24% 15%;
+    --primary: 143 45% 16%;           /* vert forêt #163a24 */
+    --primary-foreground: 44 56% 96%; /* crème #faf6ec */
+    --secondary: 40 38% 87%;          /* crème 200 */
+    --secondary-foreground: 143 45% 16%;
+    --muted: 40 33% 90%;
+    --muted-foreground: 135 12% 34%;
+    --accent: 40 40% 85%;             /* survols doux (crème chaud) */
+    --accent-foreground: 143 45% 16%;
+    --destructive: 0 72% 45%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 142.4 71.8% 29.2%;
-    --radius: 0.5rem;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
+    --border: 140 16% 82%;            /* bordures vert-crème douces */
+    --input: 140 16% 82%;
+    --ring: 36 88% 57%;               /* mangue #f2a531 (focus) */
+    --radius: 0.85rem;                /* arrondis généreux */
+    --chart-1: 143 45% 26%;
+    --chart-2: 88 48% 48%;
+    --chart-3: 36 88% 57%;
+    --chart-4: 18 69% 39%;
+    --chart-5: 131 39% 40%;
   }
 
   .dark {
-    --background: 20 14.3% 4.1%;
-    --foreground: 0 0% 95%;
-    --card: 24 9.8% 10%;
-    --card-foreground: 0 0% 95%;
-    --popover: 0 0% 9%;
-    --popover-foreground: 0 0% 95%;
-    --primary: 142.1 70.6% 45.3%;
-    --primary-foreground: 144.9 80.4% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 15%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 12 6.5% 15.1%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 85.7% 97.3%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 142.4 71.8% 29.2%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 143 40% 7%;
+    --foreground: 44 40% 95%;
+    --card: 143 38% 10%;
+    --card-foreground: 44 40% 95%;
+    --popover: 143 38% 10%;
+    --popover-foreground: 44 40% 95%;
+    --primary: 88 48% 55%;            /* lime lumineux sur fond sombre */
+    --primary-foreground: 143 45% 12%;
+    --secondary: 143 20% 18%;
+    --secondary-foreground: 44 40% 95%;
+    --muted: 143 18% 16%;
+    --muted-foreground: 40 15% 68%;
+    --accent: 143 22% 20%;
+    --accent-foreground: 44 40% 95%;
+    --destructive: 0 62% 42%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 143 20% 20%;
+    --input: 143 20% 20%;
+    --ring: 36 88% 57%;
+    --chart-1: 88 48% 55%;
+    --chart-2: 143 39% 45%;
+    --chart-3: 36 88% 57%;
+    --chart-4: 18 69% 50%;
+    --chart-5: 44 56% 70%;
   }
 }
 
@@ -67,19 +89,29 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
 @layer utilities {
+  /* Titres display Fraunces avec optical sizing (identique à la vitrine) */
   .font-display {
-    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-family: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
+    font-optical-sizing: auto;
+    font-variation-settings: 'opsz' 96;
   }
+  /* Alias historiques : on les redirige vers le nouveau système typographique
+     pour que les usages existants restent cohérents sans casse. */
   .font-bricolage {
-    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif;
   }
   .font-nunito {
-    font-family: 'Nunito Sans', system-ui, sans-serif;
+    font-family: 'Inter', 'Inter Fallback', system-ui, sans-serif;
   }
+  /* Masques organiques type feuille pour photos éditoriales */
+  .leaf-mask   { border-radius: 62% 38% 55% 45% / 55% 48% 52% 45%; }
+  .leaf-mask-2 { border-radius: 38% 62% 45% 55% / 48% 55% 45% 52%; }
   .bg-alveoles {
     background-image:
       linear-gradient(rgba(30, 77, 43, 0.055) 1px, transparent 1px),
@@ -110,3 +142,42 @@
 .animate-trk-float-slower { animation: trk-float 9s ease-in-out 3s infinite; }
 .animate-trk-fade-up      { animation: trk-fade-up 0.65s ease both; }
 .animate-trk-check-pop    { animation: trk-check-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+
+/* Texture papier kraft subtile (fond crème) — reprise du site vitrine */
+.paper {
+  background-color: #f6efe0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(63,143,78,0.05), transparent 40%),
+    radial-gradient(circle at 80% 70%, rgba(242,165,49,0.06), transparent 40%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Grain sombre pour sections vertes profondes */
+.grain-dark::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Focus visible mangue (accessibilité, identique à la vitrine) */
+:focus-visible {
+  outline: 3px solid #f2a531;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar { width: 11px; }
+::-webkit-scrollbar-track { background: #efe4cd; }
+::-webkit-scrollbar-thumb { background: #2a6640; border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: #163a24; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

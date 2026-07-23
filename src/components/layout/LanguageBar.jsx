@@ -20,13 +20,13 @@ export default function LanguageBar() {
     <div
       role="navigation"
       aria-label="Language switcher"
-      className="sticky top-0 z-50 h-9 bg-zinc-50 border-b border-zinc-200"
+      className="sticky top-0 z-50 h-9 bg-forest-900 border-b border-forest-800"
     >
       <div className="max-w-7xl mx-auto px-4 h-full flex items-center justify-end gap-0">
         {LANGS.map((lng, idx) => (
           <div key={lng.code} className="flex items-center">
             {idx > 0 && (
-              <span className="h-3.5 w-px bg-zinc-300 mx-2" aria-hidden />
+              <span className="h-3.5 w-px bg-cream-50/20 mx-2" aria-hidden />
             )}
             <button
               type="button"
@@ -37,8 +37,8 @@ export default function LanguageBar() {
               className={`
                 relative h-9 px-1 text-xs font-medium transition-colors duration-150
                 ${active === lng.code
-                  ? 'font-semibold text-green-600 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-green-600'
-                  : 'text-zinc-500 hover:text-zinc-900 cursor-pointer'
+                  ? 'font-semibold text-mango after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-mango'
+                  : 'text-cream-100/60 hover:text-cream-50 cursor-pointer'
                 }
               `}
             >

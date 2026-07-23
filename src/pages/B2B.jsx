@@ -109,7 +109,7 @@ export default function B2B() {
   if (reference) {
     return (
       <div className="container mx-auto px-4 py-24 max-w-md text-center">
-        <CheckCircle2 className="h-20 w-20 mx-auto mb-6 text-green-600" strokeWidth={1.5} />
+        <CheckCircle2 className="h-20 w-20 mx-auto mb-6 text-leaf" strokeWidth={1.5} />
         <h1 className="text-2xl font-bold mb-2">{t('b2b.success.title')}</h1>
         <p className="text-muted-foreground mb-4">{t('b2b.success.message')}</p>
         <p className="text-sm font-mono bg-muted rounded-lg px-4 py-2 inline-block mb-8 text-muted-foreground">
@@ -130,16 +130,16 @@ export default function B2B() {
   return (
     <div>
       {/* ── HERO ── */}
-      <section className="bg-gradient-to-br from-green-50 to-green-100 py-20 px-4">
+      <section className="bg-gradient-to-br from-cream-100 to-cream-200 py-20 px-4">
         <div className="container mx-auto max-w-2xl text-center">
-          <span className="inline-block bg-green-600/10 text-green-700 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
+          <span className="inline-block bg-forest-800/10 text-forest-800 text-xs font-semibold px-3 py-1 rounded-full mb-4 uppercase tracking-wide">
             B2B
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
             {t('b2b.hero.title')}
           </h1>
           <p className="text-xl text-zinc-600 mb-8">{t('b2b.hero.subtitle')}</p>
-          <Button size="lg" className="text-base px-8 bg-green-600 hover:bg-green-700" asChild>
+          <Button size="lg" className="text-base px-8 bg-mango text-forest-900 hover:bg-forest-800 hover:text-cream-50" asChild>
             <a href="#devis">{t('b2b.hero.cta')}</a>
           </Button>
         </div>
@@ -152,7 +152,7 @@ export default function B2B() {
           {[
             { key: 'delivery', Icon: Calendar, color: 'bg-blue-50 text-blue-600' },
             { key: 'pricing',  Icon: Tag,      color: 'bg-amber-50 text-amber-600' },
-            { key: 'variety',  Icon: Leaf,     color: 'bg-green-50 text-green-600' },
+            { key: 'variety',  Icon: Leaf,     color: 'bg-forest-800/8 text-leaf' },
           ].map(({ key, Icon, color }) => (
             <div key={key} className="rounded-2xl border p-6 hover:shadow-md transition-shadow">
               <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${color}`}>
@@ -196,7 +196,7 @@ export default function B2B() {
             <p className="text-muted-foreground">{t('b2b.form.subtitle')}</p>
           </div>
 
-          <div className="bg-white rounded-2xl shadow-lg border border-green-100 p-8">
+          <div className="bg-white rounded-2xl shadow-lg border border-forest-800/10 p-8">
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
 
               {/* Type + nom entreprise */}
@@ -286,8 +286,8 @@ export default function B2B() {
                         onClick={() => toggleCategory(cat.id)}
                         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border transition-colors ${
                           active
-                            ? 'bg-green-600 text-white border-green-600'
-                            : 'bg-background border-border hover:border-green-500/60'
+                            ? 'bg-forest-800 text-cream-50 border-forest-800'
+                            : 'bg-background border-border hover:border-forest-800/50'
                         }`}
                       >
                         <span aria-hidden>{cat.emoji}</span>
@@ -312,7 +312,7 @@ export default function B2B() {
 
               <Button
                 type="submit"
-                className="w-full h-12 text-base font-semibold bg-green-600 hover:bg-green-700"
+                className="w-full h-12 text-base font-semibold bg-mango text-forest-900 hover:bg-forest-800 hover:text-cream-50"
                 disabled={submitting}
               >
                 {submitting

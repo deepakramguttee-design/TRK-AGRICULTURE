@@ -11,8 +11,35 @@ export default {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        organic: '42% 58% 63% 37% / 41% 44% 56% 59%',
+      },
+      fontFamily: {
+        display: ['Fraunces', '"Fraunces Fallback"', 'Georgia', 'serif'],
+        sans: ['Inter', '"Inter Fallback"', 'system-ui', 'sans-serif'],
+      },
+      boxShadow: {
+        leafy: '0 24px 60px -24px rgba(22,58,36,0.45)',
+        sun: '0 20px 50px -20px rgba(242,165,49,0.4)',
       },
       colors: {
+        /* ── Kailash Farming design tokens (partagés avec le site vitrine) ── */
+        cream: {
+          50: '#faf6ec',
+          100: '#f6efe0',
+          200: '#efe4cd',
+        },
+        forest: {
+          900: '#0f2c1a',
+          800: '#163a24',
+          700: '#1e4d30',
+          600: '#2a6640',
+        },
+        leaf: '#3f8f4e',
+        lime: '#7fb640',
+        terracotta: '#a8481f',
+        mango: '#f2a531',
+        ink: '#20301d',
+
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

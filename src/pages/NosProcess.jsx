@@ -36,7 +36,7 @@ export default function NosProcess() {
         <div className="bg-alveoles absolute inset-0 opacity-40" />
         <div className="container mx-auto px-4 relative z-10 text-center">
           <p className="text-xs font-bold tracking-[0.25em] uppercase mb-4" style={{ color: MANGUE }}>
-            TRK Agriculture
+            Kailash Farming
           </p>
           <h1
             className="font-bricolage text-4xl md:text-5xl font-extrabold text-white mb-4 leading-tight"

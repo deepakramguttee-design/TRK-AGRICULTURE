@@ -27,8 +27,10 @@ const CONTACT_ITEMS = [
   {
     icon: MapPin,
     key: 'address',
-    href: 'https://maps.google.com/?q=Henrietta,Vacoas,Mauritius',
+    // Épingle la localisation exacte (dépose un marqueur aux coordonnées GPS).
+    href: 'https://www.google.com/maps/search/?api=1&query=-20.322619,57.465368',
     value: 'Henrietta, Vacoas, Mauritius',
+    subValue: '-20.322619, 57.465368',
     external: true,
   },
 ]
@@ -43,7 +45,7 @@ export default function Contact() {
 
       <Card className="mb-6">
         <CardContent className="pt-6 divide-y">
-          {CONTACT_ITEMS.map(({ icon: Icon, key, href, value, external }) => (
+          {CONTACT_ITEMS.map(({ icon: Icon, key, href, value, subValue, external }) => (
             <a
               key={key}
               href={href}
@@ -56,13 +58,16 @@ export default function Contact() {
                 <p className="text-sm font-medium group-hover:text-primary transition-colors">
                   {value}
                 </p>
+                {subValue && (
+                  <p className="text-xs text-muted-foreground tabular-nums">{subValue}</p>
+                )}
               </div>
             </a>
           ))}
         </CardContent>
       </Card>
 
-      <Card className="bg-green-50/60 border-green-200">
+      <Card className="bg-forest-800/5 border-forest-800/15">
         <CardContent className="pt-6">
           <p className="text-sm text-muted-foreground leading-relaxed">{t('contact.note')}</p>
           <Button asChild className="mt-4">

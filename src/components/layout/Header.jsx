@@ -44,13 +44,12 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2.5 group shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
-            <Leaf className="h-4 w-4 text-primary-foreground" />
+        <Link to="/" className="flex items-center gap-2.5 group shrink-0" aria-label="Kailash Farming">
+          <div className="w-8 h-8 rounded-full bg-forest-800 flex items-center justify-center transition-all duration-300 group-hover:scale-110">
+            <Leaf className="h-4 w-4 text-lime" />
           </div>
-          <span className="font-bold text-sm md:text-[15px] text-foreground tracking-tight leading-tight">
-            TRK Agriculture
-            <span className="hidden sm:inline text-muted-foreground font-normal"> Limited</span>
+          <span className="font-display text-base md:text-lg font-semibold text-forest-800 tracking-tight leading-tight">
+            Kailash <span className="text-leaf">Farming</span>
           </span>
         </Link>
 
@@ -156,10 +155,10 @@ export default function Header() {
                   className="flex items-center gap-2.5 mb-6"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-                    <Leaf className="h-4 w-4 text-primary-foreground" />
+                  <div className="w-8 h-8 rounded-full bg-forest-800 flex items-center justify-center">
+                    <Leaf className="h-4 w-4 text-lime" />
                   </div>
-                  <span className="font-bold text-foreground">TRK Agriculture</span>
+                  <span className="font-display text-lg font-semibold text-forest-800">Kailash <span className="text-leaf">Farming</span></span>
                 </Link>
 
                 {NAV_LINKS.map((link) => (

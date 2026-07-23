@@ -9,31 +9,31 @@ import { Leaf, Mail, MapPin } from 'lucide-react'
 const SOCIAL = [
   {
     href: 'https://www.facebook.com/dipraj.ramguttee',
-    label: 'Facebook TRK Agriculture',
+    label: 'Facebook Kailash Farming',
     icon: IconFacebook,
     hover: 'hover:bg-blue-100 hover:text-blue-700',
   },
   {
     href: 'https://www.instagram.com/trk_agriculture',
-    label: 'Instagram TRK Agriculture',
+    label: 'Instagram Kailash Farming',
     icon: IconInstagram,
     hover: 'hover:bg-pink-100 hover:text-pink-600',
   },
   {
     href: 'https://wa.me/23057745306',
-    label: 'WhatsApp TRK Agriculture',
+    label: 'WhatsApp Kailash Farming',
     icon: IconWhatsApp,
     hover: 'hover:bg-green-100 hover:text-green-700',
   },
   {
     href: 'https://www.tiktok.com/@trkagriculturelimited',
-    label: 'TikTok TRK Agriculture',
+    label: 'TikTok Kailash Farming',
     icon: IconTikTok,
     hover: 'hover:bg-stone-200 hover:text-stone-800',
   },
   {
     href: 'mailto:contact@trkagriculturelimited.mu',
-    label: 'Email TRK Agriculture',
+    label: 'Email Kailash Farming',
     icon: ({ className }) => <Mail className={className} />,
     hover: 'hover:bg-green-100 hover:text-green-700',
   },
@@ -59,7 +59,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="border-t bg-stone-50 mt-auto">
+    <footer className="border-t border-forest-800/10 bg-cream-100 mt-auto">
       <div className="container mx-auto px-4 pt-12 pb-6">
 
         {/* Main grid */}
@@ -67,19 +67,28 @@ export default function Footer() {
 
           {/* Brand column */}
           <div>
-            <Link to="/" className="flex items-center gap-2.5 mb-4 group w-fit">
-              <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center transition-transform group-hover:scale-110">
-                <Leaf className="h-4 w-4 text-primary-foreground" />
+            <Link to="/" className="flex items-center gap-2.5 mb-4 group w-fit" aria-label="Kailash Farming">
+              <div className="w-8 h-8 rounded-full bg-forest-800 flex items-center justify-center transition-transform group-hover:scale-110">
+                <Leaf className="h-4 w-4 text-lime" />
               </div>
-              <span className="font-bold text-sm text-foreground">TRK Agriculture</span>
+              <span className="font-display text-base font-semibold text-forest-800">Kailash <span className="text-leaf">Farming</span></span>
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed mb-3">
               {t('footer.tagline')}
             </p>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-5">
+            <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-3">
               <MapPin className="h-3.5 w-3.5 shrink-0" />
               {t('footer.location')}
             </div>
+            {/* Lien vers le site vitrine (storytelling de la marque) */}
+            <a
+              href="https://kailash-farming.vercel.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-xs font-semibold text-forest-800 hover:text-mango transition-colors mb-5"
+            >
+              {t('footer.story')} ↗
+            </a>
 
             {/* Social links */}
             <div className="flex flex-wrap gap-2">
@@ -175,7 +184,7 @@ export default function Footer() {
         {/* Bottom row */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} TRK Agriculture Limited — {t('footer.tagline')}
+            © {new Date().getFullYear()} Kailash Farming — {t('footer.operatedBy')}
           </p>
           <div className="flex flex-wrap gap-4">
             <Link to="/mentions-legales" className="text-xs text-muted-foreground hover:text-foreground transition-colors">

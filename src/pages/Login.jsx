@@ -161,7 +161,7 @@ export default function Login() {
           <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-lg shadow-green-200">
             <Leaf className="h-7 w-7 text-white" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-zinc-900">TRK Agriculture</h1>
+          <h1 className="font-display text-2xl font-bold text-zinc-900">Kailash Farming</h1>
           <p className="text-sm text-zinc-500 mt-1">{t('login.title')}</p>
         </div>
 
