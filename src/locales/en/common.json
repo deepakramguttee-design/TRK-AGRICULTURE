@@ -544,6 +544,45 @@
     "viewAll": "View all",
     "viewAllMobile": "Browse all products"
   },
+  "payments": {
+    "title": "Payments",
+    "subtitle": "Collect payments for pending orders",
+    "pendingTotal": "To collect",
+    "filterStatus": "Payment status",
+    "filterMethod": "Method",
+    "filterDate": "Date",
+    "clearDate": "Clear date",
+    "allStatuses": "All statuses",
+    "allMethods": "All methods",
+    "date": "Date",
+    "customer": "Customer",
+    "phone": "Phone",
+    "amount": "Amount",
+    "method": "Method",
+    "payStatus": "Payment",
+    "actions": "Actions",
+    "collect": "Collect",
+    "confirmTitle": "Confirm payment collection",
+    "confirmDesc": "Order {{order}} — collect {{amount}}?",
+    "confirmCollect": "Confirm collection",
+    "cancel": "Cancel",
+    "collected": "Payment collected",
+    "collectError": "Collection failed",
+    "loadError": "Loading error",
+    "empty": "No orders found",
+    "status": {
+      "pending": "Pending",
+      "paid": "Paid"
+    },
+    "methods": {
+      "cod": "Cash (COD)",
+      "juice": "Juice",
+      "mips_card": "Card (MIPS)",
+      "pop": "Pop",
+      "my_t_money": "my.t money",
+      "bank_transfer": "Bank transfer"
+    }
+  },
   "adminLogin": {
     "title": "Team space — 2FA enabled",
     "signin": "Sign in",

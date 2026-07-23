@@ -544,6 +544,45 @@
     "viewAll": "Voir tout",
     "viewAllMobile": "Voir tout le catalogue"
   },
+  "payments": {
+    "title": "Encaissements",
+    "subtitle": "Encaissez les paiements des commandes en attente",
+    "pendingTotal": "À encaisser",
+    "filterStatus": "Statut de paiement",
+    "filterMethod": "Méthode",
+    "filterDate": "Date",
+    "clearDate": "Effacer la date",
+    "allStatuses": "Tous les statuts",
+    "allMethods": "Toutes les méthodes",
+    "date": "Date",
+    "customer": "Client",
+    "phone": "Téléphone",
+    "amount": "Montant",
+    "method": "Méthode",
+    "payStatus": "Paiement",
+    "actions": "Actions",
+    "collect": "Encaisser",
+    "confirmTitle": "Confirmer l'encaissement",
+    "confirmDesc": "Commande {{order}} — encaisser {{amount}} ?",
+    "confirmCollect": "Confirmer l'encaissement",
+    "cancel": "Annuler",
+    "collected": "Paiement encaissé",
+    "collectError": "Échec de l'encaissement",
+    "loadError": "Erreur de chargement",
+    "empty": "Aucune commande trouvée",
+    "status": {
+      "pending": "En attente",
+      "paid": "Payé"
+    },
+    "methods": {
+      "cod": "Espèces (COD)",
+      "juice": "Juice",
+      "mips_card": "Carte (MIPS)",
+      "pop": "Pop",
+      "my_t_money": "my.t money",
+      "bank_transfer": "Virement"
+    }
+  },
   "adminLogin": {
     "title": "Espace équipe — 2FA activé",
     "signin": "Connexion",

@@ -581,6 +581,45 @@
     "viewAll": "Get tou",
     "viewAllMobile": "Get tou katalog"
   },
+  "payments": {
+    "title": "Lankesman",
+    "subtitle": "Ankes peyman bann komann an atant",
+    "pendingTotal": "Pou ankese",
+    "filterStatus": "Stati peyman",
+    "filterMethod": "Metod",
+    "filterDate": "Dat",
+    "clearDate": "Efas dat",
+    "allStatuses": "Tou stati",
+    "allMethods": "Tou metod",
+    "date": "Dat",
+    "customer": "Klian",
+    "phone": "Telefonn",
+    "amount": "Montan",
+    "method": "Metod",
+    "payStatus": "Peyman",
+    "actions": "Aksyon",
+    "collect": "Ankese",
+    "confirmTitle": "Konfirm lankesman",
+    "confirmDesc": "Komann {{order}} — ankes {{amount}} ?",
+    "confirmCollect": "Konfirm lankesman",
+    "cancel": "Anile",
+    "collected": "Peyman ankese",
+    "collectError": "Lankesman pa pase",
+    "loadError": "Erer sarzman",
+    "empty": "Pena komann",
+    "status": {
+      "pending": "An atant",
+      "paid": "Peye"
+    },
+    "methods": {
+      "cod": "Kas (COD)",
+      "juice": "Juice",
+      "mips_card": "Kart (MIPS)",
+      "pop": "Pop",
+      "my_t_money": "my.t money",
+      "bank_transfer": "Virman labank"
+    }
+  },
   "adminLogin": {
     "title": "Lespas lekip — 2FA aktive",
     "signin": "Konekte",

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { useAuth } from '@/contexts/AuthContext'
 import { Button } from '@/components/ui/button'
 import { Leaf, Truck, Award, Clock, Sun, ShoppingBag, ArrowRight, Droplets } from 'lucide-react'
 import FeaturedProducts from '@/components/FeaturedProducts'
@@ -23,6 +24,7 @@ const SEASON_KEYS = [
 
 export default function Home() {
   const { t } = useTranslation()
+  const { isAdmin, isEmployee, loading: authLoading } = useAuth()
   const SEASONS = SEASON_KEYS.map(s => ({
     ...s,
     label: t(`home.seasons.${s.key}.label`),
@@ -43,25 +45,32 @@ export default function Home() {
     })
   }, [])
 
+  // Staff (admin/operator) déjà connecté qui ouvre l'accueil → espace staff.
+  // L'admin en session AAL1 sera renvoyé par ProtectedAdminRoute vers
+  // /admin/login pour finir son TOTP.
+  if (!authLoading && (isAdmin || isEmployee)) {
+    return <Navigate to="/admin" replace />
+  }
+
   return (
     <div className="flex flex-col overflow-hidden">
 
       {/* ── HERO ── */}
-      <section className="relative min-h-[86vh] flex items-center bg-[#f4f1ea] overflow-hidden">
+      <section className="paper relative min-h-[86vh] flex items-center overflow-hidden">
 
         {/* Dot texture */}
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(22,163,74,0.14) 1.5px, transparent 1.5px)',
+            backgroundImage: 'radial-gradient(circle, rgba(22,58,36,0.10) 1.5px, transparent 1.5px)',
             backgroundSize: '26px 26px',
           }}
         />
 
         {/* Glow blobs */}
-        <div aria-hidden className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-green-200/30 blur-[80px] pointer-events-none" />
-        <div aria-hidden className="absolute bottom-0 -left-32 w-96 h-96 rounded-full bg-emerald-300/20 blur-[60px] pointer-events-none" />
+        <div aria-hidden className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-leaf/20 blur-[80px] pointer-events-none" />
+        <div aria-hidden className="absolute bottom-0 -left-32 w-96 h-96 rounded-full bg-mango/15 blur-[60px] pointer-events-none" />
 
         {/* Floating leaves */}
         <span aria-hidden className="absolute top-[10%] right-[6%] text-7xl opacity-[0.18] select-none pointer-events-none animate-trk-float">🌿</span>
@@ -72,14 +81,14 @@ export default function Home() {
           <div className="max-w-[640px]">
 
             {/* Pill badge */}
-            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-green-100 border border-green-200/80 text-green-800 text-xs font-semibold tracking-wider mb-8 animate-trk-fade-up">
-              <Leaf className="h-3 w-3" />
+            <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-forest-800/8 border border-forest-800/15 text-forest-800 text-xs font-semibold tracking-wider mb-8 animate-trk-fade-up">
+              <Leaf className="h-3 w-3 text-leaf" />
               {t('home.hero.badge')}
             </div>
 
             {/* Headline */}
             <h1
-              className="font-display text-5xl sm:text-6xl md:text-7xl font-bold text-stone-900 leading-[1.08] mb-6 animate-trk-fade-up"
+              className="font-display text-5xl sm:text-6xl md:text-7xl font-semibold text-forest-800 leading-[1.05] mb-6 animate-trk-fade-up"
               style={{ animationDelay: '80ms' }}
             >
               {t('home.hero.title')}
@@ -87,7 +96,7 @@ export default function Home() {
 
             {/* Subtitle */}
             <p
-              className="text-base md:text-lg text-stone-600 mb-10 max-w-md leading-relaxed animate-trk-fade-up"
+              className="text-base md:text-lg text-forest-700/80 mb-10 max-w-md leading-relaxed animate-trk-fade-up"
               style={{ animationDelay: '160ms' }}
             >
               {t('home.hero.subtitle')}
@@ -98,13 +107,13 @@ export default function Home() {
               className="flex flex-wrap gap-3 animate-trk-fade-up"
               style={{ animationDelay: '240ms' }}
             >
-              <Button size="lg" asChild className="rounded-full px-7 h-12 text-base shadow-md shadow-green-300/40 gap-2">
+              <Button size="lg" asChild className="rounded-full px-7 h-12 text-base bg-mango text-forest-900 hover:bg-forest-800 hover:text-cream-50 shadow-sun gap-2">
                 <Link to="/catalogue">
                   {t('home.hero.cta')}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
               </Button>
-              <Button variant="outline" size="lg" asChild className="rounded-full px-7 h-12 text-base border-stone-300 bg-white/70">
+              <Button variant="outline" size="lg" asChild className="rounded-full px-7 h-12 text-base border-forest-800/25 bg-cream-50/70 text-forest-800 hover:bg-forest-800 hover:text-cream-50">
                 <Link to="/b2b">{t('nav.b2b')}</Link>
               </Button>
             </div>
@@ -126,8 +135,8 @@ export default function Home() {
           <div className="grid grid-cols-3 gap-6 max-w-lg mx-auto">
             {STATS_KEYS.map(stat => (
               <div key={stat.labelKey} className="text-center">
-                <div className="font-display text-4xl md:text-5xl font-bold text-green-700">{stat.value}</div>
-                <div className="text-[10px] text-stone-500 font-semibold tracking-widest uppercase mt-1">{t(stat.labelKey)}</div>
+                <div className="font-display text-4xl md:text-5xl font-semibold text-forest-700">{stat.value}</div>
+                <div className="text-[10px] text-forest-700/60 font-semibold tracking-widest uppercase mt-1">{t(stat.labelKey)}</div>
               </div>
             ))}
           </div>
@@ -138,8 +147,8 @@ export default function Home() {
       <section className="bg-white py-20 md:py-28">
         <div className="container mx-auto px-4">
           <div className="text-center mb-14">
-            <p className="text-xs font-bold tracking-[0.25em] uppercase text-green-600 mb-3">{t('home.why.tag')}</p>
-            <h2 className="font-display text-4xl md:text-5xl font-bold text-stone-900">
+            <p className="text-xs font-bold tracking-[0.25em] uppercase text-leaf mb-3">{t('home.why.tag')}</p>
+            <h2 className="font-display text-4xl md:text-5xl font-semibold text-forest-800">
               {t('home.why.title')}
             </h2>
           </div>
@@ -148,13 +157,13 @@ export default function Home() {
             {WHY_ICON_MAP.map((Icon, i) => (
               <div
                 key={i}
-                className="group p-6 rounded-2xl border border-stone-100 bg-stone-50/50 hover:bg-green-50 hover:border-green-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-md"
+                className="group p-6 rounded-2xl border border-forest-800/8 bg-cream-100/50 hover:bg-cream-100 hover:border-forest-800/15 transition-all duration-300 hover:-translate-y-1 hover:shadow-leafy"
               >
-                <div className="w-11 h-11 rounded-xl bg-green-100 flex items-center justify-center text-green-700 mb-4 group-hover:bg-green-600 group-hover:text-white transition-all duration-300 group-hover:scale-110">
+                <div className="w-11 h-11 rounded-xl bg-forest-800/10 flex items-center justify-center text-forest-800 mb-4 group-hover:bg-forest-800 group-hover:text-lime transition-all duration-300 group-hover:scale-110">
                   <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="font-semibold text-stone-900 mb-2 text-sm">{t(`home.why.items.${i}.title`)}</h3>
-                <p className="text-sm text-stone-500 leading-relaxed">{t(`home.why.items.${i}.desc`)}</p>
+                <h3 className="font-semibold text-forest-800 mb-2 text-sm">{t(`home.why.items.${i}.title`)}</h3>
+                <p className="text-sm text-forest-700/70 leading-relaxed">{t(`home.why.items.${i}.desc`)}</p>
               </div>
             ))}
           </div>
@@ -220,7 +229,7 @@ export default function Home() {
       </section>
 
       {/* ── SAISONS ── */}
-      <section className="bg-[#f4f1ea] py-16 md:py-20">
+      <section className="paper py-16 md:py-20">
         <div className="container mx-auto px-4">
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-10">
             <div className="flex-1">
@@ -258,7 +267,7 @@ export default function Home() {
       </section>
 
       {/* ── FINAL CTA ── */}
-      <section className="bg-green-700 py-20 relative overflow-hidden">
+      <section className="bg-forest-800 py-20 relative overflow-hidden grain-dark">
         <div
           aria-hidden
           className="absolute inset-0 pointer-events-none"
@@ -267,18 +276,19 @@ export default function Home() {
             backgroundSize: '22px 22px',
           }}
         />
+        <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-mango/15 blur-3xl" />
         <div className="container mx-auto px-4 text-center relative z-10 max-w-xl">
-          <Droplets className="h-9 w-9 text-green-300 mx-auto mb-5" />
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-white mb-4">
+          <Droplets className="h-9 w-9 text-lime mx-auto mb-5" />
+          <h2 className="font-display text-3xl md:text-4xl font-semibold text-cream-50 mb-4">
             {t('home.cta.title')}
           </h2>
-          <p className="text-green-200 text-sm leading-relaxed mb-8">
+          <p className="text-cream-100/80 text-sm leading-relaxed mb-8">
             {t('home.cta.desc')}
           </p>
           <Button
             size="lg"
             asChild
-            className="bg-white text-green-700 hover:bg-green-50 rounded-full px-8 h-12 text-base font-semibold shadow-lg gap-2"
+            className="bg-mango text-forest-900 hover:bg-cream-50 rounded-full px-8 h-12 text-base font-semibold shadow-sun gap-2"
           >
             <Link to="/catalogue">
               <ShoppingBag className="h-4 w-4" />
