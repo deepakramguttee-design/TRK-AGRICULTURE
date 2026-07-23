@@ -13,6 +13,8 @@
   },
   "footer": {
     "tagline": "Plante Mote dan Moris 🇲🇺",
+    "operatedBy": "Kailash Farming pe zere par TRK Agriculture Ltd",
+    "story": "Dekouver nou listwar",
     "delivery": "Livrezon dan 9 Distrikt",
     "legal": "Enfòmasyon Legal",
     "legalNotice": "Mansyon Legal",
@@ -42,7 +44,7 @@
     },
     "why": {
       "tag": "Nou Angajman",
-      "title": "Pourquoi Choisir TRK ?",
+      "title": "Pourquoi Choisir Kailash Farming ?",
       "items": [
         { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
         { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
@@ -171,7 +173,7 @@
     "deliveryPaused": "Livrezon sispann pou lemoman — ramase lor plas selman",
     "pickupMode": "Ramase lor Plas",
     "pickupModeDesc": "Gratis — dan Nou Pepinyer",
-    "pickupAddress": "Pepinyer TRK Agriculture",
+    "pickupAddress": "Pepinyer Kailash Farming",
     "pickupAddressDetail": "Henrietta, Vacoas",
     "pickupGps": "Get lor Google Maps",
     "pickupNote": "Ramase gratis dan nou pepinyer. Nou pou kontakte ou pou aranzer enn ler ramase apre konfirmasyon ou komand.",
@@ -255,7 +257,7 @@
       "confirm": "Konfirm Mot de Paz",
       "save": "Sanz Mot de Paz",
       "success": "Mot de Paz Mis Azour",
-      "tooShort": "Mot de paz bizin o mwin 6 karakter",
+      "tooShort": "Mot de paz bizin o mwin 8 karakter",
       "mismatch": "Mot de paz pa koresponn"
     },
     "admin": {
@@ -270,7 +272,7 @@
       "cta": "Demann enn Devi"
     },
     "advantages": {
-      "title": "Pourquoi Choisir TRK Agriculture ?",
+      "title": "Pourquoi Choisir Kailash Farming ?",
       "delivery": { "title": "Livrezon Ebdomader Programa", "desc": "Planifye ou livrezon selon ou ritm — chak semenn, zour ek ler ki konvyen ou." },
       "pricing": { "title": "Pri B2B Degressif lor Volim", "desc": "Plis ou komand, plis ou pri bese. Devi personalize selon ou volim mensyel." },
       "variety": { "title": "Varyete lor Komand Posib", "desc": "Bizin enn varyete spesifik ? Nou kapav kultive lor komand pou satisfer ou bezwen." }
@@ -331,9 +333,9 @@
     "viewCatalog": "Get Katalog"
   },
   "about": {
-    "title": "Lor TRK Agriculture",
+    "title": "Lor Kailash Farming",
     "subtitle": "Plant kiltive dan Moris, par enn fami pasyone",
-    "intro": "TRK Agriculture se enn pepinyer familyal Morisyen. Nou kiltive lor plas, a Henrietta (Vacoas), enn large gam plant maraisher : epis ek aromatik, salade, bred, legim varye, melon ek pasteк.",
+    "intro": "Kailash Farming se enn pepinyer familyal Morisyen. Nou kiltive lor plas, a Henrietta (Vacoas), enn large gam plant maraisher : epis ek aromatik, salade, bred, legim varye, melon ek pasteк.",
     "body": "Nou konviksyon sinp : enn bon potaze komanse par enn bon plant. Se pou sa rezon la nou kiltive lokalement plant vigorye, pre pou repike, san pase par importasyon.",
     "approach": {
       "title": "Nou Apros",
@@ -486,7 +488,7 @@
     },
     "why": {
       "tag": "Nou Angajman",
-      "title": "Pourquoi Choisir TRK ?",
+      "title": "Pourquoi Choisir Kailash Farming ?",
       "items": [
         { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
         { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
@@ -538,7 +540,7 @@
     "password": "Mot de Paz",
     "forgotPassword": "Mot de Paz Bliye ?",
     "createAccount": "Kree Mo Kont",
-    "teamSpace": "Ekip TRK ?",
+    "teamSpace": "Ekip Kailash Farming ?",
     "teamLink": "Espas Ekip",
     "fullName": "Non Konple *",
     "phone": "Telefon *",
@@ -558,7 +560,7 @@
     "emailSent": "Email Anvwaye",
     "checkEmail": "Get ou bwat email pou reinitialize ou mot de paz.",
     "accountCreated": "Kont Kree !",
-    "welcome": "Byenveni dan TRK Agriculture.",
+    "welcome": "Byenveni dan Kailash Farming.",
     "verifyEmail": "Kont Kree — Verifye Ou Email",
     "verifyEmailDesc": "Konekte apre konfirmasyon."
   },

@@ -13,6 +13,8 @@
   },
   "footer": {
     "tagline": "Grown in Mauritius 🇲🇺",
+    "operatedBy": "Kailash Farming is operated by TRK Agriculture Ltd",
+    "story": "Discover our story",
     "delivery": "Delivery in 9 districts",
     "legal": "Legal",
     "legalNotice": "Legal Notice",
@@ -35,7 +37,7 @@
       "cta": "Request a quote"
     },
     "advantages": {
-      "title": "Why choose TRK Agriculture?",
+      "title": "Why choose Kailash Farming?",
       "delivery": { "title": "Scheduled weekly deliveries", "desc": "Plan your deliveries at your own pace — every week, on the days and times that suit you." },
       "pricing": { "title": "Volume-based B2B pricing", "desc": "The more you order, the lower your prices. Personalised quote based on your monthly volumes." },
       "variety": { "title": "Custom varieties on request", "desc": "Need a specific variety? We can grow to order to meet your exact requirements." }
@@ -138,7 +140,7 @@
     "deliveryPaused": "Delivery temporarily suspended — pickup only",
     "pickupMode": "Pickup",
     "pickupModeDesc": "Free — at our nursery",
-    "pickupAddress": "TRK Agriculture Nursery",
+    "pickupAddress": "Kailash Farming Nursery",
     "pickupAddressDetail": "Henrietta, Vacoas",
     "pickupGps": "View on Google Maps",
     "pickupNote": "Free pickup at our nursery. We will contact you to arrange a pickup time after your order is confirmed.",
@@ -261,7 +263,7 @@
       "confirm": "Confirm password",
       "save": "Change password",
       "success": "Password updated",
-      "tooShort": "Password must be at least 6 characters",
+      "tooShort": "Password must be at least 8 characters",
       "mismatch": "Passwords do not match"
     },
     "admin": {
@@ -270,9 +272,9 @@
     }
   },
   "about": {
-    "title": "About TRK Agriculture",
+    "title": "About Kailash Farming",
     "subtitle": "Plants grown in Mauritius, by a passionate family",
-    "intro": "TRK Agriculture is a Mauritian family nursery. We grow a wide range of vegetable plants right here in Henrietta (Vacoas): herbs and spices, salads, brèdes, assorted vegetables, melons and watermelons.",
+    "intro": "Kailash Farming is a Mauritian family nursery. We grow a wide range of vegetable plants right here in Henrietta (Vacoas): herbs and spices, salads, brèdes, assorted vegetables, melons and watermelons.",
     "body": "Our belief is simple: a good garden starts with a good plant. That's why we grow healthy, ready-to-transplant plants locally — no imports, no long supply chains. Straight from the grower to you.",
     "approach": {
       "title": "Our approach",
@@ -453,7 +455,7 @@
     },
     "why": {
       "tag": "Our Commitment",
-      "title": "Why choose TRK?",
+      "title": "Why choose Kailash Farming?",
       "items": [
         { "title": "Grown here", "desc": "Our plants grow on the island of Mauritius, harvested the very morning of your delivery." },
         { "title": "Fast delivery", "desc": "Order online, receive at home. Delivery available across all 9 districts." },
@@ -501,7 +503,7 @@
     "password": "Password",
     "forgotPassword": "Forgot password?",
     "createAccount": "Create my account",
-    "teamSpace": "TRK Team?",
+    "teamSpace": "Kailash Farming Team?",
     "teamLink": "Team login",
     "fullName": "Full name *",
     "phone": "Phone *",
@@ -521,7 +523,7 @@
     "emailSent": "Email sent",
     "checkEmail": "Check your inbox to reset your password.",
     "accountCreated": "Account created!",
-    "welcome": "Welcome to TRK Agriculture.",
+    "welcome": "Welcome to Kailash Farming.",
     "verifyEmail": "Account created — check your email",
     "verifyEmailDesc": "Sign in after confirmation."
   },

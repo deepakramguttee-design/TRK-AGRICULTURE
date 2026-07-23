@@ -46,6 +46,12 @@ export default function AdminLoginPage() {
       return
     }
 
+    // Seuls les admins doivent passer le TOTP — les operators entrent en email+mdp
+    if (prof.role === 'operator') {
+      navigate('/admin', { replace: true })
+      return
+    }
+
     // Check MFA status
     const { data: aalData } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel()
     const enrolled = aalData?.nextLevel === 'aal2' || aalData?.currentLevel === 'aal2'
@@ -160,7 +166,7 @@ export default function AdminLoginPage() {
           <div className="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center mb-4 shadow-lg shadow-green-200">
             <Leaf className="h-7 w-7 text-white" />
           </div>
-          <h1 className="font-display text-2xl font-bold text-zinc-900">TRK Agriculture</h1>
+          <h1 className="font-display text-2xl font-bold text-zinc-900">Kailash Farming</h1>
           <div className="flex items-center gap-1.5 mt-1.5 text-xs text-zinc-500">
             <ShieldCheck className="h-3.5 w-3.5 text-primary" />
             {t('adminLogin.title')}

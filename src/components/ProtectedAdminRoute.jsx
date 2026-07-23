@@ -11,18 +11,19 @@ export default function ProtectedAdminRoute({ children }) {
   const { t } = useTranslation()
   const { user, isAdmin, isEmployee, loading } = useAuth()
 
-  // Vérifie que la session est élevée en MFA (aal2). La RLS l'exige côté serveur ;
-  // ce gate évite d'afficher une coquille admin dont toutes les requêtes échoueraient.
+  // Vérifie que la session est élevée en MFA (aal2) — admins uniquement. La RLS
+  // l'exige côté serveur pour is_admin() ; les operators travaillent en AAL1.
   const [aalOk, setAalOk] = useState(null) // null = vérification en cours
 
   useEffect(() => {
     let active = true
     if (!user) { setAalOk(null); return }
+    if (!isAdmin) { setAalOk(true); return }
     supabase.auth.mfa.getAuthenticatorAssuranceLevel()
       .then(({ data }) => { if (active) setAalOk(data?.currentLevel === 'aal2') })
       .catch(() => { if (active) setAalOk(false) })
     return () => { active = false }
-  }, [user])
+  }, [user, isAdmin])
 
   if (loading || (user && aalOk === null)) {
     return (
@@ -34,8 +35,8 @@ export default function ProtectedAdminRoute({ children }) {
 
   if (!user) return <Navigate to="/admin/login" replace />
 
-  // Session non élevée en MFA → retour au login admin pour finir le TOTP
-  if ((isAdmin || isEmployee) && aalOk === false) {
+  // Session admin non élevée en MFA → retour au login admin pour finir le TOTP
+  if (isAdmin && aalOk === false) {
     return <Navigate to="/admin/login" replace />
   }
 

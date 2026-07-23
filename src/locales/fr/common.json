@@ -13,6 +13,8 @@
   },
   "footer": {
     "tagline": "Cultivé à Maurice 🇲🇺",
+    "operatedBy": "Kailash Farming est exploité par TRK Agriculture Ltd",
+    "story": "Découvrir notre histoire",
     "delivery": "Livraison dans 9 districts",
     "legal": "Informations légales",
     "legalNotice": "Mentions légales",
@@ -35,7 +37,7 @@
       "cta": "Demander un devis"
     },
     "advantages": {
-      "title": "Pourquoi choisir TRK Agriculture ?",
+      "title": "Pourquoi choisir Kailash Farming ?",
       "delivery": { "title": "Livraisons hebdomadaires programmées", "desc": "Planifiez vos livraisons selon votre rythme — chaque semaine, aux jours et heures qui vous conviennent." },
       "pricing": { "title": "Tarifs B2B dégressifs sur volume", "desc": "Plus vous commandez, plus vos prix baissent. Devis personnalisé selon vos volumes mensuels." },
       "variety": { "title": "Variétés sur commande possible", "desc": "Besoin d'une variété spécifique ? Nous pouvons cultiver sur commande pour satisfaire vos exigences." }
@@ -138,7 +140,7 @@
     "deliveryPaused": "Livraison temporairement suspendue — retrait uniquement",
     "pickupMode": "Retrait sur place",
     "pickupModeDesc": "Gratuit — à notre pépinière",
-    "pickupAddress": "Pépinière TRK Agriculture",
+    "pickupAddress": "Pépinière Kailash Farming",
     "pickupAddressDetail": "Henrietta, Vacoas",
     "pickupGps": "Voir sur Google Maps",
     "pickupNote": "Retrait gratuit à notre pépinière. Nous vous contacterons pour convenir d'un créneau de retrait après confirmation de votre commande.",
@@ -261,7 +263,7 @@
       "confirm": "Confirmer le mot de passe",
       "save": "Changer le mot de passe",
       "success": "Mot de passe mis à jour",
-      "tooShort": "Le mot de passe doit faire au moins 6 caractères",
+      "tooShort": "Le mot de passe doit faire au moins 8 caractères",
       "mismatch": "Les mots de passe ne correspondent pas"
     },
     "admin": {
@@ -270,9 +272,9 @@
     }
   },
   "about": {
-    "title": "À propos de TRK Agriculture",
+    "title": "À propos de Kailash Farming",
     "subtitle": "Des plants cultivés à Maurice, par une famille passionnée",
-    "intro": "TRK Agriculture est une pépinière familiale mauricienne. Nous cultivons sur place, à Henrietta (Vacoas), une large gamme de plants maraîchers : épices et aromates, salades, brèdes, légumes variés, melons et pastèques.",
+    "intro": "Kailash Farming est une pépinière familiale mauricienne. Nous cultivons sur place, à Henrietta (Vacoas), une large gamme de plants maraîchers : épices et aromates, salades, brèdes, légumes variés, melons et pastèques.",
     "body": "Notre conviction est simple : un bon potager commence par un bon plant. C'est pourquoi nous cultivons localement des plants vigoureux, prêts à être repiqués, sans passer par l'importation ni de longues chaînes logistiques. Du producteur directement à vous.",
     "approach": {
       "title": "Notre démarche",
@@ -453,7 +455,7 @@
     },
     "why": {
       "tag": "Notre engagement",
-      "title": "Pourquoi choisir TRK ?",
+      "title": "Pourquoi choisir Kailash Farming ?",
       "items": [
         { "title": "Cultivé ici", "desc": "Nos plantes poussent sur l'île Maurice, récoltées le matin même de votre livraison." },
         { "title": "Livraison rapide", "desc": "Commandez en ligne, recevez chez vous. Livraison disponible dans les 9 districts." },
@@ -501,7 +503,7 @@
     "password": "Mot de passe",
     "forgotPassword": "Mot de passe oublié ?",
     "createAccount": "Créer mon compte",
-    "teamSpace": "Équipe TRK ?",
+    "teamSpace": "Équipe Kailash Farming ?",
     "teamLink": "Espace équipe",
     "fullName": "Nom complet *",
     "phone": "Téléphone *",
@@ -521,7 +523,7 @@
     "emailSent": "Email envoyé",
     "checkEmail": "Vérifiez votre boîte mail pour réinitialiser votre mot de passe.",
     "accountCreated": "Compte créé !",
-    "welcome": "Bienvenue chez TRK Agriculture.",
+    "welcome": "Bienvenue chez Kailash Farming.",
     "verifyEmail": "Compte créé — vérifiez votre email",
     "verifyEmailDesc": "Connectez-vous après confirmation."
   },
