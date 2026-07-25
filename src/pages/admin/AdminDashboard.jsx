@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/contexts/AuthContext'
@@ -8,16 +9,16 @@ import {
   Smartphone, AlertCircle, MapPin, Plus, Banknote,
 } from 'lucide-react'
 
+import { useOrderStatusLabels } from '@/hooks/useOrderStatusLabels'
+
 const STATUS_ORDER_COLORS = {
   pending:   'bg-orange-100 text-orange-700 border-orange-200',
   confirmed: 'bg-blue-100 text-blue-700 border-blue-200',
-  en_route:  'bg-violet-100 text-violet-700 border-violet-200',
+  preparing: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+  prepared:  'bg-purple-100 text-purple-700 border-purple-200',
+  shipped:   'bg-cyan-100 text-cyan-700 border-cyan-200',
   delivered: 'bg-green-100 text-green-700 border-green-200',
   cancelled: 'bg-red-100 text-red-700 border-red-200',
-}
-const STATUS_ORDER_LABELS = {
-  pending: 'En attente', confirmed: 'Confirmée',
-  en_route: 'En route', delivered: 'Livrée', cancelled: 'Annulée',
 }
 
 function parseNotesName(notes) {
@@ -27,8 +28,8 @@ function parseNotesName(notes) {
 function isPickup(notes) {
   return (notes || '').includes('Retrait sur place')
 }
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+function formatDate(d, locale) {
+  return new Date(d).toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 function formatPrice(n) {
   const parts = Number(n).toFixed(2).split('.')
@@ -65,9 +66,12 @@ function RevenueCard({ label, value, sub }) {
 }
 
 export default function AdminDashboard() {
+  const { t, i18n } = useTranslation()
   const { isAdmin } = useAuth()
+  const { getLabel } = useOrderStatusLabels()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
+  const dateLocale = i18n.language === 'en' ? 'en-GB' : 'fr-FR'
 
   useEffect(() => {
     async function load() {
@@ -91,7 +95,7 @@ export default function AdminDashboard() {
         supabase.from('customers').select('id', { count: 'exact', head: true }),
         supabase.from('b2b_inquiries').select('id', { count: 'exact', head: true }).eq('status', 'new'),
         supabase.from('orders')
-          .select('id, order_number, created_at, customer_notes, total_mur, status, payment_method, payment_status')
+          .select('id, order_number, created_at, customer_notes, total_mur, status, fulfillment_type, payment_method, payment_status')
           .order('created_at', { ascending: false }).limit(6),
         supabase.from('b2b_inquiries')
           .select('id, created_at, business_name, contact_name, status')
@@ -145,9 +149,9 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t('adminCore.dashboard.title')}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          {new Date().toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          {new Date().toLocaleDateString(dateLocale, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
         </p>
       </div>
 
@@ -157,13 +161,13 @@ export default function AdminDashboard() {
           {d.pendingOrders > 0 && (
             <Link to="/admin/commandes?status=pending" className="flex items-center gap-2 rounded-lg border border-orange-300 bg-orange-50 px-4 py-2.5 text-sm font-medium text-orange-800 hover:bg-orange-100 transition-colors">
               <AlertCircle className="h-4 w-4" />
-              {d.pendingOrders} commande{d.pendingOrders > 1 ? 's' : ''} en attente de confirmation
+              {t('adminCore.dashboard.alertPendingOrders', { count: d.pendingOrders })}
             </Link>
           )}
           {isAdmin && d.juicePending > 0 && (
             <Link to="/admin/commandes" className="flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-4 py-2.5 text-sm font-medium text-amber-800 hover:bg-amber-100 transition-colors">
               <Smartphone className="h-4 w-4" />
-              {d.juicePending} paiement{d.juicePending > 1 ? 's' : ''} Juice à valider
+              {t('adminCore.dashboard.alertJuicePending', { count: d.juicePending })}
             </Link>
           )}
         </div>
@@ -172,21 +176,21 @@ export default function AdminDashboard() {
       {/* KPIs */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         {isAdmin && (
-          <KpiCard label="Produits actifs"     value={loading ? '—' : d.activeProducts} icon={Package}      color="text-green-600"  to="/admin/produits" />
+          <KpiCard label={t('adminCore.dashboard.kpiActiveProducts')}     value={loading ? '—' : d.activeProducts} icon={Package}      color="text-green-600"  to="/admin/produits" />
         )}
-        <KpiCard label="Commandes totales"   value={loading ? '—' : d.totalOrders}    icon={ShoppingCart}  color="text-blue-600"   to="/admin/commandes" />
-        <KpiCard label="Clients enregistrés" value={loading ? '—' : d.totalClients}   icon={Users}         color="text-violet-600" to={isAdmin ? '/admin/utilisateurs' : undefined} />
-        <KpiCard label="Devis B2B en attente" value={loading ? '—' : d.newB2B}        icon={TrendingUp}    color="text-orange-500" to="/admin/b2b" alert={!loading && d.newB2B > 0} />
+        <KpiCard label={t('adminCore.dashboard.kpiTotalOrders')}   value={loading ? '—' : d.totalOrders}    icon={ShoppingCart}  color="text-blue-600"   to="/admin/commandes" />
+        <KpiCard label={t('adminCore.dashboard.kpiTotalClients')} value={loading ? '—' : d.totalClients}   icon={Users}         color="text-violet-600" to={isAdmin ? '/admin/utilisateurs' : undefined} />
+        <KpiCard label={t('adminCore.dashboard.kpiPendingB2B')} value={loading ? '—' : d.newB2B}        icon={TrendingUp}    color="text-orange-500" to="/admin/b2b" alert={!loading && d.newB2B > 0} />
       </div>
 
       {/* Revenue — admin uniquement */}
       {isAdmin && (
         <div>
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">Chiffre d'affaires</h2>
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">{t('adminCore.dashboard.revenueTitle')}</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <RevenueCard label="Aujourd'hui"  value={loading ? '—' : formatPrice(d.revenueToday)}  sub="commandes non annulées" />
-            <RevenueCard label="Ce mois"      value={loading ? '—' : formatPrice(d.revenueMonth)}  sub={new Date().toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' })} />
-            <RevenueCard label="Total (all time)" value={loading ? '—' : formatPrice(d.revenueTotal)} sub="depuis le lancement" />
+            <RevenueCard label={t('adminCore.dashboard.revenueToday')}  value={loading ? '—' : formatPrice(d.revenueToday)}  sub={t('adminCore.dashboard.revenueTodaySub')} />
+            <RevenueCard label={t('adminCore.dashboard.revenueMonth')}      value={loading ? '—' : formatPrice(d.revenueMonth)}  sub={new Date().toLocaleDateString(dateLocale, { month: 'long', year: 'numeric' })} />
+            <RevenueCard label={t('adminCore.dashboard.revenueTotal')} value={loading ? '—' : formatPrice(d.revenueTotal)} sub={t('adminCore.dashboard.revenueTotalSub')} />
           </div>
         </div>
       )}
@@ -196,16 +200,16 @@ export default function AdminDashboard() {
         {/* Dernières commandes */}
         <div className="rounded-xl border overflow-hidden">
           <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
-            <h2 className="font-semibold text-sm">Dernières commandes</h2>
+            <h2 className="font-semibold text-sm">{t('adminCore.dashboard.recentOrders')}</h2>
             <Button variant="ghost" size="sm" asChild className="h-7 text-xs">
-              <Link to="/admin/commandes">Voir tout →</Link>
+              <Link to="/admin/commandes">{t('adminCore.dashboard.viewAll')}</Link>
             </Button>
           </div>
           <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <tbody>
               {!loading && d.recentOrders?.length === 0 && (
-                <tr><td className="px-4 py-6 text-center text-muted-foreground text-xs">Aucune commande</td></tr>
+                <tr><td className="px-4 py-6 text-center text-muted-foreground text-xs">{t('adminCore.dashboard.noOrders')}</td></tr>
               )}
               {(d.recentOrders ?? []).map(o => (
                 <tr key={o.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
@@ -215,18 +219,18 @@ export default function AdminDashboard() {
                     </Link>
                     <div className="flex items-center gap-1 mt-0.5">
                       <span className="text-xs text-muted-foreground">{parseNotesName(o.customer_notes)}</span>
-                      {isPickup(o.customer_notes) && <MapPin className="h-3 w-3 text-green-500" title="Retrait" />}
-                      {o.payment_method === 'juice' && <Smartphone className="h-3 w-3 text-blue-500" title="Juice" />}
-                      {o.payment_method === 'cod' && <Banknote className="h-3 w-3 text-muted-foreground" title="COD" />}
+                      {isPickup(o.customer_notes) && <MapPin className="h-3 w-3 text-green-500" title={t('adminCore.dashboard.pickupTitle')} />}
+                      {o.payment_method === 'juice' && <Smartphone className="h-3 w-3 text-blue-500" title={t('labels.payment.juice')} />}
+                      {o.payment_method === 'cod' && <Banknote className="h-3 w-3 text-muted-foreground" title={t('adminCore.dashboard.codTitle')} />}
                     </div>
                   </td>
-                  <td className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(o.created_at)}</td>
+                  <td className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(o.created_at, dateLocale)}</td>
                   <td className="px-4 py-2.5 text-right text-xs font-semibold whitespace-nowrap">{formatPrice(o.total_mur)}</td>
                   <td className="px-4 py-2.5 text-right">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
                       STATUS_ORDER_COLORS[o.status] ?? 'bg-muted text-muted-foreground border-border'
                     }`}>
-                      {STATUS_ORDER_LABELS[o.status] ?? o.status}
+                      {getLabel(o.status, o.fulfillment_type, i18n.language)}
                     </span>
                   </td>
                 </tr>
@@ -241,16 +245,16 @@ export default function AdminDashboard() {
           {/* Devis B2B */}
           <div className="rounded-xl border overflow-hidden">
             <div className="flex items-center justify-between px-4 py-3 border-b bg-muted/20">
-              <h2 className="font-semibold text-sm">Derniers devis B2B</h2>
+              <h2 className="font-semibold text-sm">{t('adminCore.dashboard.recentB2B')}</h2>
               <Button variant="ghost" size="sm" asChild className="h-7 text-xs">
-                <Link to="/admin/b2b">Voir tout →</Link>
+                <Link to="/admin/b2b">{t('adminCore.dashboard.viewAll')}</Link>
               </Button>
             </div>
             <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <tbody>
                 {!loading && d.recentB2B?.length === 0 && (
-                  <tr><td className="px-4 py-6 text-center text-muted-foreground text-xs">Aucun devis B2B</td></tr>
+                  <tr><td className="px-4 py-6 text-center text-muted-foreground text-xs">{t('adminCore.dashboard.noB2B')}</td></tr>
                 )}
                 {(d.recentB2B ?? []).map(b => (
                   <tr key={b.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
@@ -260,15 +264,15 @@ export default function AdminDashboard() {
                       </Link>
                       <p className="text-xs text-muted-foreground">{b.contact_name}</p>
                     </td>
-                    <td className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(b.created_at)}</td>
+                    <td className="px-4 py-2.5 text-xs text-muted-foreground whitespace-nowrap">{formatDate(b.created_at, dateLocale)}</td>
                     <td className="px-4 py-2.5 text-right">
                       <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
                         b.status === 'new' ? 'bg-orange-100 text-orange-700 border-orange-200'
                         : b.status === 'won' ? 'bg-green-100 text-green-700 border-green-200'
                         : 'bg-muted text-muted-foreground border-border'
                       }`}>
-                        {b.status === 'new' ? 'Nouveau' : b.status === 'contacted' ? 'Contacté'
-                          : b.status === 'quote_sent' ? 'Devis' : b.status === 'won' ? 'Gagné' : b.status}
+                        {['new', 'contacted', 'quote_sent', 'won'].includes(b.status)
+                          ? t(`adminCore.b2bStatus.${b.status}`) : b.status}
                       </span>
                     </td>
                   </tr>
@@ -280,22 +284,22 @@ export default function AdminDashboard() {
 
           {/* Actions rapides */}
           <div className="rounded-xl border p-4">
-            <h2 className="font-semibold text-sm mb-3">Actions rapides</h2>
+            <h2 className="font-semibold text-sm mb-3">{t('adminCore.dashboard.quickActions')}</h2>
             <div className="grid grid-cols-2 gap-2">
               {isAdmin && (
                 <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                  <Link to="/admin/produits/nouveau"><Plus className="h-3.5 w-3.5" /> Nouveau produit</Link>
+                  <Link to="/admin/produits/nouveau"><Plus className="h-3.5 w-3.5" /> {t('adminCore.dashboard.newProduct')}</Link>
                 </Button>
               )}
               <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                <Link to="/admin/commandes"><ShoppingCart className="h-3.5 w-3.5" /> Commandes</Link>
+                <Link to="/admin/commandes"><ShoppingCart className="h-3.5 w-3.5" /> {t('adminCore.dashboard.ordersAction')}</Link>
               </Button>
               <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                <Link to="/admin/semis"><Package className="h-3.5 w-3.5" /> Semis</Link>
+                <Link to="/admin/semis"><Package className="h-3.5 w-3.5" /> {t('adminCore.dashboard.seedlingsAction')}</Link>
               </Button>
               {isAdmin && (
                 <Button variant="outline" size="sm" asChild className="justify-start gap-2 h-9 text-xs">
-                  <Link to="/admin/utilisateurs"><Users className="h-3.5 w-3.5" /> Utilisateurs</Link>
+                  <Link to="/admin/utilisateurs"><Users className="h-3.5 w-3.5" /> {t('adminCore.dashboard.usersAction')}</Link>
                 </Button>
               )}
             </div>

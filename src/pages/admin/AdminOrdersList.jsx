@@ -14,19 +14,14 @@ import {
 import { DISTRICTS } from '@/lib/delivery'
 import { Loader2, Smartphone, Banknote, Trash2, AlertTriangle } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-
-const STATUS_LABELS = {
-  pending:   'En attente',
-  confirmed: 'Confirmée',
-  en_route:  'En route',
-  delivered: 'Livrée',
-  cancelled: 'Annulée',
-}
+import { useOrderStatusLabels, STATUS_ORDER } from '@/hooks/useOrderStatusLabels'
 
 const STATUS_COLORS = {
   pending:   'bg-orange-100 text-orange-700 border-orange-200',
   confirmed: 'bg-blue-100 text-blue-700 border-blue-200',
-  en_route:  'bg-violet-100 text-violet-700 border-violet-200',
+  preparing: 'bg-indigo-100 text-indigo-700 border-indigo-200',
+  prepared:  'bg-purple-100 text-purple-700 border-purple-200',
+  shipped:   'bg-cyan-100 text-cyan-700 border-cyan-200',
   delivered: 'bg-green-100 text-green-700 border-green-200',
   cancelled: 'bg-red-100 text-red-700 border-red-200',
 }
@@ -40,12 +35,13 @@ function parseNotes(notes) {
   return { name: get('Nom'), district: get('District') }
 }
 
-function formatDate(d) {
+function formatDate(d, lang) {
   const dt = new Date(d)
+  const locale = lang === 'en' ? 'en-GB' : 'fr-FR'
   return (
-    dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+    dt.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }) +
     ' ' +
-    dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    dt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
   )
 }
 
@@ -55,20 +51,10 @@ function formatPrice(n) {
   return 'Rs ' + parts[0] + '.' + parts[1]
 }
 
-const PAYMENT_LABELS = {
-  cod:   'COD',
-  juice: 'Juice',
-}
-
-const PAYMENT_STATUS_LABELS = {
-  pending: 'En attente',
-  paid:    'Payé',
-  failed:  'Échoué',
-}
-
 export default function AdminOrdersList() {
   const { isAdmin } = useAuth()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const { getLabel } = useOrderStatusLabels()
   const [orders, setOrders] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -81,13 +67,14 @@ export default function AdminOrdersList() {
   useEffect(() => {
     supabase
       .from('orders')
-      .select('id, order_number, created_at, customer_name, guest_phone, customer_notes, status, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status, order_items(quantity)')
+      .select('id, order_number, created_at, customer_name, guest_phone, customer_notes, status, fulfillment_type, subtotal_mur, delivery_fee_mur, discount_pct, discount_mur, total_mur, payment_method, payment_status, order_items(quantity)')
       .order('created_at', { ascending: false })
       .then(({ data, error }) => {
-        if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
+        if (error) toast({ title: t('adminOrders.list.loadError'), description: error.message, variant: 'destructive' })
         else setOrders(data ?? [])
         setLoading(false)
       })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const filtered = orders.filter(o => {
@@ -138,36 +125,39 @@ export default function AdminOrdersList() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Commandes</h1>
+        <h1 className="text-2xl font-bold">{t('adminOrders.list.title')}</h1>
         <p className="text-sm text-muted-foreground mt-0.5">
-          {orders.length} commandes — {orders.filter(o => o.payment_method === 'juice' && o.payment_status === 'pending').length} Juice en attente
+          {t('adminOrders.list.summary', {
+            count: orders.length,
+            juice: orders.filter(o => o.payment_method === 'juice' && o.payment_status === 'pending').length,
+          })}
         </p>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-4">
         <Input
-          placeholder="N° commande ou nom client…"
+          placeholder={t('adminOrders.list.searchPlaceholder')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="max-w-56"
         />
         <Select value={filterStatus} onValueChange={setFilterStatus}>
           <SelectTrigger className="w-40">
-            <SelectValue placeholder="Statut" />
+            <SelectValue placeholder={t('adminOrders.list.statusPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les statuts</SelectItem>
-            {Object.entries(STATUS_LABELS).map(([v, l]) => (
-              <SelectItem key={v} value={v}>{l}</SelectItem>
+            <SelectItem value="all">{t('adminOrders.list.allStatuses')}</SelectItem>
+            {[...STATUS_ORDER, 'cancelled'].map(s => (
+              <SelectItem key={s} value={s}>{getLabel(s, 'delivery', i18n.language)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select value={filterDistrict} onValueChange={setFilterDistrict}>
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="District" />
+            <SelectValue placeholder={t('adminOrders.list.districtPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous les districts</SelectItem>
+            <SelectItem value="all">{t('adminOrders.list.allDistricts')}</SelectItem>
             {DISTRICTS.map(d => (
               <SelectItem key={d.name} value={d.name}>{d.name}</SelectItem>
             ))}
@@ -175,12 +165,12 @@ export default function AdminOrdersList() {
         </Select>
         <Select value={filterPayment} onValueChange={setFilterPayment}>
           <SelectTrigger className="w-36">
-            <SelectValue placeholder="Paiement" />
+            <SelectValue placeholder={t('adminOrders.list.paymentPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Tous</SelectItem>
-            <SelectItem value="cod">COD</SelectItem>
-            <SelectItem value="juice">Juice</SelectItem>
+            <SelectItem value="all">{t('adminOrders.list.allPayments')}</SelectItem>
+            <SelectItem value="cod">{t('labels.payment.codShort')}</SelectItem>
+            <SelectItem value="juice">{t('labels.payment.juice')}</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -190,19 +180,19 @@ export default function AdminOrdersList() {
           <thead>
             <tr className="border-b bg-muted/50">
               <th className="px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap">#</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap">Date</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Client</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Téléphone</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">District</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground whitespace-nowrap">Plateaux</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground whitespace-nowrap">{t('adminOrders.list.colDate')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminOrders.list.colCustomer')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminOrders.list.colPhone')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminOrders.list.colDistrict')}</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground whitespace-nowrap">{t('adminOrders.list.colTrays')}</th>
               {isAdmin && (
                 <>
-                  <th className="px-4 py-3 text-right font-semibold text-muted-foreground whitespace-nowrap">Total</th>
-                  <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Paiement</th>
+                  <th className="px-4 py-3 text-right font-semibold text-muted-foreground whitespace-nowrap">{t('adminOrders.list.colTotal')}</th>
+                  <th className="px-4 py-3 text-center font-semibold text-muted-foreground">{t('adminOrders.list.colPayment')}</th>
                 </>
               )}
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Statut</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">Actions</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">{t('adminOrders.list.colStatus')}</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">{t('adminOrders.list.colActions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -217,7 +207,7 @@ export default function AdminOrdersList() {
                     </code>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
-                    {formatDate(order.created_at)}
+                    {formatDate(order.created_at, i18n.language)}
                   </td>
                   <td className="px-4 py-3 font-medium">{parsed.name || '—'}</td>
                   <td className="px-4 py-3">{order.guest_phone || '—'}</td>
@@ -245,12 +235,12 @@ export default function AdminOrdersList() {
                               : 'bg-green-100 text-green-700 border-green-200'
                           }`}>
                             <Smartphone className="h-3 w-3" />
-                            Juice {order.payment_status === 'paid' ? '✓' : '⏳'}
+                            {t('labels.payment.juice')} {order.payment_status === 'paid' ? '✓' : '⏳'}
                           </span>
                         ) : (
                           <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium border bg-muted text-muted-foreground border-border">
                             <Banknote className="h-3 w-3" />
-                            COD
+                            {t('labels.payment.codShort')}
                           </span>
                         )}
                       </td>
@@ -262,13 +252,13 @@ export default function AdminOrdersList() {
                         STATUS_COLORS[order.status] ?? 'bg-muted text-muted-foreground border-border'
                       }`}
                     >
-                      {STATUS_LABELS[order.status] ?? order.status}
+                      {getLabel(order.status, order.fulfillment_type, i18n.language)}
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
                     <div className="inline-flex items-center gap-2">
                       <Button size="sm" variant="outline" asChild>
-                        <Link to={`/admin/commandes/${order.order_number}`}>Voir détails</Link>
+                        <Link to={`/admin/commandes/${order.order_number}`}>{t('adminOrders.list.viewDetails')}</Link>
                       </Button>
                       {isAdmin && (
                         <Button size="sm" variant="destructive" onClick={() => setDeleteOrder(order)}>
@@ -284,7 +274,7 @@ export default function AdminOrdersList() {
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <p className="text-center text-muted-foreground py-8 text-sm">Aucune commande trouvée</p>
+          <p className="text-center text-muted-foreground py-8 text-sm">{t('adminOrders.list.empty')}</p>
         )}
       </div>
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -9,19 +10,15 @@ import {
 import { ChevronLeft, Loader2, CheckCircle2, Smartphone, Banknote, ArrowRight, Lock } from 'lucide-react'
 import { getProvider } from '@/lib/payments'
 import { useAuth } from '@/contexts/AuthContext'
+import { useOrderStatusLabels, STATUS_ORDER } from '@/hooks/useOrderStatusLabels'
 
-const STATUS_LABELS = {
-  pending:   'En attente',
-  confirmed: 'Confirmée',
-  shipped:   'En route',
-  delivered: 'Livrée',
-  cancelled: 'Annulée',
-}
-
-const STATUS_NEXT = {
-  pending:   { to: 'confirmed', label: 'Confirmer' },
-  confirmed: { to: 'shipped',   label: 'Marquer en route' },
-  shipped:   { to: 'delivered', label: 'Marquer livrée ✓' },
+// Statut suivant dans le cycle : pending → confirmed → preparing → prepared
+// → shipped → delivered. Les libellés viennent de order_status_labels, le
+// même vocabulaire que celui affiché au client.
+function nextStatus(status) {
+  const i = STATUS_ORDER.indexOf(status)
+  if (i === -1 || i === STATUS_ORDER.length - 1) return null
+  return STATUS_ORDER[i + 1]
 }
 
 function parseNotes(notes) {
@@ -40,12 +37,13 @@ function parseNotes(notes) {
   }
 }
 
-function formatDate(d) {
+function formatDate(d, lang) {
   const dt = new Date(d)
+  const locale = lang === 'en' ? 'en-GB' : 'fr-FR'
   return (
-    dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+    dt.toLocaleDateString(locale, { day: '2-digit', month: '2-digit', year: 'numeric' }) +
     ' ' +
-    dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    dt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })
   )
 }
 
@@ -68,6 +66,8 @@ function InfoRow({ label, value }) {
 export default function AdminOrderDetail() {
   const { order_number } = useParams()
   const { isAdmin } = useAuth()
+  const { t, i18n } = useTranslation()
+  const { getLabel } = useOrderStatusLabels()
   const [order, setOrder] = useState(null)
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -81,7 +81,7 @@ export default function AdminOrderDetail() {
         .eq('order_number', order_number)
         .single()
       if (oe) {
-        toast({ title: 'Erreur', description: oe.message, variant: 'destructive' })
+        toast({ title: t('adminOrders.detail.error'), description: oe.message, variant: 'destructive' })
         setLoading(false)
         return
       }
@@ -94,6 +94,7 @@ export default function AdminOrderDetail() {
       setLoading(false)
     }
     load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order_number])
 
   async function handleStatusChange(newStatus) {
@@ -103,24 +104,24 @@ export default function AdminOrderDetail() {
       .update({ status: newStatus })
       .eq('id', order.id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminOrders.detail.error'), description: error.message, variant: 'destructive' })
     } else {
       setOrder(o => ({ ...o, status: newStatus }))
-      toast({ title: 'Statut mis à jour ✓' })
+      toast({ title: t('adminOrders.detail.statusUpdated') })
     }
     setSaving(false)
   }
 
   async function handleNextStatus() {
-    const next = STATUS_NEXT[order.status]
+    const next = nextStatus(order.status)
     if (!next) return
     setSaving(true)
-    const { error } = await supabase.from('orders').update({ status: next.to }).eq('id', order.id)
+    const { error } = await supabase.from('orders').update({ status: next }).eq('id', order.id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminOrders.detail.error'), description: error.message, variant: 'destructive' })
     } else {
-      setOrder(o => ({ ...o, status: next.to }))
-      toast({ title: `Statut mis à jour : ${STATUS_LABELS[next.to]}` })
+      setOrder(o => ({ ...o, status: next }))
+      toast({ title: t('adminOrders.detail.statusUpdatedTo', { status: getLabel(next, order.fulfillment_type, i18n.language) }) })
     }
     setSaving(false)
   }
@@ -133,10 +134,10 @@ export default function AdminOrderDetail() {
       .update(provider.markPaidPayload())
       .eq('id', order.id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminOrders.detail.error'), description: error.message, variant: 'destructive' })
     } else {
       setOrder(o => ({ ...o, payment_status: 'paid', paid_at: new Date().toISOString() }))
-      toast({ title: 'Paiement Juice validé ✓', description: 'La commande est marquée comme payée.' })
+      toast({ title: t('adminOrders.detail.juicePaymentValidated'), description: t('adminOrders.detail.juicePaymentValidatedDesc') })
     }
     setSaving(false)
   }
@@ -150,7 +151,7 @@ export default function AdminOrderDetail() {
   }
 
   if (!order) {
-    return <p className="py-8 text-muted-foreground">Commande introuvable.</p>
+    return <p className="py-8 text-muted-foreground">{t('adminOrders.detail.notFound')}</p>
   }
 
   const parsed = parseNotes(order.customer_notes)
@@ -162,34 +163,34 @@ export default function AdminOrderDetail() {
         <Button variant="ghost" size="sm" asChild>
           <Link to="/admin/commandes">
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Retour à la liste
+            {t('adminOrders.detail.backToList')}
           </Link>
         </Button>
-        <h1 className="text-xl font-bold flex-1">Commande {order.order_number}</h1>
+        <h1 className="text-xl font-bold flex-1">{t('adminOrders.detail.orderTitle', { number: order.order_number })}</h1>
         <div className="flex items-center gap-2">
           {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
           {isAdmin ? (
             <Select value={order.status} onValueChange={handleStatusChange} disabled={saving}>
-              <SelectTrigger className="w-44"><SelectValue /></SelectTrigger>
+              <SelectTrigger className="w-56"><SelectValue /></SelectTrigger>
               <SelectContent>
-                {Object.entries(STATUS_LABELS).map(([v, l]) => (
-                  <SelectItem key={v} value={v}>{l}</SelectItem>
+                {[...STATUS_ORDER, 'cancelled'].map(s => (
+                  <SelectItem key={s} value={s}>{getLabel(s, order.fulfillment_type, i18n.language)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           ) : order.status === 'delivered' || order.status === 'cancelled' ? (
             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border text-sm font-medium bg-muted text-muted-foreground">
               <Lock className="h-3.5 w-3.5" />
-              {STATUS_LABELS[order.status]}
+              {getLabel(order.status, order.fulfillment_type, i18n.language)}
             </span>
-          ) : STATUS_NEXT[order.status] ? (
+          ) : nextStatus(order.status) ? (
             <Button
               size="sm"
               onClick={handleNextStatus}
               disabled={saving}
               className="gap-1.5"
             >
-              {STATUS_NEXT[order.status].label}
+              {getLabel(nextStatus(order.status), order.fulfillment_type, i18n.language)}
               <ArrowRight className="h-3.5 w-3.5" />
             </Button>
           ) : null}
@@ -200,28 +201,28 @@ export default function AdminOrderDetail() {
       <div className="grid md:grid-cols-2 gap-6">
         {/* Gauche — Infos client */}
         <div className="rounded-lg border p-5 space-y-2.5">
-          <h2 className="font-semibold border-b pb-2 mb-3">Informations client</h2>
-          <InfoRow label="Nom" value={parsed.name} />
-          <InfoRow label="Téléphone" value={order.guest_phone} />
-          <InfoRow label="Email" value={order.guest_email} />
-          <InfoRow label="District" value={parsed.district} />
-          <InfoRow label="Adresse" value={parsed.address} />
-          <InfoRow label="Créneau" value={parsed.slot} />
-          <InfoRow label="Notes" value={parsed.notes} />
-          <InfoRow label="Date" value={formatDate(order.created_at)} />
+          <h2 className="font-semibold border-b pb-2 mb-3">{t('adminOrders.detail.customerInfo')}</h2>
+          <InfoRow label={t('adminOrders.detail.fieldName')} value={parsed.name} />
+          <InfoRow label={t('adminOrders.detail.fieldPhone')} value={order.guest_phone} />
+          <InfoRow label={t('adminOrders.detail.fieldEmail')} value={order.guest_email} />
+          <InfoRow label={t('adminOrders.detail.fieldDistrict')} value={parsed.district} />
+          <InfoRow label={t('adminOrders.detail.fieldAddress')} value={parsed.address} />
+          <InfoRow label={t('adminOrders.detail.fieldSlot')} value={parsed.slot} />
+          <InfoRow label={t('adminOrders.detail.fieldNotes')} value={parsed.notes} />
+          <InfoRow label={t('adminOrders.detail.fieldDate')} value={formatDate(order.created_at, i18n.language)} />
         </div>
 
         {/* Droite — Articles */}
         <div className="rounded-lg border p-5">
-          <h2 className="font-semibold border-b pb-2 mb-3">Articles commandés</h2>
+          <h2 className="font-semibold border-b pb-2 mb-3">{t('adminOrders.detail.items')}</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left">
-                  <th className="pb-2 font-medium text-muted-foreground">Produit</th>
-                  <th className="pb-2 font-medium text-muted-foreground text-center">Qté</th>
-                  <th className="pb-2 font-medium text-muted-foreground text-right">P.U.</th>
-                  <th className="pb-2 font-medium text-muted-foreground text-right">Total</th>
+                  <th className="pb-2 font-medium text-muted-foreground">{t('adminOrders.detail.colProduct')}</th>
+                  <th className="pb-2 font-medium text-muted-foreground text-center">{t('adminOrders.detail.colQty')}</th>
+                  <th className="pb-2 font-medium text-muted-foreground text-right">{t('adminOrders.detail.colUnitPrice')}</th>
+                  <th className="pb-2 font-medium text-muted-foreground text-right">{t('adminOrders.detail.colTotal')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,7 +237,7 @@ export default function AdminOrderDetail() {
                 {items.length === 0 && (
                   <tr>
                     <td colSpan={4} className="py-4 text-muted-foreground text-center text-xs">
-                      Aucun article
+                      {t('adminOrders.detail.noItems')}
                     </td>
                   </tr>
                 )}
@@ -250,32 +251,32 @@ export default function AdminOrderDetail() {
       {isAdmin && <div className="mt-6 rounded-lg border p-5">
         <h2 className="font-semibold border-b pb-2 mb-3 flex items-center gap-2">
           {order.payment_method === 'juice'
-            ? <><Smartphone className="h-4 w-4 text-green-600" /> Paiement Juice</>
-            : <><Banknote className="h-4 w-4 text-muted-foreground" /> Paiement à la livraison (COD)</>
+            ? <><Smartphone className="h-4 w-4 text-green-600" /> {t('adminOrders.detail.paymentJuice')}</>
+            : <><Banknote className="h-4 w-4 text-muted-foreground" /> {t('adminOrders.detail.paymentCod')}</>
           }
         </h2>
         <div className="flex flex-wrap gap-6 items-start">
           <div className="space-y-2 text-sm flex-1 min-w-48">
-            <InfoRow label="Méthode" value={order.payment_method === 'juice' ? 'MCB Juice' : 'Cash on Delivery'} />
-            <InfoRow label="Statut paiement"
-              value={order.payment_status === 'paid' ? '✅ Payé' : order.payment_status === 'pending' ? '⏳ En attente' : order.payment_status} />
+            <InfoRow label={t('adminOrders.detail.fieldMethod')} value={order.payment_method === 'juice' ? t('adminOrders.detail.methodJuice') : t('adminOrders.detail.methodCod')} />
+            <InfoRow label={t('adminOrders.detail.fieldPaymentStatus')}
+              value={order.payment_status === 'paid' ? t('adminOrders.detail.statusPaid') : order.payment_status === 'pending' ? t('adminOrders.detail.statusPending') : order.payment_status} />
             {order.provider_txn_id && (
-              <InfoRow label="ID transaction" value={order.provider_txn_id} />
+              <InfoRow label={t('adminOrders.detail.fieldTxnId')} value={order.provider_txn_id} />
             )}
             {order.paid_at && (
-              <InfoRow label="Payé le" value={formatDate(order.paid_at)} />
+              <InfoRow label={t('adminOrders.detail.fieldPaidAt')} value={formatDate(order.paid_at, i18n.language)} />
             )}
           </div>
           {order.payment_method === 'juice' && order.payment_status === 'pending' && (
             <div className="flex-shrink-0">
               <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 space-y-3">
-                <p className="text-sm text-amber-800 font-medium">Paiement en attente de validation</p>
+                <p className="text-sm text-amber-800 font-medium">{t('adminOrders.detail.juicePendingValidation')}</p>
                 {order.provider_txn_id ? (
                   <p className="text-xs text-amber-700">
-                    ID transaction client : <code className="font-mono font-semibold">{order.provider_txn_id}</code>
+                    {t('adminOrders.detail.juiceClientTxnId')} <code className="font-mono font-semibold">{order.provider_txn_id}</code>
                   </p>
                 ) : (
-                  <p className="text-xs text-amber-600">Le client n'a pas encore renseigné son ID de transaction.</p>
+                  <p className="text-xs text-amber-600">{t('adminOrders.detail.juiceNoTxnId')}</p>
                 )}
                 <Button
                   size="sm"
@@ -284,8 +285,8 @@ export default function AdminOrderDetail() {
                   disabled={saving}
                 >
                   {saving
-                    ? <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> Enregistrement…</>
-                    : <><CheckCircle2 className="h-3.5 w-3.5 mr-1.5" /> Valider le paiement Juice</>
+                    ? <><Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" /> {t('adminOrders.detail.savingJuice')}</>
+                    : <><CheckCircle2 className="h-3.5 w-3.5 mr-1.5" /> {t('adminOrders.detail.validateJuice')}</>
                   }
                 </Button>
               </div>
@@ -294,7 +295,7 @@ export default function AdminOrderDetail() {
           {order.payment_method === 'juice' && order.payment_status === 'paid' && (
             <div className="flex items-center gap-2 text-sm text-green-700 bg-green-50 border border-green-200 rounded-lg px-4 py-3">
               <CheckCircle2 className="h-4 w-4 shrink-0" />
-              Paiement Juice validé
+              {t('adminOrders.detail.juiceValidated')}
             </div>
           )}
         </div>
@@ -304,25 +305,25 @@ export default function AdminOrderDetail() {
       {isAdmin && <>
       <div className="mt-6 rounded-lg border p-5 max-w-xs ml-auto space-y-2">
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Sous-total</span>
+          <span className="text-muted-foreground">{t('adminOrders.detail.subtotal')}</span>
           <span>{formatPrice(order.subtotal_mur)}</span>
         </div>
         <div className="flex justify-between text-sm">
-          <span className="text-muted-foreground">Livraison</span>
+          <span className="text-muted-foreground">{t('adminOrders.detail.delivery')}</span>
           <span>
             {Number(order.delivery_fee_mur) === 0
-              ? 'Offerte'
+              ? t('adminOrders.detail.deliveryFree')
               : formatPrice(order.delivery_fee_mur)}
           </span>
         </div>
         {Number(order.discount_pct) > 0 && (
           <div className="flex justify-between text-sm text-green-700">
-            <span className="font-medium">Remise fidélité {order.discount_pct}%</span>
+            <span className="font-medium">{t('adminOrders.detail.loyaltyDiscount', { pct: order.discount_pct })}</span>
             <span className="font-medium">− {formatPrice(order.discount_mur)}</span>
           </div>
         )}
         <div className="flex justify-between text-base font-bold border-t pt-2">
-          <span>TOTAL</span>
+          <span>{t('adminOrders.detail.total')}</span>
           <span className="text-green-600 text-lg">{formatPrice(order.total_mur)}</span>
         </div>
       </div>
