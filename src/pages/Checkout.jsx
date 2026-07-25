@@ -21,11 +21,10 @@ const PICKUP_LAT = -20.322619
 const PICKUP_LNG = 57.465368
 
 export default function Checkout() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { items, cartTotal, clearCart } = useCart()
   const { user } = useAuth()
   const navigate = useNavigate()
-  const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
   const [form, setForm] = useState({ name: '', phone: '', email: '', district: '', address: '', slot: 'any', notes: '' })
   const [deliveryMode, setDeliveryMode] = useState('delivery')
@@ -43,7 +42,7 @@ export default function Checkout() {
     if (!user) return
     supabase.from('customers')
       .select('discount_pct, full_name, phone, address, district')
-      .eq('id', user.id).single()
+      .eq('user_id', user.id).single()
       .then(({ data }) => {
         if (!data) return
         if (data.discount_pct) setDiscountPct(data.discount_pct)
@@ -131,7 +130,7 @@ export default function Checkout() {
       )
 
       const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Erreur lors de la commande')
+      if (!res.ok) throw new Error(data.error || t('checkout.orderError'))
 
       clearCart()
 
@@ -150,7 +149,7 @@ export default function Checkout() {
         state: { name: form.name, total: data.total_mur, district: form.district, deliveryFee: data.delivery_fee_mur },
       })
     } catch (err) {
-      toast({ title: 'Erreur', description: err.message, variant: 'destructive' })
+      toast({ title: t('checkout.errorTitle'), description: err.message, variant: 'destructive' })
     } finally {
       setSubmitting(false)
     }
@@ -170,7 +169,7 @@ export default function Checkout() {
         state: { name: form.name, total: juicePhase.total, district: form.district, deliveryFee, paymentMethod: 'juice' },
       })
     } catch (err) {
-      toast({ title: 'Erreur', description: err.message, variant: 'destructive' })
+      toast({ title: t('checkout.errorTitle'), description: err.message, variant: 'destructive' })
     } finally {
       setSaving(false)
     }
@@ -227,7 +226,7 @@ export default function Checkout() {
                       className={errors.phone ? 'border-destructive ring-1 ring-destructive' : ''} />
                   </Field>
                   <Field label={t('checkout.email')} error={errors.email}>
-                    <Input type="email" placeholder="email@exemple.mu" value={form.email}
+                    <Input type="email" placeholder={t('checkout.emailPlaceholder')} value={form.email}
                       onChange={e => set('email', e.target.value)}
                       className={errors.email ? 'border-destructive ring-1 ring-destructive' : ''} />
                   </Field>
@@ -412,7 +411,8 @@ export default function Checkout() {
               <h2 className="font-semibold">{t('checkout.summary')}</h2>
               <div className="space-y-2 max-h-56 overflow-y-auto pr-1">
                 {items.map(item => {
-                  const name = lang === 'en' ? (item.name_en || item.name_fr) : item.name_fr
+                  // Nom de variété toujours en français, quelle que soit la langue d'interface.
+                  const name = item.name_fr
                   return (
                     <div key={item.id} className="flex gap-2 text-sm">
                       <div className="w-8 h-8 flex-shrink-0 rounded bg-zinc-100 flex items-center justify-center text-base">

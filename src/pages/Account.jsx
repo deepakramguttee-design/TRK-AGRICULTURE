@@ -11,31 +11,44 @@ import {
 } from '@/components/ui/select'
 import {
   User, Package, Shield, LayoutDashboard, LogOut, Pencil, X,
-  Loader2, ChevronRight,
+  Loader2, ChevronRight, ChevronDown,
 } from 'lucide-react'
+import OrderTracking from '@/components/OrderTracking'
+import { useOrderStatusLabels } from '@/hooks/useOrderStatusLabels'
+
+// Affichage de la langue préférée. La colonne DB accepte 'fr' | 'en' | 'kr'.
+const LANG_LABELS = {
+  fr: 'Français',
+  en: 'English',
+  kr: 'Kreol Morisien',
+}
 
 const STATUS_COLORS = {
   pending:          'bg-amber-50 text-amber-700 border-amber-200',
   confirmed:        'bg-blue-50 text-blue-700 border-blue-200',
-  preparing:        'bg-purple-50 text-purple-700 border-purple-200',
+  preparing:        'bg-indigo-50 text-indigo-700 border-indigo-200',
+  prepared:         'bg-purple-50 text-purple-700 border-purple-200',
   shipped:          'bg-cyan-50 text-cyan-700 border-cyan-200',
   delivered:        'bg-green-50 text-green-700 border-green-200',
   cancelled:        'bg-red-50 text-red-700 border-red-200',
 }
 
 export default function Account() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { user, isAdmin, loading, signOut } = useAuth()
+  const { getLabel } = useOrderStatusLabels()
 
   const isOtpUser = user?.app_metadata?.provider === 'phone'
 
   const [profile, setProfile] = useState(null)
+  const [customerId, setCustomerId] = useState(null)
   const [editing, setEditing] = useState(false)
   const [editForm, setEditForm] = useState({ full_name: '', phone: '', address: '', district: '', preferred_lang: 'fr' })
   const [saving, setSaving] = useState(false)
 
   const [orders, setOrders] = useState([])
   const [ordersLoading, setOrdersLoading] = useState(true)
+  const [expandedOrder, setExpandedOrder] = useState(null)
 
   const [pwForm, setPwForm] = useState({ new_pw: '', confirm_pw: '' })
   const [pwSaving, setPwSaving] = useState(false)
@@ -43,17 +56,46 @@ export default function Account() {
   useEffect(() => {
     if (!user) return
     fetchProfile()
-    fetchOrders()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
+
+  // Suivi live : dès qu'on connaît l'id client, on récupère ses commandes
+  // et on s'abonne aux mises à jour temps réel (statut, paiement).
+  useEffect(() => {
+    if (!customerId) return
+    fetchOrders(customerId)
+
+    const channel = supabase
+      .channel(`account-orders-${customerId}`)
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'orders', filter: `customer_id=eq.${customerId}` },
+        payload => {
+          setOrders(prev =>
+            prev.map(o => (o.id === payload.new.id ? { ...o, ...payload.new } : o)),
+          )
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: 'INSERT', schema: 'public', table: 'orders', filter: `customer_id=eq.${customerId}` },
+        () => fetchOrders(customerId),
+      )
+      .subscribe()
+
+    return () => { supabase.removeChannel(channel) }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [customerId])
 
   async function fetchProfile() {
     const { data } = await supabase
       .from('customers')
-      .select('full_name, phone, address, district, account_type, company_name, preferred_lang')
-      .eq('id', user.id)
+      .select('id, full_name, phone, address, district, account_type, company_name, preferred_lang')
+      .eq('user_id', user.id)
       .single()
     if (data) {
       setProfile(data)
+      setCustomerId(data.id)
       setEditForm({
         full_name: data.full_name ?? '',
         phone: data.phone ?? '',
@@ -61,22 +103,19 @@ export default function Account() {
         district: data.district ?? '',
         preferred_lang: data.preferred_lang ?? 'fr',
       })
+    } else {
+      setOrdersLoading(false)
     }
   }
 
-  async function fetchOrders() {
+  async function fetchOrders(cid) {
     setOrdersLoading(true)
-    let q = supabase
+    const { data } = await supabase
       .from('orders')
-      .select('order_number, status, total_mur, created_at')
+      .select('id, order_number, status, fulfillment_type, total_mur, created_at')
+      .eq('customer_id', cid)
       .order('created_at', { ascending: false })
       .limit(20)
-    if (user.email) {
-      q = q.or(`customer_id.eq.${user.id},guest_email.eq.${user.email}`)
-    } else {
-      q = q.eq('customer_id', user.id)
-    }
-    const { data } = await q
     setOrders(data ?? [])
     setOrdersLoading(false)
   }
@@ -92,7 +131,7 @@ export default function Account() {
         district: editForm.district.trim() || null,
         preferred_lang: editForm.preferred_lang,
       })
-      .eq('id', user.id)
+      .eq('user_id', user.id)
     setSaving(false)
     if (error) {
       toast({ title: t('account.error'), description: error.message, variant: 'destructive' })
@@ -169,21 +208,21 @@ export default function Account() {
                 type="tel"
                 value={editForm.phone}
                 onChange={e => setEditForm(f => ({ ...f, phone: e.target.value }))}
-                placeholder="52 345 678"
+                placeholder={t('checkout.phonePlaceholder')}
               />
             </Field>
-            <Field label="Adresse de livraison">
+            <Field label={t('account.profile.address')}>
               <Input
                 value={editForm.address}
                 onChange={e => setEditForm(f => ({ ...f, address: e.target.value }))}
-                placeholder="Rue, village"
+                placeholder={t('account.profile.addressPlaceholder')}
               />
             </Field>
-            <Field label="District">
+            <Field label={t('account.profile.district')}>
               <Input
                 value={editForm.district}
                 onChange={e => setEditForm(f => ({ ...f, district: e.target.value }))}
-                placeholder="Ex : Pamplemousses"
+                placeholder={t('account.profile.districtPlaceholder')}
               />
             </Field>
             <Field label={t('account.profile.lang')}>
@@ -192,6 +231,7 @@ export default function Account() {
                 <SelectContent>
                   <SelectItem value="fr">Français</SelectItem>
                   <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="kr">Kreol Morisien</SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -209,9 +249,9 @@ export default function Account() {
           <div className="space-y-3">
             <InfoRow label={t('account.profile.name')} value={profile?.full_name || '—'} />
             <InfoRow label={t('account.profile.phone')} value={profile?.phone || '—'} />
-            {profile?.address && <InfoRow label="Adresse" value={profile.address} />}
-            {profile?.district && <InfoRow label="District" value={profile.district} />}
-            <InfoRow label={t('account.profile.lang')} value={profile?.preferred_lang === 'en' ? 'English' : 'Français'} />
+            {profile?.address && <InfoRow label={t('account.profile.address')} value={profile.address} />}
+            {profile?.district && <InfoRow label={t('account.profile.district')} value={profile.district} />}
+            <InfoRow label={t('account.profile.lang')} value={LANG_LABELS[profile?.preferred_lang] || LANG_LABELS.fr} />
             {profile?.company_name && (
               <InfoRow label={t('account.profile.company')} value={profile.company_name} />
             )}
@@ -237,20 +277,36 @@ export default function Account() {
           </div>
         ) : (
           <div className="divide-y">
-            {orders.map(o => (
-              <div key={o.order_number} className="flex items-center justify-between py-3 gap-3">
-                <div className="min-w-0">
-                  <p className="font-mono text-sm font-medium">{o.order_number}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    {new Date(o.created_at).toLocaleDateString('fr-MU', { day: '2-digit', month: 'short', year: 'numeric' })}
-                  </p>
+            {orders.map(o => {
+              const isExpanded = expandedOrder === o.id
+              return (
+                <div key={o.id} className="py-3">
+                  <button
+                    type="button"
+                    className="w-full flex items-center justify-between gap-3 text-left"
+                    onClick={() => setExpandedOrder(isExpanded ? null : o.id)}
+                    aria-expanded={isExpanded}
+                  >
+                    <div className="min-w-0">
+                      <p className="font-mono text-sm font-medium">{o.order_number}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">
+                        {new Date(o.created_at).toLocaleDateString(i18n.language === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3 shrink-0">
+                      <StatusBadge order={o} getLabel={getLabel} lang={i18n.language} />
+                      <span className="text-sm font-semibold">Rs {Number(o.total_mur).toFixed(0)}</span>
+                      <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                    </div>
+                  </button>
+                  {isExpanded && (
+                    <div className="mt-3">
+                      <OrderTracking order={o} />
+                    </div>
+                  )}
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <StatusBadge status={o.status} t={t} />
-                  <span className="text-sm font-semibold">Rs {Number(o.total_mur).toFixed(0)}</span>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </AccountCard>
@@ -344,11 +400,11 @@ function InfoRow({ label, value }) {
   )
 }
 
-function StatusBadge({ status, t }) {
-  const cls = STATUS_COLORS[status] ?? 'bg-muted text-muted-foreground border-border'
+function StatusBadge({ order, getLabel, lang }) {
+  const cls = STATUS_COLORS[order.status] ?? 'bg-muted text-muted-foreground border-border'
   return (
     <span className={`text-xs px-2 py-0.5 rounded-full border font-medium ${cls}`}>
-      {t(`account.orders.status.${status}`, { defaultValue: status })}
+      {getLabel(order.status, order.fulfillment_type, lang)}
     </span>
   )
 }
