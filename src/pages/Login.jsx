@@ -115,25 +115,29 @@ export default function Login() {
     if (Object.keys(errs).length) { setRegErrors(errs); return }
     setRegLoading(true)
     const email = regForm.email.trim()
+    const fullName = regForm.full_name.trim().replace(/\s+/g, ' ')
+    const [firstName, ...rest] = fullName.split(' ')
+    const lastName = rest.join(' ')
+    const phone = regForm.phone.trim().replace(/[\s\-().]/g, '')
+    // La fiche customer est créée/rattachée par le trigger handle_new_customer
+    // à partir de ces métadonnées (first_name, last_name, phone). On ne fait
+    // aucun insert manuel : customers.id n'est plus l'id auth (lien via user_id).
     const { data, error } = await supabase.auth.signUp({
       email,
       password: regForm.password,
-      options: { data: { full_name: regForm.full_name.trim() } },
+      options: {
+        data: {
+          full_name: fullName,
+          first_name: firstName,
+          last_name: lastName || null,
+          phone,
+        },
+      },
     })
     if (error) {
       toast({ title: t('login.errorTitle'), description: error.message, variant: 'destructive' })
       setRegLoading(false)
       return
-    }
-    const uid = data.user?.id
-    if (uid) {
-      await supabase.from('customers').upsert({
-        id: uid,
-        full_name: regForm.full_name.trim(),
-        phone: regForm.phone.trim().replace(/[\s\-().]/g, ''),
-        account_type: 'retail',
-        preferred_lang: 'fr',
-      })
     }
     if (!data.session) {
       const { error: signInErr } = await supabase.auth.signInWithPassword({ email, password: regForm.password })
