@@ -53,7 +53,15 @@ const SLOT_LABELS: Record<string, string> = {
 }
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders(req) })
+  // CORS reflétant TOUJOURS l'origine de la requête (localhost en dev, Netlify
+  // en prod). Sans ça, une réponse renvoyée sans `req` retombait sur l'origine
+  // Netlify et le navigateur bloquait l'appel local (« Failed to fetch »).
+  const cors = corsHeaders(req)
+  json = (body: unknown, status = 200, _req?: Request) => new Response(JSON.stringify(body), {
+    status, headers: { ...cors, 'Content-Type': 'application/json' },
+  })
+
+  if (req.method === 'OPTIONS') return new Response('ok', { headers: cors })
   if (req.method !== 'POST') return json({ error: 'Méthode non autorisée' }, 405, req)
 
   // Admin client (service role) — bypasses RLS for trusted inserts
@@ -65,6 +73,7 @@ Deno.serve(async (req) => {
 
   // Identify caller (may be anon guest)
   let userId: string | null = null
+  let customerId: string | null = null      // customers.id réel (≠ auth uid depuis la migration CRM)
   let userDiscountPct = 0
 
   const authHeader = req.headers.get('Authorization')
@@ -77,11 +86,13 @@ Deno.serve(async (req) => {
     const { data: { user } } = await supabaseUser.auth.getUser()
     if (user) {
       userId = user.id
+      // Le lien compte ↔ fiche client passe par customers.user_id
       const { data: customer } = await supabaseAdmin
         .from('customers')
-        .select('discount_pct')
-        .eq('id', userId)
+        .select('id, discount_pct')
+        .eq('user_id', userId)
         .single()
+      customerId = customer?.id ?? null
       userDiscountPct = customer?.discount_pct ?? 0
     }
   }
@@ -173,7 +184,11 @@ Deno.serve(async (req) => {
   const { data: order, error: orderErr } = await supabaseAdmin
     .from('orders')
     .insert({
-      customer_id: userId,
+      // Client connecté : id réel de la fiche. Invité : null → le trigger
+      // link_or_create_order_customer rattache/crée la fiche par téléphone/email.
+      customer_id: customerId,
+      customer_name: form!.name,
+      customer_phone: form!.phone,
       guest_phone: form!.phone,
       guest_email: form?.email || null,
       status: 'pending',
@@ -202,7 +217,9 @@ Deno.serve(async (req) => {
     return json({ error: itemsErr.message }, 500)
   }
 
-  // Upsert customer profile (last-used address) for logged-in users
+  // Mémorise la dernière adresse utilisée pour les clients connectés.
+  // La fiche existe déjà (créée au signup par handle_new_customer) ; on met à
+  // jour par user_id. Aucun insert manuel : id ≠ auth uid depuis la migration.
   if (userId) {
     const coords = {
       full_name: form!.name.trim() || null,
@@ -210,15 +227,7 @@ Deno.serve(async (req) => {
       address: deliveryMode === 'delivery' ? (form?.address?.trim() || null) : null,
       district: deliveryMode === 'delivery' ? (form?.district || null) : null,
     }
-    const { data: existing } = await supabaseAdmin
-      .from('customers').select('id').eq('id', userId).single()
-    if (!existing) {
-      await supabaseAdmin.from('customers').insert({
-        id: userId, email: null, account_type: 'b2c', discount_pct: 0, ...coords,
-      })
-    } else {
-      await supabaseAdmin.from('customers').update(coords).eq('id', userId)
-    }
+    await supabaseAdmin.from('customers').update(coords).eq('user_id', userId)
   }
 
   return json({
