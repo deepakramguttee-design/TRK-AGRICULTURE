@@ -76,10 +76,10 @@ export default function Calendrier() {
                     className="flex-1 text-center"
                   >
                     {i === 4 && (
-                      <span className="text-[10px] font-semibold text-sky-600 whitespace-nowrap">☁ Saison fraîche</span>
+                      <span className="text-[10px] font-semibold text-sky-600 whitespace-nowrap">☁ {t('calendrier.coolSeason')}</span>
                     )}
                     {i === 10 && (
-                      <span className="text-[10px] font-semibold text-amber-600 whitespace-nowrap">☀ Saison chaude</span>
+                      <span className="text-[10px] font-semibold text-amber-600 whitespace-nowrap">☀ {t('calendrier.hotSeason')}</span>
                     )}
                   </div>
                 ))}
@@ -174,7 +174,7 @@ export default function Calendrier() {
         <div className="bg-alveoles absolute inset-0 opacity-40" />
         <div className="relative z-10">
           <h2 className="font-bricolage text-2xl font-bold text-white mb-2">
-            {t('catalogs.title', 'Prêt à commander ?')}
+            {t('calendrier.ctaTitle')}
           </h2>
           <p className="text-sm mb-6" style={{ color: 'rgba(251,247,239,0.8)' }}>
             {t('process.subtitle')}

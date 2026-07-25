@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -7,13 +8,7 @@ import {
 } from '@/components/ui/select'
 import { Image as ImageIcon, Loader2, Trash2, Upload } from 'lucide-react'
 
-const CATEGORIES = [
-  { value: 'epices', label: '🌿 Épices' },
-  { value: 'salades', label: '🥬 Salades' },
-  { value: 'bredes', label: '🍃 Brèdes' },
-  { value: 'legumes', label: '🥕 Légumes' },
-  { value: 'melons', label: '🍈 Melons' },
-]
+const CATEGORY_VALUES = ['epices', 'salades', 'bredes', 'legumes', 'melons']
 
 export default function AdminProductForm({
   initialValues,
@@ -24,6 +19,7 @@ export default function AdminProductForm({
   onImageUpload,
   onImageDelete,
 }) {
+  const { t } = useTranslation()
   const [values, setValues] = useState(initialValues)
   const [loading, setLoading] = useState(false)
   const fileInputRef = useRef(null)
@@ -49,7 +45,7 @@ export default function AdminProductForm({
     <form onSubmit={handleSubmit} className="max-w-lg space-y-4">
       {!isEdit && (
         <div className="space-y-1.5">
-          <label className="text-sm font-medium" htmlFor="sku">SKU *</label>
+          <label className="text-sm font-medium" htmlFor="sku">{t('adminCatalog.form.skuLabel')}</label>
           <Input
             id="sku"
             value={values.sku}
@@ -61,7 +57,7 @@ export default function AdminProductForm({
       )}
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium" htmlFor="name_fr">Nom (FR) *</label>
+        <label className="text-sm font-medium" htmlFor="name_fr">{t('adminCatalog.form.nameFrLabel')}</label>
         <Input
           id="name_fr"
           value={values.name_fr}
@@ -72,7 +68,7 @@ export default function AdminProductForm({
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium" htmlFor="name_en">Nom (EN)</label>
+        <label className="text-sm font-medium" htmlFor="name_en">{t('adminCatalog.form.nameEnLabel')}</label>
         <Input
           id="name_en"
           value={values.name_en}
@@ -82,14 +78,14 @@ export default function AdminProductForm({
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium">Catégorie *</label>
+        <label className="text-sm font-medium">{t('adminCatalog.form.categoryLabel')}</label>
         <Select value={values.category} onValueChange={v => set('category', v)} required>
           <SelectTrigger>
-            <SelectValue placeholder="Choisir une catégorie" />
+            <SelectValue placeholder={t('adminCatalog.form.categoryPlaceholder')} />
           </SelectTrigger>
           <SelectContent>
-            {CATEGORIES.map(cat => (
-              <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+            {CATEGORY_VALUES.map(cat => (
+              <SelectItem key={cat} value={cat}>{t(`adminCatalog.form.categories.${cat}`)}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -97,7 +93,7 @@ export default function AdminProductForm({
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-1.5">
-          <label className="text-sm font-medium" htmlFor="price_mur">Prix (Rs) *</label>
+          <label className="text-sm font-medium" htmlFor="price_mur">{t('adminCatalog.form.priceLabel')}</label>
           <Input
             id="price_mur"
             type="number"
@@ -110,7 +106,7 @@ export default function AdminProductForm({
           />
         </div>
         <div className="space-y-1.5">
-          <label className="text-sm font-medium" htmlFor="unit">Unité</label>
+          <label className="text-sm font-medium" htmlFor="unit">{t('adminCatalog.form.unitLabel')}</label>
           <Input
             id="unit"
             value={values.unit}
@@ -121,12 +117,12 @@ export default function AdminProductForm({
       </div>
 
       <div className="space-y-1.5">
-        <label className="text-sm font-medium" htmlFor="description">Description</label>
+        <label className="text-sm font-medium" htmlFor="description">{t('adminCatalog.form.descriptionLabel')}</label>
         <textarea
           id="description"
           value={values.description}
           onChange={e => set('description', e.target.value)}
-          placeholder="Description du produit…"
+          placeholder={t('adminCatalog.form.descriptionPlaceholder')}
           rows={3}
           className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring resize-none"
         />
@@ -134,7 +130,7 @@ export default function AdminProductForm({
 
       {isEdit && (
         <div className="space-y-1.5">
-          <label className="text-sm font-medium">Photo du produit</label>
+          <label className="text-sm font-medium">{t('adminCatalog.form.photoLabel')}</label>
           <input
             ref={fileInputRef}
             type="file"
@@ -147,7 +143,7 @@ export default function AdminProductForm({
             <div className="flex items-center gap-3">
               <img
                 src={imageUrl}
-                alt="Aperçu"
+                alt={t('adminCatalog.form.preview')}
                 className="w-[100px] h-[100px] rounded-md object-cover border bg-muted flex-shrink-0"
               />
               <div className="flex flex-col gap-2">
@@ -163,7 +159,7 @@ export default function AdminProductForm({
                     ? <Loader2 className="h-3 w-3 animate-spin" />
                     : <Upload className="h-3 w-3" />
                   }
-                  {uploading ? 'En cours…' : 'Remplacer'}
+                  {uploading ? t('adminCatalog.form.inProgress') : t('adminCatalog.form.replace')}
                 </Button>
                 <Button
                   type="button"
@@ -174,7 +170,7 @@ export default function AdminProductForm({
                   className="gap-1.5 text-destructive hover:text-destructive hover:bg-destructive/10"
                 >
                   <Trash2 className="h-3 w-3" />
-                  Supprimer
+                  {t('adminCatalog.form.delete')}
                 </Button>
               </div>
             </div>
@@ -191,7 +187,7 @@ export default function AdminProductForm({
                 ? <Loader2 className="h-3 w-3 animate-spin" />
                 : <ImageIcon className="h-3 w-3" />
               }
-              {uploading ? 'En cours…' : 'Ajouter une photo'}
+              {uploading ? t('adminCatalog.form.inProgress') : t('adminCatalog.form.addPhoto')}
             </Button>
           )}
         </div>
@@ -217,17 +213,17 @@ export default function AdminProductForm({
           className="text-sm font-medium cursor-pointer"
           onClick={() => set('is_active', !values.is_active)}
         >
-          Produit actif (visible dans le catalogue)
+          {t('adminCatalog.form.activeToggle')}
         </span>
       </div>
 
       <div className="flex gap-3 pt-2">
         <Button type="submit" disabled={loading || uploading}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-          {isEdit ? 'Mettre à jour' : 'Créer le produit'}
+          {isEdit ? t('adminCatalog.form.update') : t('adminCatalog.form.create')}
         </Button>
         <Button type="button" variant="outline" asChild>
-          <Link to="/admin/produits">Annuler</Link>
+          <Link to="/admin/produits">{t('adminCatalog.form.cancel')}</Link>
         </Button>
       </div>
     </form>

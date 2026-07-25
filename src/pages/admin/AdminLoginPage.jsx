@@ -78,7 +78,7 @@ export default function AdminLoginPage() {
     const { data: factors } = await supabase.auth.mfa.listFactors()
     const totp = factors?.totp?.[0]
     if (!totp) {
-      toast({ title: 'Authentication Error', description: 'No TOTP factor found. Please contact your administrator.', variant: 'destructive' })
+      toast({ title: t('adminLogin.invalidCode'), description: t('adminLogin.noTotp'), variant: 'destructive' })
       await supabase.auth.signOut()
       setLoading(false)
       return

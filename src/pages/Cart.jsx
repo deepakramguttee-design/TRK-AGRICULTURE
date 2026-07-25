@@ -7,9 +7,8 @@ import { CATEGORY_EMOJI } from '@/components/ProductCard'
 import { FREE_DELIVERY_THRESHOLD } from '@/lib/delivery'
 
 export default function Cart() {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { items, cartTotal, removeFromCart, updateQuantity, clearCart } = useCart()
-  const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
 
   const isFreeDelivery = cartTotal >= FREE_DELIVERY_THRESHOLD
   const amountUntilFree = (FREE_DELIVERY_THRESHOLD - cartTotal).toFixed(2)
@@ -39,7 +38,8 @@ export default function Cart() {
         <div className="lg:col-span-2">
           <div className="space-y-3">
             {items.map(item => {
-              const name = lang === 'en' ? (item.name_en || item.name_fr) : item.name_fr
+              // Nom de variété toujours en français, quelle que soit la langue d'interface.
+              const name = item.name_fr
               const lineTotal = item.price_mur * item.quantity
               return (
                 <div
@@ -72,7 +72,7 @@ export default function Cart() {
                     <div className="flex items-center gap-2 mt-3">
                       <button
                         type="button"
-                        aria-label={lang === 'fr' ? 'Diminuer' : 'Decrease'}
+                        aria-label={t('cart.decrease')}
                         onClick={() => updateQuantity(item.id, item.quantity - 1)}
                         disabled={item.quantity <= 1}
                         className="h-7 w-7 rounded-md border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-40"
@@ -84,7 +84,7 @@ export default function Cart() {
                       </span>
                       <button
                         type="button"
-                        aria-label={lang === 'fr' ? 'Augmenter' : 'Increase'}
+                        aria-label={t('cart.increase')}
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         className="h-7 w-7 rounded-md border flex items-center justify-center hover:bg-muted transition-colors"
                       >
@@ -100,7 +100,7 @@ export default function Cart() {
                     </p>
                     <button
                       type="button"
-                      aria-label={lang === 'fr' ? 'Supprimer' : 'Remove'}
+                      aria-label={t('cart.remove')}
                       onClick={() => removeFromCart(item.id)}
                       className="text-muted-foreground/50 hover:text-destructive transition-colors"
                     >

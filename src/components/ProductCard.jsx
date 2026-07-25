@@ -41,7 +41,8 @@ export default function ProductCard({ product, categories = [] }) {
   const [qty, setQty] = useState(1)
 
   const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
-  const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
+  // Nom de variété toujours en français, quelle que soit la langue d'interface.
+  const name = product.name_fr
   const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
   const styles = CATEGORY_STYLES[product.category] || DEFAULT_STYLES
   const status = product.status || 'available'

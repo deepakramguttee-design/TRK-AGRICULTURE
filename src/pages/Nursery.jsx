@@ -45,14 +45,15 @@ function daysElapsed(sownDate) {
   return Math.floor((today - new Date(sownDate)) / 86400000)
 }
 
-function formatDate(sownDate, extraDays) {
+function formatDate(sownDate, extraDays, locale) {
   const d = new Date(sownDate)
   d.setDate(d.getDate() + extraDays)
-  return d.toLocaleDateString('fr-MU', { day: 'numeric', month: 'long' })
+  return d.toLocaleDateString(locale, { day: 'numeric', month: 'long' })
 }
 
 export default function Nursery() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const dateLocale = i18n.language === 'en' ? 'en-GB' : 'fr-FR'
   const [batches, setBatches] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -193,7 +194,7 @@ export default function Nursery() {
 
         {!loading && !error && filtered.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filtered.map(b => <BatchCard key={b.id} batch={b} t={t} />)}
+            {filtered.map(b => <BatchCard key={b.id} batch={b} t={t} dateLocale={dateLocale} />)}
           </div>
         )}
 
@@ -263,7 +264,7 @@ export default function Nursery() {
   )
 }
 
-function BatchCard({ batch: b, t }) {
+function BatchCard({ batch: b, t, dateLocale }) {
   const isReady = b.remaining <= 0
   const isSoon  = !isReady && b.remaining <= 7
 
@@ -271,10 +272,10 @@ function BatchCard({ batch: b, t }) {
   const care = PLANT_CARE[category] ?? null
 
   const harvestDate = b.sown_date
-    ? formatDate(b.sown_date, b.estimated_days)
+    ? formatDate(b.sown_date, b.estimated_days, dateLocale)
     : null
 
-  const waMsg = encodeURIComponent(`Bonjour, je souhaite précommander: ${b.variety_name}`)
+  const waMsg = encodeURIComponent(`${t('nursery.waPreorder')} ${b.variety_name}`)
 
   return (
     <div className="rounded-2xl border border-stone-200 bg-white overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col">

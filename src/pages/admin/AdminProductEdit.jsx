@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Loader2 } from 'lucide-react'
@@ -16,6 +17,7 @@ function extractFilename(url) {
 }
 
 export default function AdminProductEdit() {
+  const { t } = useTranslation()
   const { sku } = useParams()
   const navigate = useNavigate()
   const [product, setProduct] = useState(null)
@@ -31,7 +33,7 @@ export default function AdminProductEdit() {
       .single()
       .then(({ data, error }) => {
         if (error || !data) {
-          toast({ title: 'Produit introuvable', variant: 'destructive' })
+          toast({ title: t('adminCatalog.edit2.notFound'), variant: 'destructive' })
           navigate('/admin/produits', { replace: true })
         } else {
           setProduct(data)
@@ -43,7 +45,7 @@ export default function AdminProductEdit() {
 
   async function handleImageUpload(file) {
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
-      toast({ title: 'Format non supporté', description: 'Accepté : JPG, PNG, WebP', variant: 'destructive' })
+      toast({ title: t('adminCatalog.edit2.formatUnsupported'), description: t('adminCatalog.edit2.formatAccepted'), variant: 'destructive' })
       return
     }
     setUploading(true)
@@ -71,16 +73,16 @@ export default function AdminProductEdit() {
       if (dbErr) throw dbErr
 
       setImageUrl(publicUrl)
-      toast({ title: 'Photo mise à jour ✓' })
+      toast({ title: t('adminCatalog.edit2.photoUpdated') })
     } catch (e) {
-      toast({ title: 'Erreur upload', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.edit2.uploadError'), description: e.message, variant: 'destructive' })
     } finally {
       setUploading(false)
     }
   }
 
   async function handleImageDelete() {
-    if (!window.confirm('Supprimer la photo de ce produit ?')) return
+    if (!window.confirm(t('adminCatalog.edit2.confirmDeletePhoto'))) return
     setUploading(true)
     try {
       // Supprimer du bucket seulement si c'est une URL bucket (pas Facebook)
@@ -96,9 +98,9 @@ export default function AdminProductEdit() {
       if (error) throw error
 
       setImageUrl(null)
-      toast({ title: 'Photo supprimée' })
+      toast({ title: t('adminCatalog.edit2.photoDeleted') })
     } catch (e) {
-      toast({ title: 'Erreur suppression', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.edit2.deleteError'), description: e.message, variant: 'destructive' })
     } finally {
       setUploading(false)
     }
@@ -118,9 +120,9 @@ export default function AdminProductEdit() {
       })
       .eq('sku', sku)
     if (error) {
-      toast({ title: 'Erreur mise à jour', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.edit2.updateError'), description: error.message, variant: 'destructive' })
     } else {
-      toast({ title: 'Produit mis à jour ✓', description: values.name_fr })
+      toast({ title: t('adminCatalog.edit2.updated'), description: values.name_fr })
       navigate('/admin/produits')
     }
   }
@@ -137,8 +139,8 @@ export default function AdminProductEdit() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-1">Modifier le produit</h1>
-      <p className="text-sm text-muted-foreground mb-6">SKU : {product.sku}</p>
+      <h1 className="text-2xl font-bold mb-1">{t('adminCatalog.edit2.title')}</h1>
+      <p className="text-sm text-muted-foreground mb-6">{t('adminCatalog.edit2.skuLine', { sku: product.sku })}</p>
       <AdminProductForm
         initialValues={{
           sku: product.sku,

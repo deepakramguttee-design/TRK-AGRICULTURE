@@ -1,4 +1,30 @@
 {
+  "labels": {
+    "payment": {
+      "cod": "Paiement à la livraison",
+      "codShort": "COD",
+      "juice": "MCB Juice",
+      "mips": "Carte bancaire"
+    },
+    "paymentStatus": {
+      "pending": "En attente",
+      "paid": "Payé",
+      "failed": "Échoué"
+    },
+    "fulfillment": {
+      "pickup": "Retrait sur place",
+      "delivery": "Livraison"
+    }
+  },
+  "unsubscribe": {
+    "loading": "Traitement de votre désinscription…",
+    "successTitle": "Vous êtes désinscrit",
+    "successBody": "Vous ne recevrez plus de SMS ni d'e-mails marketing de TRK Agriculture. Vos commandes ne sont pas affectées.",
+    "errorTitle": "Lien invalide",
+    "invalidBody": "Ce lien de désinscription est invalide ou a expiré.",
+    "errorBody": "Une erreur est survenue. Merci de réessayer plus tard.",
+    "backHome": "Retour à l'accueil"
+  },
   "nav": {
     "catalog": "Catalogue",
     "process": "Notre Process",
@@ -38,9 +64,18 @@
     },
     "advantages": {
       "title": "Pourquoi choisir Kailash Farming ?",
-      "delivery": { "title": "Livraisons hebdomadaires programmées", "desc": "Planifiez vos livraisons selon votre rythme — chaque semaine, aux jours et heures qui vous conviennent." },
-      "pricing": { "title": "Tarifs B2B dégressifs sur volume", "desc": "Plus vous commandez, plus vos prix baissent. Devis personnalisé selon vos volumes mensuels." },
-      "variety": { "title": "Variétés sur commande possible", "desc": "Besoin d'une variété spécifique ? Nous pouvons cultiver sur commande pour satisfaire vos exigences." }
+      "delivery": {
+        "title": "Livraisons hebdomadaires programmées",
+        "desc": "Planifiez vos livraisons selon votre rythme — chaque semaine, aux jours et heures qui vous conviennent."
+      },
+      "pricing": {
+        "title": "Tarifs B2B dégressifs sur volume",
+        "desc": "Plus vous commandez, plus vos prix baissent. Devis personnalisé selon vos volumes mensuels."
+      },
+      "variety": {
+        "title": "Variétés sur commande possible",
+        "desc": "Besoin d'une variété spécifique ? Nous pouvons cultiver sur commande pour satisfaire vos exigences."
+      }
     },
     "clients": {
       "title": "Ils nous font confiance",
@@ -78,6 +113,16 @@
         "20_50": "20 à 50 plateaux / mois",
         "gt50": "Plus de 50 plateaux / mois",
         "unknown": "Je ne sais pas encore"
+      },
+      "companyNamePlaceholder": "Ex : Restaurant Le Jardin",
+      "emailPlaceholder": "contact@votre-entreprise.mu",
+      "phonePlaceholder": "+230 5 XXX XXXX",
+      "categoryLabels": {
+        "epices": "Épices & Aromates",
+        "salades": "Salades",
+        "bredes": "Brèdes",
+        "legumes": "Légumes variés",
+        "melons": "Melons & Pastèques"
       }
     },
     "success": {
@@ -103,7 +148,10 @@
     "freeDeliveryReached": "Livraison gratuite 🎉",
     "total": "Total",
     "checkout": "Passer commande",
-    "addToCart": "Ajouter {{name}} au panier"
+    "addToCart": "Ajouter {{name}} au panier",
+    "decrease": "Diminuer",
+    "increase": "Augmenter",
+    "remove": "Supprimer"
   },
   "checkout": {
     "title": "Finaliser la commande",
@@ -188,7 +236,10 @@
       "notice": "Votre commande sera mise en attente jusqu'à validation du paiement par notre équipe.",
       "copy": "Copier",
       "copied": "Copié !"
-    }
+    },
+    "errorTitle": "Erreur",
+    "orderError": "Erreur lors de la commande",
+    "emailPlaceholder": "email@exemple.mu"
   },
   "confirmation": {
     "title": "Commande confirmée !",
@@ -227,6 +278,13 @@
       "available": "Disponible",
       "in_production": "En production",
       "coming_soon": "Bientôt disponible"
+    },
+    "heroKicker": "Directement de nos champs",
+    "productsAvailable": "produits disponibles",
+    "sort": {
+      "default": "Trier",
+      "priceAsc": "Prix croissant",
+      "priceDesc": "Prix décroissant"
     }
   },
   "account": {
@@ -242,7 +300,11 @@
       "company": "Entreprise",
       "edit": "Modifier",
       "save": "Enregistrer",
-      "saved": "Profil mis à jour"
+      "saved": "Profil mis à jour",
+      "address": "Adresse de livraison",
+      "addressPlaceholder": "Rue, village",
+      "district": "District",
+      "districtPlaceholder": "Ex : Pamplemousses"
     },
     "orders": {
       "title": "Mes commandes",
@@ -251,7 +313,9 @@
       "status": {
         "pending": "En attente",
         "confirmed": "Confirmée",
+        "prepared": "Préparée",
         "preparing": "En préparation",
+        "shipped": "En route",
         "out_for_delivery": "En livraison",
         "delivered": "Livrée",
         "cancelled": "Annulée"
@@ -341,11 +405,36 @@
       "examples": "Exemples de variétés"
     },
     "durations": {
-      "epices":  { "germination": "5–10 j", "nursery": "3–4 sem", "total": "4–6 sem", "examples": "Basilic, Thym, Coriandre, Citronnelle" },
-      "salades": { "germination": "3–7 j",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Laitue, Roquette, Mesclun" },
-      "bredes":  { "germination": "5–10 j", "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Brède mouroum, Brède thazard, Songe" },
-      "legumes": { "germination": "7–14 j", "nursery": "4–6 sem", "total": "5–8 sem", "examples": "Tomate, Poivron, Aubergine, Choux" },
-      "melons":  { "germination": "5–7 j",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Melon, Pastèque, Concombre, Courgette" }
+      "epices": {
+        "germination": "5–10 j",
+        "nursery": "3–4 sem",
+        "total": "4–6 sem",
+        "examples": "Basilic, Thym, Coriandre, Citronnelle"
+      },
+      "salades": {
+        "germination": "3–7 j",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Laitue, Roquette, Mesclun"
+      },
+      "bredes": {
+        "germination": "5–10 j",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Brède mouroum, Brède thazard, Songe"
+      },
+      "legumes": {
+        "germination": "7–14 j",
+        "nursery": "4–6 sem",
+        "total": "5–8 sem",
+        "examples": "Tomate, Poivron, Aubergine, Choux"
+      },
+      "melons": {
+        "germination": "5–7 j",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Melon, Pastèque, Concombre, Courgette"
+      }
     },
     "ideasTitle": "Idées pour la suite",
     "ideasContentTitle": "Contenus à développer",
@@ -368,7 +457,20 @@
     "title": "Calendrier de disponibilité",
     "subtitle": "Les meilleurs mois pour commander chaque catégorie à Maurice",
     "climateNote": "Île Maurice · Saison chaude & pluvieuse : nov → avr · Saison fraîche & sèche : mai → oct",
-    "months": ["Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+    "months": [
+      "Jan",
+      "Fév",
+      "Mar",
+      "Avr",
+      "Mai",
+      "Jun",
+      "Jul",
+      "Aoû",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Déc"
+    ],
     "legend": {
       "high": "Pleine disponibilité",
       "medium": "Disponibilité partielle",
@@ -382,7 +484,10 @@
       "bredes": "Brèdes",
       "legumes": "Légumes",
       "melons": "Melons & Pastèques"
-    }
+    },
+    "coolSeason": "Saison fraîche",
+    "hotSeason": "Saison chaude",
+    "ctaTitle": "Prêt à commander ?"
   },
   "nursery": {
     "title": "Pépinière en direct",
@@ -439,7 +544,8 @@
       "title": "Prêts à planter cette semaine",
       "subtitle": "Ces variétés sont disponibles dès maintenant en pépinière.",
       "cta": "Voir tous les lots"
-    }
+    },
+    "waPreorder": "Bonjour, je souhaite précommander :"
   },
   "home": {
     "hero": {
@@ -457,20 +563,64 @@
       "tag": "Notre engagement",
       "title": "Pourquoi choisir Kailash Farming ?",
       "items": [
-        { "title": "Cultivé ici", "desc": "Nos plantes poussent sur l'île Maurice, récoltées le matin même de votre livraison." },
-        { "title": "Livraison rapide", "desc": "Commandez en ligne, recevez chez vous. Livraison disponible dans les 9 districts." },
-        { "title": "Qualité garantie", "desc": "Sélection rigoureuse à chaque récolte. Sans produits chimiques inutiles." },
-        { "title": "Toujours de saison", "desc": "Notre catalogue évolue avec les saisons pour vous offrir ce qui est à son meilleur." }
+        {
+          "title": "Cultivé ici",
+          "desc": "Nos plantes poussent sur l'île Maurice, récoltées le matin même de votre livraison."
+        },
+        {
+          "title": "Livraison rapide",
+          "desc": "Commandez en ligne, recevez chez vous. Livraison disponible dans les 9 districts."
+        },
+        {
+          "title": "Qualité garantie",
+          "desc": "Sélection rigoureuse à chaque récolte. Sans produits chimiques inutiles."
+        },
+        {
+          "title": "Toujours de saison",
+          "desc": "Notre catalogue évolue avec les saisons pour vous offrir ce qui est à son meilleur."
+        }
       ]
     },
     "seasons": {
       "tag": "Calendrier des récoltes",
       "title": "Nos produits, au fil des saisons",
       "note": "* Indicatif. Le catalogue est mis à jour selon les récoltes disponibles.",
-      "summer":  { "tag": "☀️ Été",      "label": "Jan–Mar", "items": ["Brèdes mourongue", "Laitue", "Citronnelle"] },
-      "cyclone": { "tag": "🌧 Cyclone",  "label": "Avr–Jun", "items": ["Épices robustes", "Herbes aromatiques", "Cresson"] },
-      "winter":  { "tag": "💨 Hiver",    "label": "Jul–Sep", "items": ["Brèdes chouchou", "Laitue boston", "Thym"] },
-      "spring":  { "tag": "🌱 Printemps","label": "Oct–Déc", "items": ["Salades variées", "Tomates cerise", "Basilic"] }
+      "summer": {
+        "tag": "☀️ Été",
+        "label": "Jan–Mar",
+        "items": [
+          "Brèdes mourongue",
+          "Laitue",
+          "Citronnelle"
+        ]
+      },
+      "cyclone": {
+        "tag": "🌧 Cyclone",
+        "label": "Avr–Jun",
+        "items": [
+          "Épices robustes",
+          "Herbes aromatiques",
+          "Cresson"
+        ]
+      },
+      "winter": {
+        "tag": "💨 Hiver",
+        "label": "Jul–Sep",
+        "items": [
+          "Brèdes chouchou",
+          "Laitue boston",
+          "Thym"
+        ]
+      },
+      "spring": {
+        "tag": "🌱 Printemps",
+        "label": "Oct–Déc",
+        "items": [
+          "Salades variées",
+          "Tomates cerise",
+          "Basilic"
+        ]
+      }
     },
     "cta": {
       "title": "Fraîcheur livrée chez vous",
@@ -525,7 +675,11 @@
     "accountCreated": "Compte créé !",
     "welcome": "Bienvenue chez Kailash Farming.",
     "verifyEmail": "Compte créé — vérifiez votre email",
-    "verifyEmailDesc": "Connectez-vous après confirmation."
+    "verifyEmailDesc": "Connectez-vous après confirmation.",
+    "emailPlaceholder": "votre@email.com",
+    "fullNamePlaceholder": "Jean Dupont",
+    "phonePlaceholder": "52 345 678",
+    "passwordPlaceholder": "Min. 8 caractères"
   },
   "admin": {
     "accessDenied": "Accès refusé",
@@ -614,5 +768,628 @@
     "totpError": "Erreur TOTP",
     "connectionError": "Connexion impossible",
     "noTotp": "Aucun facteur TOTP trouvé. Veuillez contacter votre administrateur."
+  },
+  "adminClients": {
+    "common": {
+      "error": "Erreur",
+      "loading": "Chargement…",
+      "cancel": "Annuler",
+      "save": "Enregistrer",
+      "view": "Voir",
+      "noName": "Sans nom",
+      "dash": "—",
+      "particulier": "Particulier",
+      "professionnel": "Professionnel",
+      "clientNotFound": "Client introuvable"
+    },
+    "list": {
+      "title": "Clients",
+      "exportCsv": "Export CSV",
+      "newClient": "Nouveau client",
+      "searchPlaceholder": "Nom, société, téléphone, code…",
+      "allTypes": "Tous types",
+      "allDistricts": "Tous districts",
+      "activeAndInactive": "Actifs + inactifs",
+      "active": "Actifs",
+      "inactive": "Inactifs",
+      "noResults": "Aucun résultat pour ces filtres.",
+      "noClients": "Aucun client enregistré.",
+      "inactiveBadge": "Inactif",
+      "count": "{{count}} client(s) affiché(s)",
+      "cols": {
+        "code": "Code",
+        "client": "Client",
+        "phone": "Téléphone",
+        "district": "District",
+        "orders": "Cmd.",
+        "revenuePaid": "CA payé",
+        "last": "Dernière",
+        "optIn": "Opt-in"
+      }
+    },
+    "newModal": {
+      "title": "Nouveau client",
+      "firstName": "Prénom *",
+      "lastName": "Nom",
+      "phone": "Téléphone *",
+      "email": "Email",
+      "type": "Type",
+      "district": "District",
+      "company": "Société",
+      "create": "Créer",
+      "firstNameRequired": "Prénom requis",
+      "phoneInvalid": "Téléphone mauricien invalide",
+      "duplicatePhone": "Un client avec ce téléphone existe déjà.",
+      "created": "Client créé"
+    },
+    "profile": {
+      "backToClients": "Clients",
+      "clientNoName": "Client sans nom",
+      "deactivate": "Désactiver",
+      "reactivate": "Réactiver",
+      "deactivated": "Client désactivé",
+      "reactivated": "Client réactivé",
+      "contactInfo": "Coordonnées",
+      "firstName": "Prénom",
+      "lastName": "Nom",
+      "phone": "Téléphone",
+      "email": "Email",
+      "type": "Type",
+      "district": "District",
+      "company": "Société",
+      "internalNotes": "Notes internes",
+      "profileUpdated": "Fiche mise à jour",
+      "marketing": "Marketing",
+      "smsMarketing": "SMS marketing",
+      "emailMarketing": "Email marketing",
+      "unsubscribedOn": "Désinscrit le {{date}}",
+      "loyaltyDiscount": "Remise fidélité",
+      "discountApplied": "Remise {{pct}}%",
+      "stats": {
+        "orders": "Commandes",
+        "revenuePaid": "CA payé",
+        "addresses": "Adresses"
+      },
+      "addresses": "Adresses",
+      "addressDefault": "Adresse",
+      "defaultBadge": "Par défaut",
+      "orderHistory": "Historique des commandes",
+      "noOrders": "Aucune commande",
+      "cols": {
+        "number": "N°",
+        "date": "Date",
+        "total": "Total",
+        "payment": "Paiement",
+        "status": "Statut"
+      }
+    },
+    "detail": {
+      "backToUsers": "Utilisateurs",
+      "clientNoName": "Client sans nom",
+      "clientInfo": "Informations client",
+      "phone": "Téléphone",
+      "company": "Entreprise",
+      "lang": "Langue",
+      "registeredOn": "Inscrit le",
+      "stats": "Statistiques",
+      "orders": "Commandes",
+      "delivered": "Livrées",
+      "totalSpent": "Total dépensé",
+      "orderHistory": "Historique des commandes",
+      "ordersCount": "{{count}} commande(s)",
+      "noOrders": "Aucune commande",
+      "cols": {
+        "number": "N°",
+        "date": "Date",
+        "total": "Total",
+        "payment": "Paiement",
+        "status": "Statut"
+      }
+    },
+    "users": {
+      "title": "Utilisateurs",
+      "addMember": "Ajouter un membre",
+      "tabs": {
+        "clients": "Clients",
+        "team": "Équipe"
+      },
+      "searchClients": "Nom, téléphone, entreprise…",
+      "searchTeam": "Nom, email…",
+      "noResults": "Aucun résultat.",
+      "noClients": "Aucun client enregistré.",
+      "noTeam": "Aucun membre d'équipe.",
+      "roleUpdated": "Rôle mis à jour",
+      "accountDeleted": "Compte supprimé",
+      "deleteConfirm": "Supprimer définitivement le compte « {{label}} » ?\n\nSes commandes éventuelles seront conservées en tant que commandes invité. Cette action est irréversible.",
+      "discountApplied": "Remise {{pct}}% appliquée",
+      "clientCols": {
+        "user": "Utilisateur",
+        "phone": "Téléphone",
+        "type": "Type",
+        "discount": "Remise",
+        "registeredOn": "Inscrit le",
+        "action": "Action"
+      },
+      "teamCols": {
+        "member": "Membre",
+        "email": "Email",
+        "role": "Rôle",
+        "memberSince": "Membre depuis",
+        "action": "Action"
+      },
+      "deleteAccount": "Supprimer ce compte",
+      "demoteBeforeDelete": "Rétrograder en Employé avant de supprimer",
+      "roles": {
+        "admin": "Admin",
+        "operator": "Employé",
+        "client": "Client"
+      },
+      "invite": {
+        "title": "Ajouter un membre de l'équipe",
+        "fullName": "Nom complet",
+        "fullNamePlaceholder": "Prénom Nom",
+        "email": "Email",
+        "emailPlaceholder": "email@exemple.com",
+        "tempPassword": "Mot de passe temporaire",
+        "tempPasswordPlaceholder": "Min. 8 caractères",
+        "role": "Rôle",
+        "createAccount": "Créer le compte",
+        "passwordTooShort": "Mot de passe trop court",
+        "passwordTooShortDesc": "Au moins 8 caractères.",
+        "memberAdded": "Membre ajouté",
+        "memberAddedDesc": "{{email}} — rôle : {{role}}."
+      }
+    }
+  },
+  "adminCore": {
+    "sectionTitle": "Administration",
+    "signOut": "Déconnexion",
+    "signedOut": "Déconnecté",
+    "comingSoon": "Bientôt",
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Produits",
+      "orders": "Commandes",
+      "payments": "Encaissements",
+      "clients": "Clients",
+      "campaigns": "Campagnes",
+      "b2b": "B2B",
+      "seedlings": "Semis",
+      "users": "Utilisateurs"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "alertPendingOrders_one": "{{count}} commande en attente de confirmation",
+      "alertPendingOrders_other": "{{count}} commandes en attente de confirmation",
+      "alertJuicePending_one": "{{count}} paiement Juice à valider",
+      "alertJuicePending_other": "{{count}} paiements Juice à valider",
+      "kpiActiveProducts": "Produits actifs",
+      "kpiTotalOrders": "Commandes totales",
+      "kpiTotalClients": "Clients enregistrés",
+      "kpiPendingB2B": "Devis B2B en attente",
+      "revenueTitle": "Chiffre d'affaires",
+      "revenueToday": "Aujourd'hui",
+      "revenueMonth": "Ce mois",
+      "revenueTotal": "Total (all time)",
+      "revenueTodaySub": "commandes non annulées",
+      "revenueTotalSub": "depuis le lancement",
+      "recentOrders": "Dernières commandes",
+      "recentB2B": "Derniers devis B2B",
+      "viewAll": "Voir tout →",
+      "noOrders": "Aucune commande",
+      "noB2B": "Aucun devis B2B",
+      "quickActions": "Actions rapides",
+      "newProduct": "Nouveau produit",
+      "ordersAction": "Commandes",
+      "seedlingsAction": "Semis",
+      "usersAction": "Utilisateurs",
+      "pickupTitle": "Retrait",
+      "codTitle": "COD"
+    },
+    "b2bStatus": {
+      "new": "Nouveau",
+      "contacted": "Contacté",
+      "quote_sent": "Devis",
+      "won": "Gagné"
+    }
+  },
+  "adminCatalog": {
+    "title": "Produits",
+    "totalCount": "{{count}} produits au total",
+    "newProduct": "Nouveau produit",
+    "searchPlaceholder": "Rechercher par nom ou SKU…",
+    "all": "Toutes",
+    "col": {
+      "sku": "SKU",
+      "nameFr": "Nom FR",
+      "nameEn": "Nom EN",
+      "category": "Catégorie",
+      "priceRs": "Prix Rs",
+      "image": "Image",
+      "active": "Actif",
+      "actions": "Actions",
+      "name": "Nom"
+    },
+    "edit": "Éditer",
+    "delete": "Supprimer",
+    "empty": "Aucun produit trouvé",
+    "deactivateTitle": "Désactiver ce produit ?",
+    "deactivateDesc": "Êtes-vous sûr ? Cette action est irréversible. {{name}} sera masqué du catalogue public mais conservé en base de données.",
+    "cancel": "Annuler",
+    "deactivate": "Désactiver",
+    "loadError": "Erreur chargement",
+    "error": "Erreur",
+    "productDeactivated": "Produit désactivé",
+    "status": {
+      "available": "Disponible",
+      "in_production": "En production",
+      "coming_soon": "Bientôt"
+    },
+    "form": {
+      "skuLabel": "SKU *",
+      "nameFrLabel": "Nom (FR) *",
+      "nameEnLabel": "Nom (EN)",
+      "categoryLabel": "Catégorie *",
+      "categoryPlaceholder": "Choisir une catégorie",
+      "priceLabel": "Prix (Rs) *",
+      "unitLabel": "Unité",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Description du produit…",
+      "photoLabel": "Photo du produit",
+      "preview": "Aperçu",
+      "inProgress": "En cours…",
+      "replace": "Remplacer",
+      "delete": "Supprimer",
+      "addPhoto": "Ajouter une photo",
+      "activeToggle": "Produit actif (visible dans le catalogue)",
+      "update": "Mettre à jour",
+      "create": "Créer le produit",
+      "cancel": "Annuler",
+      "categories": {
+        "epices": "🌿 Épices",
+        "salades": "🥬 Salades",
+        "bredes": "🍃 Brèdes",
+        "legumes": "🥕 Légumes",
+        "melons": "🍈 Melons"
+      }
+    },
+    "create": {
+      "title": "Nouveau produit",
+      "createError": "Erreur création",
+      "created": "Produit créé ✓"
+    },
+    "edit2": {
+      "title": "Modifier le produit",
+      "skuLine": "SKU : {{sku}}",
+      "notFound": "Produit introuvable",
+      "formatUnsupported": "Format non supporté",
+      "formatAccepted": "Accepté : JPG, PNG, WebP",
+      "photoUpdated": "Photo mise à jour ✓",
+      "uploadError": "Erreur upload",
+      "confirmDeletePhoto": "Supprimer la photo de ce produit ?",
+      "photoDeleted": "Photo supprimée",
+      "deleteError": "Erreur suppression",
+      "updateError": "Erreur mise à jour",
+      "updated": "Produit mis à jour ✓"
+    },
+    "detail": {
+      "notFound": "Produit introuvable",
+      "productsBack": "Produits",
+      "deactivate": "Désactiver",
+      "activate": "Activer",
+      "modify": "Modifier",
+      "noImage": "Pas d'image",
+      "active": "Actif",
+      "inactive": "Inactif",
+      "nameFr": "Nom FR",
+      "nameEn": "Nom EN",
+      "price": "Prix",
+      "unit": "Unité",
+      "descriptionFr": "Description FR",
+      "descriptionEn": "Description EN",
+      "orders": "Commandes",
+      "qtySold": "Qté vendue",
+      "inUnit": "en {{unit}}",
+      "unitFallback": "unité(s)",
+      "revenue": "Revenus",
+      "recentOrders": "Dernières commandes contenant ce produit",
+      "orderNumber": "N° commande",
+      "date": "Date",
+      "qty": "Qté",
+      "lineTotal": "Total ligne",
+      "orderStatus": "Statut",
+      "view": "Voir",
+      "productDeactivated": "Produit désactivé",
+      "productActivated": "Produit activé ✓"
+    },
+    "legacy": {
+      "title": "Admin — Produits",
+      "subtitle": "{{count}} produits · Cliquez sur un nom pour modifier · Cliquez sur un prix pour modifier · Glissez une image pour l'uploader",
+      "col": {
+        "sku": "SKU",
+        "name": "Nom",
+        "category": "Catégorie",
+        "priceRs": "Prix Rs",
+        "status": "Statut",
+        "active": "Actif",
+        "photo": "Photo",
+        "action": "Action"
+      },
+      "editNameTitle": "Modifier nom et description",
+      "priceEditTitle": "Cliquer pour modifier le prix",
+      "hide": "Cliquer pour masquer",
+      "activateHint": "Cliquer pour activer",
+      "replace": "Remplacer",
+      "uploadPhoto": "Upload photo",
+      "uploading": "Upload…",
+      "delete": "Supprimer",
+      "editTitle": "Modifier le produit",
+      "nameFrRequired": "Nom FR requis",
+      "productUpdated": "Produit mis à jour ✓",
+      "confirmDeletePhoto": "Supprimer la photo de \"{{name}}\" ?",
+      "formatUnsupported": "Format non supporté",
+      "formatAccepted": "Accepté : JPG, PNG, WebP",
+      "photoUpdated": "Photo mise à jour ✓",
+      "uploadError": "Erreur upload",
+      "photoDeleted": "Photo supprimée",
+      "deleteError": "Erreur suppression",
+      "priceInvalid": "Prix invalide",
+      "priceInvalidDesc": "Entrez un nombre positif",
+      "priceUpdated": "Prix mis à jour ✓",
+      "priceError": "Erreur prix",
+      "statusUpdated": "Statut mis à jour ✓",
+      "statusError": "Erreur statut",
+      "productActivated": "Produit activé ✓",
+      "productHidden": "Produit masqué",
+      "activationError": "Erreur activation",
+      "loadError": "Erreur chargement",
+      "error": "Erreur",
+      "save": "Enregistrer"
+    }
+  },
+  "adminB2b": {
+    "title": "Devis B2B",
+    "totalCount": "{{count}} demandes au total",
+    "searchPlaceholder": "Entreprise ou contact…",
+    "filterStatus": "Statut",
+    "filterType": "Type",
+    "allStatuses": "Tous les statuts",
+    "allTypes": "Tous les types",
+    "loadError": "Erreur chargement",
+    "error": "Erreur",
+    "col": {
+      "date": "Date",
+      "company": "Entreprise",
+      "type": "Type",
+      "contact": "Contact",
+      "phone": "Téléphone",
+      "estimatedVolume": "Volume estimé",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "viewDetails": "Voir détails",
+    "empty": "Aucune demande B2B trouvée",
+    "detail": {
+      "backToList": "Retour à la liste",
+      "notFound": "Demande introuvable.",
+      "markContacted": "Marquer contacté",
+      "sendEmail": "Envoyer email",
+      "call": "Appeler",
+      "company": "Entreprise",
+      "name": "Nom",
+      "type": "Type",
+      "estimatedVolume": "Volume estimé",
+      "contact": "Contact",
+      "email": "Email",
+      "phone": "Téléphone",
+      "varietiesInterested": "Variétés intéressées",
+      "message": "Message",
+      "currentStatus": "Statut actuel :",
+      "statusUpdated": "Statut mis à jour ✓"
+    },
+    "status": {
+      "new": "Nouveau",
+      "contacted": "Contacté",
+      "quote_sent": "Devis envoyé",
+      "won": "Gagné",
+      "lost": "Perdu"
+    },
+    "businessType": {
+      "hotel": "Hôtel",
+      "restaurant": "Restaurant",
+      "landscaper": "Paysagiste",
+      "green_space": "Espace vert",
+      "other": "Autre"
+    }
+  },
+  "adminSowing": {
+    "title": "Semis",
+    "totalCount": "{{count}} lot(s) enregistré(s)",
+    "addBatch": "Ajouter un lot",
+    "productOptional": "Produit (optionnel)",
+    "select": "— Sélectionner —",
+    "varietyNameLabel": "Nom de la variété *",
+    "varietyNamePlaceholder": "ex : Basilic Grand Vert",
+    "sownDateLabel": "Date de semis *",
+    "estimatedDaysLabel": "Durée estimée (jours) *",
+    "plateaux": "Plateaux",
+    "notes": "Notes",
+    "notesOptional": "Optionnel",
+    "add": "Ajouter",
+    "col": {
+      "variety": "Variété",
+      "sownOn": "Semé le",
+      "elapsed": "Écoulés",
+      "duration": "Durée",
+      "plateaux": "Plateaux",
+      "status": "Statut",
+      "actions": "Actions"
+    },
+    "empty": "Aucun lot enregistré",
+    "ready": "Prêt 🎉",
+    "inDays": "Dans {{days}} j",
+    "edit": "Éditer",
+    "delete": "Supprimer",
+    "editTitle": "Modifier le lot",
+    "varietyLabel": "Variété *",
+    "durationLabel": "Durée (jours) *",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "deleteTitle": "Supprimer ce lot ?",
+    "deleteDesc": "Voulez-vous supprimer {{name}} ? Cette action est irréversible.",
+    "error": "Erreur",
+    "batchAdded": "Lot ajouté ✓",
+    "batchUpdated": "Lot mis à jour ✓",
+    "batchDeleted": "Lot supprimé"
+  },
+  "adminCampaigns": {
+    "title": "Campagnes",
+    "newCampaign": "Nouvelle campagne",
+    "loading": "Chargement…",
+    "empty": "Aucune campagne. Créez-en une pour toucher vos clients par SMS ou e-mail.",
+    "error": "Erreur",
+    "col": {
+      "campaign": "Campagne",
+      "channel": "Canal",
+      "status": "Statut",
+      "recipients": "Destinataires",
+      "sent": "Envoyés",
+      "failed": "Échecs",
+      "createdOn": "Créée le"
+    },
+    "channelBoth": "SMS + Email",
+    "status": {
+      "draft": "Brouillon",
+      "scheduled": "Planifiée",
+      "sending": "Envoi…",
+      "sent": "Envoyée",
+      "failed": "Échec"
+    },
+    "detail": {
+      "campaignsBack": "Campagnes",
+      "newCampaign": "Nouvelle campagne",
+      "notFound": "Campagne introuvable",
+      "content": "Contenu",
+      "campaignName": "Nom de la campagne",
+      "channel": "Canal",
+      "channelBoth": "SMS + Email",
+      "template": "Modèle",
+      "templateNone": "— Aucun —",
+      "subjectEmail": "Sujet (email)",
+      "bodyText": "Corps texte (SMS / fallback)",
+      "bodyTextPlaceholder": "Bonjour {{full_name}}, …",
+      "charsSegments": "{{chars}} caractères · {{segments}} segment(s) SMS",
+      "segmentBilled": " — chaque segment est facturé",
+      "variablesLabel": "Variables : ",
+      "bodyHtml": "Corps HTML (email, optionnel)",
+      "bodyHtmlPlaceholder": "<p>Bonjour {{full_name}}…</p>",
+      "save": "Enregistrer",
+      "targeting": "Ciblage",
+      "accountType": "Type de compte",
+      "accountAll": "Tous",
+      "accountB2c": "Particulier",
+      "accountB2b": "Professionnel",
+      "district": "District",
+      "districtAll": "Tous",
+      "minOrders": "Nb commandes min",
+      "inactiveDays": "Inactifs depuis (jours)",
+      "saveToCalc": "Enregistrez la campagne pour calculer l'audience.",
+      "calcAudience": "Calculer l'audience",
+      "audience": "Audience",
+      "sms": "SMS",
+      "email": "Email",
+      "estimatedSmsCost": "Coût SMS estimé :",
+      "costBreakdown": "({{count}} × {{segments}} seg × Rs {{unit}})",
+      "sendCampaign": "Envoyer la campagne",
+      "tracking": "Suivi",
+      "sentCount": "{{count}} envoyés",
+      "failedCount": "{{count}} échecs",
+      "deliveredPct": "{{pct}}% délivré",
+      "failures": "Échecs",
+      "confirmSendTitle": "Confirmer l'envoi",
+      "confirmSendRecipients": "{{count}} destinataire(s) — {{sms}} SMS, {{email}} e-mail(s).",
+      "confirmSendCost": "Coût SMS estimé :",
+      "cancel": "Annuler",
+      "send": "Envoyer",
+      "nameRequired": "Nom requis",
+      "bodyRequired": "Corps du message requis",
+      "campaignCreated": "Campagne créée",
+      "campaignSaved": "Campagne enregistrée",
+      "audienceCalculated": "Audience calculée : {{count}} destinataire(s)",
+      "sendError": "Erreur d'envoi",
+      "sendDone": "Envoi terminé",
+      "sendDoneDesc": "{{sent}} envoyé(s), {{failed}} échec(s)"
+    }
+  },
+  "adminOrders": {
+    "list": {
+      "title": "Commandes",
+      "summary": "{{count}} commandes — {{juice}} Juice en attente",
+      "searchPlaceholder": "N° commande ou nom client…",
+      "statusPlaceholder": "Statut",
+      "allStatuses": "Tous les statuts",
+      "districtPlaceholder": "District",
+      "allDistricts": "Tous les districts",
+      "paymentPlaceholder": "Paiement",
+      "allPayments": "Tous",
+      "colDate": "Date",
+      "colCustomer": "Client",
+      "colPhone": "Téléphone",
+      "colDistrict": "District",
+      "colTrays": "Plateaux",
+      "colTotal": "Total",
+      "colPayment": "Paiement",
+      "colStatus": "Statut",
+      "colActions": "Actions",
+      "viewDetails": "Voir détails",
+      "empty": "Aucune commande trouvée",
+      "loadError": "Erreur chargement"
+    },
+    "detail": {
+      "notFound": "Commande introuvable.",
+      "backToList": "Retour à la liste",
+      "orderTitle": "Commande {{number}}",
+      "customerInfo": "Informations client",
+      "fieldName": "Nom",
+      "fieldPhone": "Téléphone",
+      "fieldEmail": "Email",
+      "fieldDistrict": "District",
+      "fieldAddress": "Adresse",
+      "fieldSlot": "Créneau",
+      "fieldNotes": "Notes",
+      "fieldDate": "Date",
+      "items": "Articles commandés",
+      "colProduct": "Produit",
+      "colQty": "Qté",
+      "colUnitPrice": "P.U.",
+      "colTotal": "Total",
+      "noItems": "Aucun article",
+      "paymentJuice": "Paiement Juice",
+      "paymentCod": "Paiement à la livraison (COD)",
+      "fieldMethod": "Méthode",
+      "methodJuice": "MCB Juice",
+      "methodCod": "Cash on Delivery",
+      "fieldPaymentStatus": "Statut paiement",
+      "statusPaid": "✅ Payé",
+      "statusPending": "⏳ En attente",
+      "fieldTxnId": "ID transaction",
+      "fieldPaidAt": "Payé le",
+      "juicePendingValidation": "Paiement en attente de validation",
+      "juiceClientTxnId": "ID transaction client :",
+      "juiceNoTxnId": "Le client n'a pas encore renseigné son ID de transaction.",
+      "validateJuice": "Valider le paiement Juice",
+      "savingJuice": "Enregistrement…",
+      "juiceValidated": "Paiement Juice validé",
+      "subtotal": "Sous-total",
+      "delivery": "Livraison",
+      "deliveryFree": "Offerte",
+      "loyaltyDiscount": "Remise fidélité {{pct}}%",
+      "total": "TOTAL",
+      "error": "Erreur",
+      "statusUpdated": "Statut mis à jour ✓",
+      "statusUpdatedTo": "Statut mis à jour : {{status}}",
+      "juicePaymentValidated": "Paiement Juice validé ✓",
+      "juicePaymentValidatedDesc": "La commande est marquée comme payée."
+    }
   }
 }

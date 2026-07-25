@@ -21,11 +21,6 @@ const CATEGORIES = [
   { id: 'melons',  emoji: '🍈' },
 ]
 
-const CAT_LABELS = {
-  fr: { epices: 'Épices & Aromates', salades: 'Salades', bredes: 'Brèdes', legumes: 'Légumes variés', melons: 'Melons & Pastèques' },
-  en: { epices: 'Herbs & Spices', salades: 'Salads', bredes: 'Mauritian Greens', legumes: 'Vegetables', melons: 'Melons' },
-}
-
 const PLACEHOLDER_LOGOS = [
   { label: 'Hôtel Côte d\'Or', initials: 'HCO' },
   { label: 'Restaurant Le Lagon', initials: 'RLL' },
@@ -41,8 +36,7 @@ function genRef() {
 }
 
 export default function B2B() {
-  const { t, i18n } = useTranslation()
-  const lang = i18n.language.startsWith('en') ? 'en' : 'fr'
+  const { t } = useTranslation()
 
   const [form, setForm] = useState({
     business_type: '', business_name: '', contact_name: '',
@@ -218,7 +212,7 @@ export default function B2B() {
 
                 <B2BField label={`${t('b2b.form.companyName')} *`} error={errors.business_name} t={t}>
                   <Input
-                    placeholder={lang === 'fr' ? 'Ex: Restaurant Le Jardin' : 'Ex: Le Jardin Restaurant'}
+                    placeholder={t('b2b.form.companyNamePlaceholder')}
                     value={form.business_name}
                     onChange={e => set('business_name', e.target.value)}
                     className={errors.business_name ? 'border-destructive ring-1 ring-destructive' : ''}
@@ -240,7 +234,7 @@ export default function B2B() {
                 <B2BField label={`${t('b2b.form.email')} *`} error={errors.email} t={t}>
                   <Input
                     type="email"
-                    placeholder="contact@votre-entreprise.mu"
+                    placeholder={t('b2b.form.emailPlaceholder')}
                     value={form.email}
                     onChange={e => set('email', e.target.value)}
                     className={errors.email ? 'border-destructive ring-1 ring-destructive' : ''}
@@ -249,7 +243,7 @@ export default function B2B() {
                 <B2BField label={`${t('b2b.form.phone')} *`} error={errors.phone} t={t}>
                   <Input
                     type="tel"
-                    placeholder="+230 5 XXX XXXX"
+                    placeholder={t('b2b.form.phonePlaceholder')}
                     value={form.phone}
                     onChange={e => set('phone', e.target.value)}
                     className={errors.phone ? 'border-destructive ring-1 ring-destructive' : ''}
@@ -291,7 +285,7 @@ export default function B2B() {
                         }`}
                       >
                         <span aria-hidden>{cat.emoji}</span>
-                        {CAT_LABELS[lang][cat.id]}
+                        {t(`b2b.form.categoryLabels.${cat.id}`)}
                         {active && <span className="text-[10px] font-bold">✓</span>}
                       </button>
                     )

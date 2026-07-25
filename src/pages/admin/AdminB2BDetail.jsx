@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -8,13 +9,7 @@ import {
 } from '@/components/ui/select'
 import { ChevronLeft, Loader2, Mail, Phone, UserCheck } from 'lucide-react'
 
-const STATUS_LABELS = {
-  new:        'Nouveau',
-  contacted:  'Contacté',
-  quote_sent: 'Devis envoyé',
-  won:        'Gagné',
-  lost:       'Perdu',
-}
+const STATUS_KEYS = ['new', 'contacted', 'quote_sent', 'won', 'lost']
 
 const STATUS_COLORS = {
   new:        'bg-orange-100 text-orange-700 border-orange-200',
@@ -22,14 +17,6 @@ const STATUS_COLORS = {
   quote_sent: 'bg-violet-100 text-violet-700 border-violet-200',
   won:        'bg-green-100 text-green-700 border-green-200',
   lost:       'bg-gray-100 text-gray-600 border-gray-200',
-}
-
-const BUSINESS_TYPE_LABELS = {
-  hotel:       'Hôtel',
-  restaurant:  'Restaurant',
-  landscaper:  'Paysagiste',
-  green_space: 'Espace vert',
-  other:       'Autre',
 }
 
 const VARIETY_COLORS = [
@@ -40,12 +27,13 @@ const VARIETY_COLORS = [
   'bg-cyan-100 text-cyan-700 border-cyan-200',
 ]
 
-function formatDate(d) {
+function formatDate(d, lang) {
   const dt = new Date(d)
+  const loc = lang === 'en' ? 'en-GB' : 'fr-FR'
   return (
-    dt.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) +
+    dt.toLocaleDateString(loc, { day: '2-digit', month: '2-digit', year: 'numeric' }) +
     ' ' +
-    dt.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
+    dt.toLocaleTimeString(loc, { hour: '2-digit', minute: '2-digit' })
   )
 }
 
@@ -60,6 +48,7 @@ function InfoRow({ label, value }) {
 }
 
 export default function AdminB2BDetail() {
+  const { t, i18n } = useTranslation()
   const { id } = useParams()
   const [inquiry, setInquiry] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -72,11 +61,11 @@ export default function AdminB2BDetail() {
       .eq('id', id)
       .single()
       .then(({ data, error }) => {
-        if (error) toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+        if (error) toast({ title: t('adminB2b.error'), description: error.message, variant: 'destructive' })
         else setInquiry(data)
         setLoading(false)
       })
-  }, [id])
+  }, [id, t])
 
   async function handleStatusChange(newStatus) {
     setSaving(true)
@@ -85,10 +74,10 @@ export default function AdminB2BDetail() {
       .update({ status: newStatus })
       .eq('id', id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminB2b.error'), description: error.message, variant: 'destructive' })
     } else {
       setInquiry(i => ({ ...i, status: newStatus }))
-      toast({ title: 'Statut mis à jour ✓' })
+      toast({ title: t('adminB2b.detail.statusUpdated') })
     }
     setSaving(false)
   }
@@ -102,7 +91,7 @@ export default function AdminB2BDetail() {
   }
 
   if (!inquiry) {
-    return <p className="py-8 text-muted-foreground">Demande introuvable.</p>
+    return <p className="py-8 text-muted-foreground">{t('adminB2b.detail.notFound')}</p>
   }
 
   const varieties = inquiry.varieties_interested ?? []
@@ -114,12 +103,12 @@ export default function AdminB2BDetail() {
         <Button variant="ghost" size="sm" asChild className="shrink-0 mt-0.5">
           <Link to="/admin/b2b">
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Retour à la liste
+            {t('adminB2b.detail.backToList')}
           </Link>
         </Button>
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold">{inquiry.business_name}</h1>
-          <p className="text-sm text-muted-foreground">{formatDate(inquiry.created_at)}</p>
+          <p className="text-sm text-muted-foreground">{formatDate(inquiry.created_at, i18n.language)}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
@@ -131,18 +120,18 @@ export default function AdminB2BDetail() {
             onClick={() => handleStatusChange('contacted')}
           >
             <UserCheck className="h-4 w-4" />
-            Marquer contacté
+            {t('adminB2b.detail.markContacted')}
           </Button>
           <Button size="sm" variant="outline" className="gap-1.5" asChild>
             <a href={`mailto:${inquiry.email}`}>
               <Mail className="h-4 w-4" />
-              Envoyer email
+              {t('adminB2b.detail.sendEmail')}
             </a>
           </Button>
           <Button size="sm" variant="outline" className="gap-1.5" asChild>
             <a href={`tel:${inquiry.phone}`}>
               <Phone className="h-4 w-4" />
-              Appeler
+              {t('adminB2b.detail.call')}
             </a>
           </Button>
           <Select value={inquiry.status} onValueChange={handleStatusChange} disabled={saving}>
@@ -150,8 +139,8 @@ export default function AdminB2BDetail() {
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(STATUS_LABELS).map(([v, l]) => (
-                <SelectItem key={v} value={v}>{l}</SelectItem>
+              {STATUS_KEYS.map(v => (
+                <SelectItem key={v} value={v}>{t(`adminB2b.status.${v}`)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
@@ -162,16 +151,16 @@ export default function AdminB2BDetail() {
         {/* Gauche — Entreprise + Contact */}
         <div className="space-y-4">
           <div className="rounded-lg border p-5 space-y-2.5">
-            <h2 className="font-semibold border-b pb-2 mb-3">Entreprise</h2>
-            <InfoRow label="Nom" value={inquiry.business_name} />
-            <InfoRow label="Type" value={BUSINESS_TYPE_LABELS[inquiry.business_type] ?? inquiry.business_type} />
-            <InfoRow label="Volume estimé" value={inquiry.estimated_volume} />
+            <h2 className="font-semibold border-b pb-2 mb-3">{t('adminB2b.detail.company')}</h2>
+            <InfoRow label={t('adminB2b.detail.name')} value={inquiry.business_name} />
+            <InfoRow label={t('adminB2b.detail.type')} value={t(`adminB2b.businessType.${inquiry.business_type}`, { defaultValue: inquiry.business_type })} />
+            <InfoRow label={t('adminB2b.detail.estimatedVolume')} value={inquiry.estimated_volume} />
           </div>
           <div className="rounded-lg border p-5 space-y-2.5">
-            <h2 className="font-semibold border-b pb-2 mb-3">Contact</h2>
-            <InfoRow label="Nom" value={inquiry.contact_name} />
-            <InfoRow label="Email" value={inquiry.email} />
-            <InfoRow label="Téléphone" value={inquiry.phone} />
+            <h2 className="font-semibold border-b pb-2 mb-3">{t('adminB2b.detail.contact')}</h2>
+            <InfoRow label={t('adminB2b.detail.name')} value={inquiry.contact_name} />
+            <InfoRow label={t('adminB2b.detail.email')} value={inquiry.email} />
+            <InfoRow label={t('adminB2b.detail.phone')} value={inquiry.phone} />
           </div>
         </div>
 
@@ -179,7 +168,7 @@ export default function AdminB2BDetail() {
         <div className="space-y-4">
           {varieties.length > 0 && (
             <div className="rounded-lg border p-5">
-              <h2 className="font-semibold border-b pb-2 mb-3">Variétés intéressées</h2>
+              <h2 className="font-semibold border-b pb-2 mb-3">{t('adminB2b.detail.varietiesInterested')}</h2>
               <div className="flex flex-wrap gap-2">
                 {varieties.map((v, i) => (
                   <span
@@ -195,7 +184,7 @@ export default function AdminB2BDetail() {
             </div>
           )}
           <div className="rounded-lg border p-5">
-            <h2 className="font-semibold border-b pb-2 mb-3">Message</h2>
+            <h2 className="font-semibold border-b pb-2 mb-3">{t('adminB2b.detail.message')}</h2>
             <p className="text-sm leading-relaxed whitespace-pre-wrap text-muted-foreground">
               {inquiry.message || '—'}
             </p>
@@ -204,13 +193,13 @@ export default function AdminB2BDetail() {
       </div>
 
       <div className="mt-4 flex items-center gap-2">
-        <span className="text-sm text-muted-foreground">Statut actuel :</span>
+        <span className="text-sm text-muted-foreground">{t('adminB2b.detail.currentStatus')}</span>
         <span
           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${
             STATUS_COLORS[inquiry.status] ?? 'bg-muted text-muted-foreground border-border'
           }`}
         >
-          {STATUS_LABELS[inquiry.status] ?? inquiry.status}
+          {t(`adminB2b.status.${inquiry.status}`, { defaultValue: inquiry.status })}
         </span>
       </div>
     </div>

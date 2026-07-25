@@ -188,7 +188,7 @@ export default function Login() {
                   </div>
                   <p className="text-xs text-zinc-500 -mt-2">{t('login.resetHint')}</p>
                   <Field label="Email" icon={Mail}>
-                    <Input type="email" placeholder="your@email.com" value={forgotEmail}
+                    <Input type="email" placeholder={t('login.emailPlaceholder')} value={forgotEmail}
                       onChange={e => setForgotEmail(e.target.value)}
                       autoComplete="email" className="pl-9" required />
                   </Field>
@@ -228,12 +228,12 @@ export default function Login() {
             ) : (
               <form onSubmit={handleRegister} className="flex flex-col gap-4">
                 <Field label={t('login.fullName')} icon={User} error={regErrors.full_name}>
-                  <Input placeholder="John Doe" value={regForm.full_name}
+                  <Input placeholder={t('login.fullNamePlaceholder')} value={regForm.full_name}
                     onChange={e => { setRegForm(f => ({ ...f, full_name: e.target.value })); setRegErrors(er => ({ ...er, full_name: undefined })) }}
                     autoComplete="name" className={`pl-9 ${regErrors.full_name ? 'border-destructive' : ''}`} />
                 </Field>
                 <Field label={t('login.phone')} icon={Phone} error={regErrors.phone}>
-                  <Input type="tel" placeholder="52 345 678" value={regForm.phone}
+                  <Input type="tel" placeholder={t('login.phonePlaceholder')} value={regForm.phone}
                     onChange={e => { setRegForm(f => ({ ...f, phone: e.target.value })); setRegErrors(er => ({ ...er, phone: undefined })) }}
                     autoComplete="tel" className={`pl-9 ${regErrors.phone ? 'border-destructive' : ''}`} />
                 </Field>
@@ -245,7 +245,7 @@ export default function Login() {
                 <Field label={t('login.passwordField')} error={regErrors.password}>
                   <PasswordInput value={regForm.password}
                     onChange={e => { setRegForm(f => ({ ...f, password: e.target.value })); setRegErrors(er => ({ ...er, password: undefined })) }}
-                    placeholder="Min. 8 chars" autoComplete="new-password" />
+                    placeholder={t('login.passwordPlaceholder')} autoComplete="new-password" />
                 </Field>
                 <Field label={t('login.confirm')} error={regErrors.confirm}>
                   <PasswordInput value={regForm.confirm}

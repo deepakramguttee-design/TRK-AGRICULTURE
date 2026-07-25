@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -17,6 +18,7 @@ const CATEGORY_EMOJI = {
 const CATEGORIES = ['epices', 'salades', 'bredes', 'legumes', 'melons']
 
 export default function AdminProductsList() {
+  const { t } = useTranslation()
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
@@ -31,7 +33,7 @@ export default function AdminProductsList() {
       .select('id, sku, name_fr, category, price_mur, unit, image_url, is_active')
       .order('category')
       .order('name_fr')
-    if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
+    if (error) toast({ title: t('adminCatalog.loadError'), description: error.message, variant: 'destructive' })
     else setProducts(data ?? [])
     setLoading(false)
   }
@@ -45,7 +47,7 @@ export default function AdminProductsList() {
       .update({ is_active: !product.is_active })
       .eq('sku', product.sku)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.error'), description: error.message, variant: 'destructive' })
     } else {
       setProducts(prev => prev.map(p => p.sku === product.sku ? { ...p, is_active: !p.is_active } : p))
     }
@@ -60,9 +62,9 @@ export default function AdminProductsList() {
       .update({ is_active: false })
       .eq('sku', deleteTarget.sku)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.error'), description: error.message, variant: 'destructive' })
     } else {
-      toast({ title: 'Produit désactivé' })
+      toast({ title: t('adminCatalog.productDeactivated') })
       setProducts(prev => prev.map(p => p.sku === deleteTarget.sku ? { ...p, is_active: false } : p))
     }
     setDeleting(false)
@@ -88,13 +90,13 @@ export default function AdminProductsList() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Produits</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">{products.length} produits au total</p>
+          <h1 className="text-2xl font-bold">{t('adminCatalog.title')}</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{t('adminCatalog.totalCount', { count: products.length })}</p>
         </div>
         <Button asChild>
           <Link to="/admin/produits/nouveau">
             <Plus className="h-4 w-4 mr-1.5" />
-            Nouveau produit
+            {t('adminCatalog.newProduct')}
           </Link>
         </Button>
       </div>
@@ -102,7 +104,7 @@ export default function AdminProductsList() {
       {/* Filters */}
       <div className="flex flex-wrap gap-2 mb-4">
         <Input
-          placeholder="Rechercher par nom ou SKU…"
+          placeholder={t('adminCatalog.searchPlaceholder')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="max-w-56"
@@ -112,7 +114,7 @@ export default function AdminProductsList() {
           variant={!filterCat ? 'default' : 'outline'}
           onClick={() => setFilterCat('')}
         >
-          Toutes
+          {t('adminCatalog.all')}
         </Button>
         {CATEGORIES.map(cat => (
           <Button
@@ -132,13 +134,13 @@ export default function AdminProductsList() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-muted/50">
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">SKU</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Nom FR</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Catégorie</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">Prix Rs</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Image</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">Actif</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">Actions</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminCatalog.col.sku')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminCatalog.col.nameFr')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminCatalog.col.category')}</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">{t('adminCatalog.col.priceRs')}</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">{t('adminCatalog.col.image')}</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground">{t('adminCatalog.col.active')}</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted-foreground">{t('adminCatalog.col.actions')}</th>
             </tr>
           </thead>
           <tbody>
@@ -198,7 +200,7 @@ export default function AdminProductsList() {
                     <Button size="sm" variant="ghost" asChild>
                       <Link to={`/admin/produits/${product.sku}/editer`}>
                         <Pencil className="h-3.5 w-3.5 mr-1" />
-                        Éditer
+                        {t('adminCatalog.edit')}
                       </Link>
                     </Button>
                     <Button
@@ -208,7 +210,7 @@ export default function AdminProductsList() {
                       onClick={() => setDeleteTarget(product)}
                     >
                       <Trash2 className="h-3.5 w-3.5 mr-1" />
-                      Supprimer
+                      {t('adminCatalog.delete')}
                     </Button>
                   </div>
                 </td>
@@ -217,7 +219,7 @@ export default function AdminProductsList() {
           </tbody>
         </table>
         {filtered.length === 0 && (
-          <p className="text-center text-muted-foreground py-8 text-sm">Aucun produit trouvé</p>
+          <p className="text-center text-muted-foreground py-8 text-sm">{t('adminCatalog.empty')}</p>
         )}
       </div>
 
@@ -225,19 +227,18 @@ export default function AdminProductsList() {
       <Dialog open={!!deleteTarget} onOpenChange={open => !open && setDeleteTarget(null)}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Désactiver ce produit ?</DialogTitle>
+            <DialogTitle>{t('adminCatalog.deactivateTitle')}</DialogTitle>
             <DialogDescription>
-              Êtes-vous sûr ? Cette action est irréversible.{' '}
-              <strong>{deleteTarget?.name_fr}</strong> sera masqué du catalogue public mais conservé en base de données.
+              {t('adminCatalog.deactivateDesc', { name: deleteTarget?.name_fr })}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Annuler</Button>
+              <Button variant="outline">{t('adminCatalog.cancel')}</Button>
             </DialogClose>
             <Button variant="destructive" onClick={handleDelete} disabled={deleting}>
               {deleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Désactiver
+              {t('adminCatalog.deactivate')}
             </Button>
           </DialogFooter>
         </DialogContent>

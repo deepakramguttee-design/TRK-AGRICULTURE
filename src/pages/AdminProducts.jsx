@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { Upload, Image as ImageIcon, Loader2, ShieldAlert, Trash2, Pencil } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
@@ -13,9 +14,9 @@ const CATEGORY_EMOJI = {
 }
 
 const STATUS_OPTIONS = [
-  { value: 'available',    label: 'Disponible',    className: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
-  { value: 'in_production',label: 'En production', className: 'text-amber-700  bg-amber-50  border-amber-200'  },
-  { value: 'coming_soon',  label: 'Bientôt',       className: 'text-blue-700   bg-blue-50   border-blue-200'   },
+  { value: 'available',     className: 'text-emerald-700 bg-emerald-50 border-emerald-200' },
+  { value: 'in_production', className: 'text-amber-700  bg-amber-50  border-amber-200'  },
+  { value: 'coming_soon',   className: 'text-blue-700   bg-blue-50   border-blue-200'   },
 ]
 
 async function resizeToMax(file, maxWidth = 1200) {
@@ -41,6 +42,7 @@ async function resizeToMax(file, maxWidth = 1200) {
 }
 
 export default function AdminProducts() {
+  const { t } = useTranslation()
   const { user } = useAuth()
   const navigate = useNavigate()
   const fileInputRefs = useRef({})
@@ -67,16 +69,16 @@ export default function AdminProducts() {
       .order('category')
       .order('name_fr')
       .then(({ data, error }) => {
-        if (error) toast({ title: 'Erreur chargement', description: error.message, variant: 'destructive' })
+        if (error) toast({ title: t('adminCatalog.legacy.loadError'), description: error.message, variant: 'destructive' })
         else setProducts(data || [])
         setLoading(false)
       })
-  }, [user, navigate])
+  }, [user, navigate, t])
 
   async function handleUpload(product, file) {
     if (!file) return
     if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
-      toast({ title: 'Format non supporté', description: 'Accepté : JPG, PNG, WebP', variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.formatUnsupported'), description: t('adminCatalog.legacy.formatAccepted'), variant: 'destructive' })
       return
     }
     setUploading(product.sku)
@@ -103,16 +105,16 @@ export default function AdminProducts() {
       setProducts(prev =>
         prev.map(p => p.sku === product.sku ? { ...p, image_url: publicUrl } : p)
       )
-      toast({ title: 'Photo mise à jour ✓', description: product.name_fr })
+      toast({ title: t('adminCatalog.legacy.photoUpdated'), description: product.name_fr })
     } catch (e) {
-      toast({ title: 'Erreur upload', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.uploadError'), description: e.message, variant: 'destructive' })
     } finally {
       setUploading(null)
     }
   }
 
   async function handleDeleteImage(product) {
-    if (!window.confirm(`Supprimer la photo de "${product.name_fr}" ?`)) return
+    if (!window.confirm(t('adminCatalog.legacy.confirmDeletePhoto', { name: product.name_fr }))) return
     setDeleting(product.sku)
     try {
       // Remove from Storage only if it's a Supabase Storage URL
@@ -133,9 +135,9 @@ export default function AdminProducts() {
       setProducts(prev =>
         prev.map(p => p.sku === product.sku ? { ...p, image_url: null } : p)
       )
-      toast({ title: 'Photo supprimée', description: product.name_fr })
+      toast({ title: t('adminCatalog.legacy.photoDeleted'), description: product.name_fr })
     } catch (e) {
-      toast({ title: 'Erreur suppression', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.deleteError'), description: e.message, variant: 'destructive' })
     } finally {
       setDeleting(null)
     }
@@ -144,17 +146,17 @@ export default function AdminProducts() {
   async function handleSaveProduct() {
     if (!editingProduct) return
     const { sku, name_fr, name_en, description_fr, description_en } = editingProduct
-    if (!name_fr.trim()) { toast({ title: 'Nom FR requis', variant: 'destructive' }); return }
+    if (!name_fr.trim()) { toast({ title: t('adminCatalog.legacy.nameFrRequired'), variant: 'destructive' }); return }
     const patch = { name_fr: name_fr.trim(), name_en: name_en?.trim() || null, description_fr: description_fr?.trim() || null, description_en: description_en?.trim() || null }
     setSavingProduct(true)
     try {
       const { error } = await supabase.from('products').update(patch).eq('sku', sku)
       if (error) throw error
       setProducts(prev => prev.map(p => p.sku === sku ? { ...p, ...patch } : p))
-      toast({ title: 'Produit mis à jour ✓', description: patch.name_fr })
+      toast({ title: t('adminCatalog.legacy.productUpdated'), description: patch.name_fr })
       setEditingProduct(null)
     } catch (e) {
-      toast({ title: 'Erreur', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.error'), description: e.message, variant: 'destructive' })
     } finally {
       setSavingProduct(false)
     }
@@ -172,7 +174,7 @@ export default function AdminProducts() {
   async function savePrice(product) {
     const parsed = parseFloat(editingPrice.value)
     if (isNaN(parsed) || parsed < 0) {
-      toast({ title: 'Prix invalide', description: 'Entrez un nombre positif', variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.priceInvalid'), description: t('adminCatalog.legacy.priceInvalidDesc'), variant: 'destructive' })
       return
     }
     const rounded = Math.round(parsed * 100) / 100
@@ -189,9 +191,9 @@ export default function AdminProducts() {
       setProducts(prev =>
         prev.map(p => p.sku === product.sku ? { ...p, price_mur: rounded } : p)
       )
-      toast({ title: 'Prix mis à jour ✓', description: `${product.name_fr} → Rs ${rounded}` })
+      toast({ title: t('adminCatalog.legacy.priceUpdated'), description: `${product.name_fr} → Rs ${rounded}` })
     } catch (e) {
-      toast({ title: 'Erreur prix', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.priceError'), description: e.message, variant: 'destructive' })
     } finally {
       setSavingPrice(null)
     }
@@ -204,10 +206,10 @@ export default function AdminProducts() {
       const { error } = await supabase.from('products').update({ status: newStatus }).eq('sku', product.sku)
       if (error) throw error
       setProducts(prev => prev.map(p => p.sku === product.sku ? { ...p, status: newStatus } : p))
-      const label = STATUS_OPTIONS.find(o => o.value === newStatus)?.label
-      toast({ title: 'Statut mis à jour ✓', description: `${product.name_fr} → ${label}` })
+      const label = t(`adminCatalog.status.${newStatus}`, { defaultValue: newStatus })
+      toast({ title: t('adminCatalog.legacy.statusUpdated'), description: `${product.name_fr} → ${label}` })
     } catch (e) {
-      toast({ title: 'Erreur statut', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.statusError'), description: e.message, variant: 'destructive' })
     } finally {
       setSavingStatus(null)
     }
@@ -220,9 +222,9 @@ export default function AdminProducts() {
       const { error } = await supabase.from('products').update({ is_active: next }).eq('sku', product.sku)
       if (error) throw error
       setProducts(prev => prev.map(p => p.sku === product.sku ? { ...p, is_active: next } : p))
-      toast({ title: next ? 'Produit activé ✓' : 'Produit masqué', description: product.name_fr })
+      toast({ title: next ? t('adminCatalog.legacy.productActivated') : t('adminCatalog.legacy.productHidden'), description: product.name_fr })
     } catch (e) {
-      toast({ title: 'Erreur activation', description: e.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.legacy.activationError'), description: e.message, variant: 'destructive' })
     } finally {
       setSavingActive(null)
     }
@@ -238,7 +240,7 @@ export default function AdminProducts() {
     return (
       <div className="container mx-auto px-4 py-24 flex items-center justify-center gap-2 text-muted-foreground">
         <Loader2 className="h-5 w-5 animate-spin" />
-        Chargement…
+        {t('adminCampaigns.loading')}
       </div>
     )
   }
@@ -248,9 +250,9 @@ export default function AdminProducts() {
       <div className="flex items-center gap-3 mb-6">
         <ShieldAlert className="h-5 w-5 text-primary" />
         <div>
-          <h1 className="text-2xl font-bold">Admin — Produits</h1>
+          <h1 className="text-2xl font-bold">{t('adminCatalog.legacy.title')}</h1>
           <p className="text-muted-foreground text-sm mt-0.5">
-            {products.length} produits · Cliquez sur un nom pour modifier · Cliquez sur un prix pour modifier · Glissez une image pour l'uploader
+            {t('adminCatalog.legacy.subtitle', { count: products.length })}
           </p>
         </div>
       </div>
@@ -259,14 +261,14 @@ export default function AdminProducts() {
         <table className="w-full text-sm">
           <thead>
             <tr className="border-b bg-muted/50">
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-28">SKU</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">Nom</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">Catégorie</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-24">Prix Rs</th>
-              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">Statut</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-16">Actif</th>
-              <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-20">Photo</th>
-              <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-40">Action</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-28">{t('adminCatalog.legacy.col.sku')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground">{t('adminCatalog.legacy.col.name')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">{t('adminCatalog.legacy.col.category')}</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-24">{t('adminCatalog.legacy.col.priceRs')}</th>
+              <th className="px-4 py-3 text-left font-semibold text-muted-foreground w-36">{t('adminCatalog.legacy.col.status')}</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-16">{t('adminCatalog.legacy.col.active')}</th>
+              <th className="px-4 py-3 text-center font-semibold text-muted-foreground w-20">{t('adminCatalog.legacy.col.photo')}</th>
+              <th className="px-4 py-3 text-right font-semibold text-muted-foreground w-40">{t('adminCatalog.legacy.col.action')}</th>
             </tr>
           </thead>
           <tbody>
@@ -305,7 +307,7 @@ export default function AdminProducts() {
                     <button
                       className="group flex items-center gap-1.5 text-left font-medium hover:text-primary transition-colors"
                       onClick={() => setEditingProduct({ ...product })}
-                      title="Modifier nom et description"
+                      title={t('adminCatalog.legacy.editNameTitle')}
                     >
                       {product.name_fr}
                       <Pencil className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
@@ -344,7 +346,7 @@ export default function AdminProducts() {
                         className="group inline-flex items-center justify-end gap-1.5 text-right w-full hover:text-primary transition-colors"
                         onClick={() => startEditPrice(product)}
                         disabled={isSavingPrice}
-                        title="Cliquer pour modifier le prix"
+                        title={t('adminCatalog.legacy.priceEditTitle')}
                       >
                         {isSavingPrice
                           ? <Loader2 className="h-3 w-3 animate-spin text-muted-foreground" />
@@ -375,7 +377,7 @@ export default function AdminProducts() {
                         }`}
                       >
                         {STATUS_OPTIONS.map(o => (
-                          <option key={o.value} value={o.value}>{o.label}</option>
+                          <option key={o.value} value={o.value}>{t(`adminCatalog.status.${o.value}`)}</option>
                         ))}
                       </select>
                     </div>
@@ -388,7 +390,7 @@ export default function AdminProducts() {
                     ) : (
                       <button
                         onClick={() => handleToggleActive(product)}
-                        title={product.is_active ? 'Cliquer pour masquer' : 'Cliquer pour activer'}
+                        title={product.is_active ? t('adminCatalog.legacy.hide') : t('adminCatalog.legacy.activateHint')}
                         className={`w-10 h-5 rounded-full transition-colors relative ${
                           product.is_active ? 'bg-emerald-500' : 'bg-muted'
                         }`}
@@ -437,7 +439,7 @@ export default function AdminProducts() {
                           ? <Loader2 className="h-3 w-3 animate-spin" />
                           : <Upload className="h-3 w-3" />
                         }
-                        {isUploading ? 'Upload…' : product.image_url ? 'Remplacer' : 'Upload photo'}
+                        {isUploading ? t('adminCatalog.legacy.uploading') : product.image_url ? t('adminCatalog.legacy.replace') : t('adminCatalog.legacy.uploadPhoto')}
                       </Button>
                       {product.image_url && (
                         <Button
@@ -451,7 +453,7 @@ export default function AdminProducts() {
                             ? <Loader2 className="h-3 w-3 animate-spin" />
                             : <Trash2 className="h-3 w-3" />
                           }
-                          {isDeleting ? '…' : 'Supprimer'}
+                          {isDeleting ? '…' : t('adminCatalog.legacy.delete')}
                         </Button>
                       )}
                     </div>
@@ -467,13 +469,13 @@ export default function AdminProducts() {
       <Dialog open={!!editingProduct} onOpenChange={open => { if (!open) setEditingProduct(null) }}>
         <DialogContent className="max-w-lg">
           <DialogHeader>
-            <DialogTitle>Modifier le produit</DialogTitle>
+            <DialogTitle>{t('adminCatalog.legacy.editTitle')}</DialogTitle>
           </DialogHeader>
           {editingProduct && (
             <div className="grid gap-4 py-2">
               <div className="grid grid-cols-2 gap-3">
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">Nom FR *</label>
+                  <label className="text-xs font-medium text-muted-foreground">{t('adminCatalog.form.nameFrLabel')}</label>
                   <input
                     className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background"
                     value={editingProduct.name_fr || ''}
@@ -482,7 +484,7 @@ export default function AdminProducts() {
                   />
                 </div>
                 <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-muted-foreground">Nom EN</label>
+                  <label className="text-xs font-medium text-muted-foreground">{t('adminCatalog.form.nameEnLabel')}</label>
                   <input
                     className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background"
                     value={editingProduct.name_en || ''}
@@ -491,7 +493,7 @@ export default function AdminProducts() {
                 </div>
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Description FR</label>
+                <label className="text-xs font-medium text-muted-foreground">{t('adminCatalog.detail.descriptionFr')}</label>
                 <textarea
                   rows={3}
                   className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background resize-none"
@@ -500,7 +502,7 @@ export default function AdminProducts() {
                 />
               </div>
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-muted-foreground">Description EN</label>
+                <label className="text-xs font-medium text-muted-foreground">{t('adminCatalog.detail.descriptionEn')}</label>
                 <textarea
                   rows={3}
                   className="border rounded px-3 py-1.5 text-sm focus:outline-none focus:ring-1 focus:ring-primary bg-background resize-none"
@@ -512,11 +514,11 @@ export default function AdminProducts() {
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline" size="sm">Annuler</Button>
+              <Button variant="outline" size="sm">{t('adminCatalog.form.cancel')}</Button>
             </DialogClose>
             <Button size="sm" disabled={savingProduct} onClick={handleSaveProduct}>
               {savingProduct ? <Loader2 className="h-3 w-3 animate-spin mr-1.5" /> : null}
-              Enregistrer
+              {t('adminCatalog.legacy.save')}
             </Button>
           </DialogFooter>
         </DialogContent>

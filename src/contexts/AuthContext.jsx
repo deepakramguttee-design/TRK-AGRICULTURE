@@ -1,7 +1,27 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
+import i18n from '@/lib/i18n'
 
 const AuthContext = createContext(null)
+
+// customers.preferred_lang ('kr') ↔ codes i18n ('mfe')
+const DB_TO_I18N = { fr: 'fr', en: 'en', kr: 'mfe' }
+
+// À la connexion, on applique la langue préférée enregistrée sur la fiche
+// client (persistance du choix de langue après reconnexion).
+async function applyPreferredLang(userId) {
+  const { data } = await supabase
+    .from('customers')
+    .select('preferred_lang')
+    .eq('user_id', userId)
+    .single()
+  const lang = DB_TO_I18N[data?.preferred_lang]
+  if (lang && lang !== i18n.language) {
+    i18n.changeLanguage(lang)
+    try { localStorage.setItem('trk-lang', lang) } catch { /* stockage indisponible */ }
+    document.documentElement.lang = lang
+  }
+}
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
@@ -25,11 +45,15 @@ export function AuthProvider({ children }) {
       setLoading(false)
     })
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       const u = session?.user ?? null
       setUser(u)
-      if (u) fetchProfile(u.id)
-      else setProfile(null)
+      if (u) {
+        fetchProfile(u.id)
+        if (event === 'SIGNED_IN') applyPreferredLang(u.id)
+      } else {
+        setProfile(null)
+      }
     })
 
     return () => subscription.unsubscribe()

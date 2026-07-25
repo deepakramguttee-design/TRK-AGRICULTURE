@@ -1,4 +1,30 @@
 {
+  "labels": {
+    "payment": {
+      "cod": "Peye kan ou gagn komann",
+      "codShort": "COD",
+      "juice": "MCB Juice",
+      "mips": "Kart labank"
+    },
+    "paymentStatus": {
+      "pending": "Pe atann",
+      "paid": "Peye",
+      "failed": "Pa'nn marse"
+    },
+    "fulfillment": {
+      "pickup": "Retre lor plas",
+      "delivery": "Livrezon"
+    }
+  },
+  "unsubscribe": {
+    "loading": "Nou pe tret ou demann dezabonman…",
+    "successTitle": "Ou finn dezabone",
+    "successBody": "Ou pou nepli gagn SMS ou email marketing TRK Agriculture. Ou bann komann pa afekte.",
+    "errorTitle": "Lien pa valab",
+    "invalidBody": "Sa lien dezabonman-la pa valab ouswa finn expire.",
+    "errorBody": "Ti ena enn problem. Silvouple reseye plitar.",
+    "backHome": "Retour lakaz"
+  },
   "nav": {
     "catalog": "Katalog",
     "process": "Nou Fason",
@@ -46,20 +72,64 @@
       "tag": "Nou Angajman",
       "title": "Pourquoi Choisir Kailash Farming ?",
       "items": [
-        { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
-        { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
-        { "title": "Kalite Garanti", "desc": "Seleksyon rigurez a chak rekolt. San prodwi chimi initil." },
-        { "title": "Touzour Saison", "desc": "Nou katalog evolu avek sezon pou donn ou sa ki pi bon." }
+        {
+          "title": "Kiltive Isi",
+          "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon."
+        },
+        {
+          "title": "Livrezon Rapid",
+          "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt."
+        },
+        {
+          "title": "Kalite Garanti",
+          "desc": "Seleksyon rigurez a chak rekolt. San prodwi chimi initil."
+        },
+        {
+          "title": "Touzour Saison",
+          "desc": "Nou katalog evolu avek sezon pou donn ou sa ki pi bon."
+        }
       ]
     },
     "seasons": {
       "tag": "Kalanndriye Rekolt",
       "title": "Nou Prodwi, Tou Long Sezon",
       "note": "* Indikatif. Katalog mis azour selon rekolt disponib.",
-      "summer":  { "tag": "☀️ Ete",      "label": "Zan–Mar", "items": ["Bred Mouroum", "Leti", "Sitronnel"] },
-      "cyclone": { "tag": "🌧 Siklonn",  "label": "Avr–Zin", "items": ["Epis Fort", "Zerb Aromatik", "Kreso"] },
-      "winter":  { "tag": "💨 Liver",    "label": "Ziy–Sep", "items": ["Bred Sousou", "Leti Boston", "Tim"] },
-      "spring":  { "tag": "🌱 Prentan",  "label": "Okt–Des", "items": ["Salade Varye", "Tomat Serize", "Bazlik"] }
+      "summer": {
+        "tag": "☀️ Ete",
+        "label": "Zan–Mar",
+        "items": [
+          "Bred Mouroum",
+          "Leti",
+          "Sitronnel"
+        ]
+      },
+      "cyclone": {
+        "tag": "🌧 Siklonn",
+        "label": "Avr–Zin",
+        "items": [
+          "Epis Fort",
+          "Zerb Aromatik",
+          "Kreso"
+        ]
+      },
+      "winter": {
+        "tag": "💨 Liver",
+        "label": "Ziy–Sep",
+        "items": [
+          "Bred Sousou",
+          "Leti Boston",
+          "Tim"
+        ]
+      },
+      "spring": {
+        "tag": "🌱 Prentan",
+        "label": "Okt–Des",
+        "items": [
+          "Salade Varye",
+          "Tomat Serize",
+          "Bazlik"
+        ]
+      }
     },
     "cta": {
       "title": "Fresher Livre Lakaz",
@@ -94,6 +164,13 @@
       "available": "Disponib",
       "in_production": "An Produksyon",
       "coming_soon": "Byento Disponib"
+    },
+    "heroKicker": "Direk depi nou karo",
+    "productsAvailable": "prodwi disponib",
+    "sort": {
+      "default": "Triye",
+      "priceAsc": "Pri : ba → o",
+      "priceDesc": "Pri : o → ba"
     }
   },
   "product": {
@@ -123,7 +200,10 @@
     "freeDeliveryReached": "Livrezon Gratis 🎉",
     "total": "Total",
     "checkout": "Konfirme Komand",
-    "addToCart": "Azout {{name}} dan panier"
+    "addToCart": "Azout {{name}} dan panier",
+    "decrease": "Diminie",
+    "increase": "Ogmante",
+    "remove": "Tire"
   },
   "checkout": {
     "title": "Finaliz Komand",
@@ -208,7 +288,10 @@
       "notice": "Ou komand pou rested dan atant ziska nou team valide peman.",
       "copy": "Kopye",
       "copied": "Kopye !"
-    }
+    },
+    "errorTitle": "Erer",
+    "orderError": "Ena enn erer avek ou komann",
+    "emailPlaceholder": "email@egzanp.mu"
   },
   "confirmation": {
     "title": "Komand Konfirme !",
@@ -236,7 +319,11 @@
       "company": "Lantrepriz",
       "edit": "Modifye",
       "save": "Anrezistre",
-      "saved": "Profil Mis Azour"
+      "saved": "Profil Mis Azour",
+      "address": "Adres livrezon",
+      "addressPlaceholder": "Larout, vilaz",
+      "district": "Distrik",
+      "districtPlaceholder": "Eg : Pamplemousses"
     },
     "orders": {
       "title": "Mo Komand",
@@ -245,7 +332,9 @@
       "status": {
         "pending": "An Atant",
         "confirmed": "Konfirme",
+        "prepared": "Prepare",
         "preparing": "An Preparasyon",
+        "shipped": "Lor Larout",
         "out_for_delivery": "An Livrezon",
         "delivered": "Livre",
         "cancelled": "Anile"
@@ -273,9 +362,18 @@
     },
     "advantages": {
       "title": "Pourquoi Choisir Kailash Farming ?",
-      "delivery": { "title": "Livrezon Ebdomader Programa", "desc": "Planifye ou livrezon selon ou ritm — chak semenn, zour ek ler ki konvyen ou." },
-      "pricing": { "title": "Pri B2B Degressif lor Volim", "desc": "Plis ou komand, plis ou pri bese. Devi personalize selon ou volim mensyel." },
-      "variety": { "title": "Varyete lor Komand Posib", "desc": "Bizin enn varyete spesifik ? Nou kapav kultive lor komand pou satisfer ou bezwen." }
+      "delivery": {
+        "title": "Livrezon Ebdomader Programa",
+        "desc": "Planifye ou livrezon selon ou ritm — chak semenn, zour ek ler ki konvyen ou."
+      },
+      "pricing": {
+        "title": "Pri B2B Degressif lor Volim",
+        "desc": "Plis ou komand, plis ou pri bese. Devi personalize selon ou volim mensyel."
+      },
+      "variety": {
+        "title": "Varyete lor Komand Posib",
+        "desc": "Bizin enn varyete spesifik ? Nou kapav kultive lor komand pou satisfer ou bezwen."
+      }
     },
     "clients": {
       "title": "Zot Fer Konfians Nou",
@@ -313,6 +411,16 @@
         "20_50": "20 a 50 Plato / Mwa",
         "gt50": "Plis 50 Plato / Mwa",
         "unknown": "Mo Pa Kone Ankor"
+      },
+      "companyNamePlaceholder": "Eg : Restoran Le Jardin",
+      "emailPlaceholder": "kontak@ou-konpani.mu",
+      "phonePlaceholder": "+230 5 XXX XXXX",
+      "categoryLabels": {
+        "epices": "Zepis & Aromat",
+        "salades": "Salad",
+        "bredes": "Bred",
+        "legumes": "Legim varye",
+        "melons": "Melon & Melon dodo"
       }
     },
     "success": {
@@ -357,12 +465,30 @@
     "cucu98Desc": "Alveyol pli gran pou kukurbitase : melon, pastek, konkombre",
     "stepsTitle": "6 Etap Produksyon",
     "steps": {
-      "substrat": { "title": "Preparasyon Substrat", "desc": "Seleksyon ek melanz tourb, perlit ek konpos orgenik adapte a chak famiy plant." },
-      "semis":    { "title": "Semis", "desc": "Enn grenn par alveyol, a profonder optimal selon espess." },
-      "germination": { "title": "Zerminasyon", "desc": "Dan kondisyon kontrole, grenn leve dan 3 a 14 zur selon varyete." },
-      "croissance":  { "title": "Kwasans dan Pepinyer", "desc": "Plantiil gran sou labri avek arozaz regulye." },
-      "durcissement":{ "title": "Dirsisement", "desc": "Avan vant, plant expose progressivman kondisyon exteyer." },
-      "vente":       { "title": "Pre pou Vann", "desc": "Plant vigorye, bien anrasine, pre pou repiкe dan ou zardin." }
+      "substrat": {
+        "title": "Preparasyon Substrat",
+        "desc": "Seleksyon ek melanz tourb, perlit ek konpos orgenik adapte a chak famiy plant."
+      },
+      "semis": {
+        "title": "Semis",
+        "desc": "Enn grenn par alveyol, a profonder optimal selon espess."
+      },
+      "germination": {
+        "title": "Zerminasyon",
+        "desc": "Dan kondisyon kontrole, grenn leve dan 3 a 14 zur selon varyete."
+      },
+      "croissance": {
+        "title": "Kwasans dan Pepinyer",
+        "desc": "Plantiil gran sou labri avek arozaz regulye."
+      },
+      "durcissement": {
+        "title": "Dirsisement",
+        "desc": "Avan vant, plant expose progressivman kondisyon exteyer."
+      },
+      "vente": {
+        "title": "Pre pou Vann",
+        "desc": "Plant vigorye, bien anrasine, pre pou repiкe dan ou zardin."
+      }
     },
     "durationsTitle": "Dire Produksyon par Kategori",
     "durationsNote": "Dire indikatif dan Moris. Sezon sho (nov – avr) akselere kwasans.",
@@ -374,11 +500,36 @@
       "examples": "Exanp Varyete"
     },
     "durations": {
-      "epices":  { "germination": "5–10 z", "nursery": "3–4 sem", "total": "4–6 sem", "examples": "Bazlik, Tim, Koriandr, Sitronnel" },
-      "salades": { "germination": "3–7 z",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Leti, Roket, Mesklun" },
-      "bredes":  { "germination": "5–10 z", "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Bred Mouroum, Bred Tazard, Song" },
-      "legumes": { "germination": "7–14 z", "nursery": "4–6 sem", "total": "5–8 sem", "examples": "Tomat, Poivron, Brinzel, Sou" },
-      "melons":  { "germination": "5–7 z",  "nursery": "2–3 sem", "total": "3–4 sem", "examples": "Melon, Pastek, Konkombre, Kourgett" }
+      "epices": {
+        "germination": "5–10 z",
+        "nursery": "3–4 sem",
+        "total": "4–6 sem",
+        "examples": "Bazlik, Tim, Koriandr, Sitronnel"
+      },
+      "salades": {
+        "germination": "3–7 z",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Leti, Roket, Mesklun"
+      },
+      "bredes": {
+        "germination": "5–10 z",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Bred Mouroum, Bred Tazard, Song"
+      },
+      "legumes": {
+        "germination": "7–14 z",
+        "nursery": "4–6 sem",
+        "total": "5–8 sem",
+        "examples": "Tomat, Poivron, Brinzel, Sou"
+      },
+      "melons": {
+        "germination": "5–7 z",
+        "nursery": "2–3 sem",
+        "total": "3–4 sem",
+        "examples": "Melon, Pastek, Konkombre, Kourgett"
+      }
     },
     "ideasTitle": "Lide pou Later",
     "ideasContentTitle": "Konteni pou Devlope",
@@ -401,7 +552,20 @@
     "title": "Kalanndriye Disponibilite",
     "subtitle": "Pi bon mwa pou komand chak kategori dan Moris",
     "climateNote": "Lil Moris · Sezon Sho & Plivier : nov → avr · Sezon Fre & Sek : me → okt",
-    "months": ["Zan", "Fev", "Mar", "Avr", "Me", "Zin", "Ziy", "Out", "Sep", "Okt", "Nov", "Des"],
+    "months": [
+      "Zan",
+      "Fev",
+      "Mar",
+      "Avr",
+      "Me",
+      "Zin",
+      "Ziy",
+      "Out",
+      "Sep",
+      "Okt",
+      "Nov",
+      "Des"
+    ],
     "legend": {
       "high": "Disponibilite Konple",
       "medium": "Disponibilite Parsyel",
@@ -415,7 +579,10 @@
       "bredes": "Bred",
       "legumes": "Legim",
       "melons": "Melon & Pastek"
-    }
+    },
+    "coolSeason": "Sezon fre",
+    "hotSeason": "Sezon so",
+    "ctaTitle": "Pare pou komande ?"
   },
   "nursery": {
     "title": "Pepinyer an Direkt",
@@ -472,62 +639,8 @@
       "title": "Pre pou Plante Sa Semenn",
       "subtitle": "Sa varyete la disponib depi konn dan pepinyer.",
       "cta": "Get Tou Lo"
-    }
-  },
-  "home": {
-    "hero": {
-      "title": "Plant Fre Kiltive dan Moris",
-      "subtitle": "Komand direkteman depi produkter. Livrezon dan 24h dan tou distrikt.",
-      "cta": "Get Katalog",
-      "badge": "Agrikilti Lokal · Moris"
     },
-    "stats": {
-      "local": "Prodwi Lokal",
-      "districts": "Distrikt Livre",
-      "varieties": "Varyete Fre"
-    },
-    "why": {
-      "tag": "Nou Angajman",
-      "title": "Pourquoi Choisir Kailash Farming ?",
-      "items": [
-        { "title": "Kiltive Isi", "desc": "Nou plant pouse dan Lil Moris, rekolt le matin mem ou livrezon." },
-        { "title": "Livrezon Rapid", "desc": "Komand online, resevwar lakaz. Livrezon disponib dan 9 distrikt." },
-        { "title": "Kalite Garanti", "desc": "Seleksyon rigurez a chak rekolt. San prodwi chimi initil." },
-        { "title": "Touzour Saison", "desc": "Nou katalog evolu avek sezon pou donn ou sa ki pi bon." }
-      ]
-    },
-    "seasons": {
-      "tag": "Kalanndriye Rekolt",
-      "title": "Nou Prodwi, Tou Long Sezon",
-      "note": "* Indikatif. Katalog mis azour selon rekolt disponib.",
-      "summer":  { "tag": "☀️ Ete",      "label": "Zan–Mar", "items": ["Bred Mouroum", "Leti", "Sitronnel"] },
-      "cyclone": { "tag": "🌧 Siklonn",  "label": "Avr–Zin", "items": ["Epis Fort", "Zerb Aromatik", "Kreso"] },
-      "winter":  { "tag": "💨 Liver",    "label": "Ziy–Sep", "items": ["Bred Sousou", "Leti Boston", "Tim"] },
-      "spring":  { "tag": "🌱 Prentan",  "label": "Okt–Des", "items": ["Salade Varye", "Tomat Serize", "Bazlik"] }
-    },
-    "cta": {
-      "title": "Fresher Livre Lakaz",
-      "desc": "Komand online, resevwar ou plant fre direkteman depi nou sams. Partou dan Lil Moris."
-    },
-    "features": {
-      "b2c": { "title": "Katalog B2C", "desc": "Komand nou legim, fri ek plant aromatik fre, livre direkteman lakaz." },
-      "b2b": { "title": "Abonnman B2B", "desc": "Solisyon sur-mezir pou lotel ek restoran. Komand rekilyer, fakter ek kondisyon negosiasyon." },
-      "fresh": { "title": "Garanti Fresher 24h", "desc": "Tou nou prodwi rekolt le matin mem ek livre dan 24 zer. Fresher garanti." },
-      "cta": "Konn Plis"
-    }
-  },
-  "confirmation": {
-    "title": "Komand Konfirme !",
-    "subtitle": "Mersi pou Ou Komand",
-    "message": "Nou pou kontakte ou dan 24h pou organiz livrezon.",
-    "orderNumber": "Nimewo Komand",
-    "name": "Non",
-    "total": "Total",
-    "district": "Distrikt",
-    "backHome": "Retour Lakaz",
-    "trackOrders": "Suiv Ou Komand",
-    "createAccountDesc": "Kree enn kont gratis avek ou nimewo telefon pou retrouv tou ou komand ek suiv ou livrezon.",
-    "createAccount": "Kree enn Kont →"
+    "waPreorder": "Bonzour, mo anvi prekomann :"
   },
   "login": {
     "title": "Ou Espas Personal",
@@ -562,7 +675,11 @@
     "accountCreated": "Kont Kree !",
     "welcome": "Byenveni dan Kailash Farming.",
     "verifyEmail": "Kont Kree — Verifye Ou Email",
-    "verifyEmailDesc": "Konekte apre konfirmasyon."
+    "verifyEmailDesc": "Konekte apre konfirmasyon.",
+    "emailPlaceholder": "ou@email.com",
+    "fullNamePlaceholder": "Jean Dupont",
+    "phonePlaceholder": "52 345 678",
+    "passwordPlaceholder": "Minimem 8 karakter"
   },
   "admin": {
     "accessDenied": "Akse Refize",
@@ -651,5 +768,628 @@
     "totpError": "Erler TOTP",
     "connectionError": "Koneksion rat",
     "noTotp": "Okenn fakteur TOTP trouve. Kontakte ou administrater."
+  },
+  "adminClients": {
+    "common": {
+      "error": "Erer",
+      "loading": "Pe sarze…",
+      "cancel": "Anile",
+      "save": "Anrezistre",
+      "view": "Gete",
+      "noName": "San non",
+      "dash": "—",
+      "particulier": "Partikilie",
+      "professionnel": "Profesionel",
+      "clientNotFound": "Kliyan pa trouve"
+    },
+    "list": {
+      "title": "Kliyan",
+      "exportCsv": "Export CSV",
+      "newClient": "Nouvo kliyan",
+      "searchPlaceholder": "Non, konpani, telefonn, kod…",
+      "allTypes": "Tou tip",
+      "allDistricts": "Tou distrik",
+      "activeAndInactive": "Aktif + inaktif",
+      "active": "Aktif",
+      "inactive": "Inaktif",
+      "noResults": "Pena okenn rezilta pou sa bann filtre la.",
+      "noClients": "Pena okenn kliyan anrezistre.",
+      "inactiveBadge": "Inaktif",
+      "count": "{{count}} kliyan afiche",
+      "cols": {
+        "code": "Kod",
+        "client": "Kliyan",
+        "phone": "Telefonn",
+        "district": "Distrik",
+        "orders": "Kmd.",
+        "revenuePaid": "CA peye",
+        "last": "Dernie",
+        "optIn": "Opt-in"
+      }
+    },
+    "newModal": {
+      "title": "Nouvo kliyan",
+      "firstName": "Premie non *",
+      "lastName": "Non",
+      "phone": "Telefonn *",
+      "email": "Email",
+      "type": "Tip",
+      "district": "Distrik",
+      "company": "Konpani",
+      "create": "Kree",
+      "firstNameRequired": "Premie non neseser",
+      "phoneInvalid": "Nimero telefonn morisien pa valab",
+      "duplicatePhone": "Ena deja enn kliyan avek sa nimero telefonn la.",
+      "created": "Kliyan kree"
+    },
+    "profile": {
+      "backToClients": "Kliyan",
+      "clientNoName": "Kliyan san non",
+      "deactivate": "Dezaktive",
+      "reactivate": "Reaktive",
+      "deactivated": "Kliyan dezaktive",
+      "reactivated": "Kliyan reaktive",
+      "contactInfo": "Koordone",
+      "firstName": "Premie non",
+      "lastName": "Non",
+      "phone": "Telefonn",
+      "email": "Email",
+      "type": "Tip",
+      "district": "Distrik",
+      "company": "Konpani",
+      "internalNotes": "Not intern",
+      "profileUpdated": "Fis azourne",
+      "marketing": "Marketing",
+      "smsMarketing": "SMS marketing",
+      "emailMarketing": "Email marketing",
+      "unsubscribedOn": "Dezabone le {{date}}",
+      "loyaltyDiscount": "Rabe fidelite",
+      "discountApplied": "Rabe {{pct}}%",
+      "stats": {
+        "orders": "Komann",
+        "revenuePaid": "CA peye",
+        "addresses": "Ladres"
+      },
+      "addresses": "Ladres",
+      "addressDefault": "Ladres",
+      "defaultBadge": "Par defo",
+      "orderHistory": "Listwar bann komann",
+      "noOrders": "Pena okenn komann",
+      "cols": {
+        "number": "No.",
+        "date": "Dat",
+        "total": "Total",
+        "payment": "Peyman",
+        "status": "Stati"
+      }
+    },
+    "detail": {
+      "backToUsers": "Itilizater",
+      "clientNoName": "Kliyan san non",
+      "clientInfo": "Informasion kliyan",
+      "phone": "Telefonn",
+      "company": "Antrepriz",
+      "lang": "Lang",
+      "registeredOn": "Inskri le",
+      "stats": "Statistik",
+      "orders": "Komann",
+      "delivered": "Livre",
+      "totalSpent": "Total depanse",
+      "orderHistory": "Listwar bann komann",
+      "ordersCount": "{{count}} komann",
+      "noOrders": "Pena okenn komann",
+      "cols": {
+        "number": "No.",
+        "date": "Dat",
+        "total": "Total",
+        "payment": "Peyman",
+        "status": "Stati"
+      }
+    },
+    "users": {
+      "title": "Itilizater",
+      "addMember": "Azout enn manb",
+      "tabs": {
+        "clients": "Kliyan",
+        "team": "Lekip"
+      },
+      "searchClients": "Non, telefonn, antrepriz…",
+      "searchTeam": "Non, email…",
+      "noResults": "Pena okenn rezilta.",
+      "noClients": "Pena okenn kliyan anrezistre.",
+      "noTeam": "Pena okenn manb lekip.",
+      "roleUpdated": "Rol azourne",
+      "accountDeleted": "Kont siprime",
+      "deleteConfirm": "Siprim definitivman kont « {{label}} » ?\n\nSo bann komann pou konserve kouma komann invite. Sa aksion la irreversib.",
+      "discountApplied": "Rabe {{pct}}% aplike",
+      "clientCols": {
+        "user": "Itilizater",
+        "phone": "Telefonn",
+        "type": "Tip",
+        "discount": "Rabe",
+        "registeredOn": "Inskri le",
+        "action": "Aksion"
+      },
+      "teamCols": {
+        "member": "Manb",
+        "email": "Email",
+        "role": "Rol",
+        "memberSince": "Manb depi",
+        "action": "Aksion"
+      },
+      "deleteAccount": "Siprim sa kont la",
+      "demoteBeforeDelete": "Rabes an Anplwaye avan siprime",
+      "roles": {
+        "admin": "Admin",
+        "operator": "Anplwaye",
+        "client": "Kliyan"
+      },
+      "invite": {
+        "title": "Azout enn manb lekip",
+        "fullName": "Non konple",
+        "fullNamePlaceholder": "Premie non Non",
+        "email": "Email",
+        "emailPlaceholder": "email@egzanp.com",
+        "tempPassword": "Modpas tanporer",
+        "tempPasswordPlaceholder": "Min. 8 karakter",
+        "role": "Rol",
+        "createAccount": "Kree kont",
+        "passwordTooShort": "Modpas tro kourt",
+        "passwordTooShortDesc": "Omwin 8 karakter.",
+        "memberAdded": "Manb azoute",
+        "memberAddedDesc": "{{email}} — rol : {{role}}."
+      }
+    }
+  },
+  "adminCore": {
+    "sectionTitle": "Administration",
+    "signOut": "Dekonekte",
+    "signedOut": "Ou dekonekte",
+    "comingSoon": "Byento",
+    "nav": {
+      "dashboard": "Dashboard",
+      "products": "Prodwi",
+      "orders": "Komann",
+      "payments": "Ankesman",
+      "clients": "Kliyan",
+      "campaigns": "Kanpayn",
+      "b2b": "B2B",
+      "seedlings": "Semi",
+      "users": "Itilizater"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "alertPendingOrders_one": "{{count}} komann pe atann konfirmasyon",
+      "alertPendingOrders_other": "{{count}} komann pe atann konfirmasyon",
+      "alertJuicePending_one": "{{count}} peyman Juice pou valide",
+      "alertJuicePending_other": "{{count}} peyman Juice pou valide",
+      "kpiActiveProducts": "Prodwi aktif",
+      "kpiTotalOrders": "Total komann",
+      "kpiTotalClients": "Kliyan anrezistre",
+      "kpiPendingB2B": "Devi B2B pe atann",
+      "revenueTitle": "Sif dafer",
+      "revenueToday": "Zordi",
+      "revenueMonth": "Sa mwa la",
+      "revenueTotal": "Total (depi koumansman)",
+      "revenueTodaySub": "komann pa anile",
+      "revenueTotalSub": "depi lansman",
+      "recentOrders": "Dernie komann",
+      "recentB2B": "Dernie devi B2B",
+      "viewAll": "Get tou →",
+      "noOrders": "Pena komann",
+      "noB2B": "Pena devi B2B",
+      "quickActions": "Aksyon rapid",
+      "newProduct": "Nouvo prodwi",
+      "ordersAction": "Komann",
+      "seedlingsAction": "Semi",
+      "usersAction": "Itilizater",
+      "pickupTitle": "Ranmase",
+      "codTitle": "COD"
+    },
+    "b2bStatus": {
+      "new": "Nouvo",
+      "contacted": "Kontakte",
+      "quote_sent": "Devi",
+      "won": "Gagne"
+    }
+  },
+  "adminCatalog": {
+    "title": "Prodwi",
+    "totalCount": "{{count}} prodwi antou",
+    "newProduct": "Nouvo prodwi",
+    "searchPlaceholder": "Rode par nom ou SKU…",
+    "all": "Tou",
+    "col": {
+      "sku": "SKU",
+      "nameFr": "Nom FR",
+      "nameEn": "Nom EN",
+      "category": "Kategori",
+      "priceRs": "Pri Rs",
+      "image": "Imaz",
+      "active": "Aktif",
+      "actions": "Aksion",
+      "name": "Nom"
+    },
+    "edit": "Modifie",
+    "delete": "Efase",
+    "empty": "Pena prodwi trouve",
+    "deactivateTitle": "Dezaktiv sa prodwi la?",
+    "deactivateDesc": "Ou sir? Sa aksion la irreversib. {{name}} pou kasiet dan katalog piblik me li res dan baz done.",
+    "cancel": "Anile",
+    "deactivate": "Dezaktiv",
+    "loadError": "Erer sarzman",
+    "error": "Erer",
+    "productDeactivated": "Prodwi dezaktive",
+    "status": {
+      "available": "Disponib",
+      "in_production": "An prodiksion",
+      "coming_soon": "Byento"
+    },
+    "form": {
+      "skuLabel": "SKU *",
+      "nameFrLabel": "Nom (FR) *",
+      "nameEnLabel": "Nom (EN)",
+      "categoryLabel": "Kategori *",
+      "categoryPlaceholder": "Swazir enn kategori",
+      "priceLabel": "Pri (Rs) *",
+      "unitLabel": "Inite",
+      "descriptionLabel": "Deskripsion",
+      "descriptionPlaceholder": "Deskripsion prodwi…",
+      "photoLabel": "Foto prodwi",
+      "preview": "Apersi",
+      "inProgress": "An kour…",
+      "replace": "Ranplas",
+      "delete": "Efase",
+      "addPhoto": "Azout enn foto",
+      "activeToggle": "Prodwi aktif (vizib dan katalog)",
+      "update": "Met azour",
+      "create": "Kree prodwi",
+      "cancel": "Anile",
+      "categories": {
+        "epices": "🌿 Zepis",
+        "salades": "🥬 Salad",
+        "bredes": "🍃 Bred",
+        "legumes": "🥕 Legim",
+        "melons": "🍈 Melon"
+      }
+    },
+    "create": {
+      "title": "Nouvo prodwi",
+      "createError": "Erer kreasion",
+      "created": "Prodwi kree ✓"
+    },
+    "edit2": {
+      "title": "Modifie prodwi",
+      "skuLine": "SKU : {{sku}}",
+      "notFound": "Prodwi pa trouve",
+      "formatUnsupported": "Format pa siporte",
+      "formatAccepted": "Aksepte : JPG, PNG, WebP",
+      "photoUpdated": "Foto met azour ✓",
+      "uploadError": "Erer upload",
+      "confirmDeletePhoto": "Efas foto sa prodwi la?",
+      "photoDeleted": "Foto efase",
+      "deleteError": "Erer efasman",
+      "updateError": "Erer met azour",
+      "updated": "Prodwi met azour ✓"
+    },
+    "detail": {
+      "notFound": "Prodwi pa trouve",
+      "productsBack": "Prodwi",
+      "deactivate": "Dezaktiv",
+      "activate": "Aktiv",
+      "modify": "Modifie",
+      "noImage": "Pena imaz",
+      "active": "Aktif",
+      "inactive": "Inaktif",
+      "nameFr": "Nom FR",
+      "nameEn": "Nom EN",
+      "price": "Pri",
+      "unit": "Inite",
+      "descriptionFr": "Deskripsion FR",
+      "descriptionEn": "Deskripsion EN",
+      "orders": "Komann",
+      "qtySold": "Kantite vandi",
+      "inUnit": "an {{unit}}",
+      "unitFallback": "inite",
+      "revenue": "Revni",
+      "recentOrders": "Dernie komann ki ena sa prodwi la",
+      "orderNumber": "No komann",
+      "date": "Dat",
+      "qty": "Kant",
+      "lineTotal": "Total liyn",
+      "orderStatus": "Stati",
+      "view": "Gete",
+      "productDeactivated": "Prodwi dezaktive",
+      "productActivated": "Prodwi aktive ✓"
+    },
+    "legacy": {
+      "title": "Admin — Prodwi",
+      "subtitle": "{{count}} prodwi · Klik lor enn nom pou modifie · Klik lor enn pri pou modifie · Glis enn imaz pou uplode li",
+      "col": {
+        "sku": "SKU",
+        "name": "Nom",
+        "category": "Kategori",
+        "priceRs": "Pri Rs",
+        "status": "Stati",
+        "active": "Aktif",
+        "photo": "Foto",
+        "action": "Aksion"
+      },
+      "editNameTitle": "Modifie nom ek deskripsion",
+      "priceEditTitle": "Klik pou modifie pri",
+      "hide": "Klik pou kasiet",
+      "activateHint": "Klik pou aktiv",
+      "replace": "Ranplas",
+      "uploadPhoto": "Uplod foto",
+      "uploading": "Uplod…",
+      "delete": "Efase",
+      "editTitle": "Modifie prodwi",
+      "nameFrRequired": "Nom FR obligatwar",
+      "productUpdated": "Prodwi met azour ✓",
+      "confirmDeletePhoto": "Efas foto \"{{name}}\"?",
+      "formatUnsupported": "Format pa siporte",
+      "formatAccepted": "Aksepte : JPG, PNG, WebP",
+      "photoUpdated": "Foto met azour ✓",
+      "uploadError": "Erer upload",
+      "photoDeleted": "Foto efase",
+      "deleteError": "Erer efasman",
+      "priceInvalid": "Pri pa valab",
+      "priceInvalidDesc": "Rant enn nomb pozitif",
+      "priceUpdated": "Pri met azour ✓",
+      "priceError": "Erer pri",
+      "statusUpdated": "Stati met azour ✓",
+      "statusError": "Erer stati",
+      "productActivated": "Prodwi aktive ✓",
+      "productHidden": "Prodwi kasiet",
+      "activationError": "Erer aktivasion",
+      "loadError": "Erer sarzman",
+      "error": "Erer",
+      "save": "Anrezistre"
+    }
+  },
+  "adminB2b": {
+    "title": "Devi B2B",
+    "totalCount": "{{count}} demann antou",
+    "searchPlaceholder": "Konpayni ou kontak…",
+    "filterStatus": "Stati",
+    "filterType": "Tip",
+    "allStatuses": "Tou bann stati",
+    "allTypes": "Tou bann tip",
+    "loadError": "Erer sarzman",
+    "error": "Erer",
+    "col": {
+      "date": "Dat",
+      "company": "Konpayni",
+      "type": "Tip",
+      "contact": "Kontak",
+      "phone": "Telefonn",
+      "estimatedVolume": "Volim estime",
+      "status": "Stati",
+      "actions": "Aksion"
+    },
+    "viewDetails": "Gete detay",
+    "empty": "Pena demann B2B trouve",
+    "detail": {
+      "backToList": "Retour lalis",
+      "notFound": "Demann pa trouve.",
+      "markContacted": "Mark kontakte",
+      "sendEmail": "Avoy email",
+      "call": "Apele",
+      "company": "Konpayni",
+      "name": "Nom",
+      "type": "Tip",
+      "estimatedVolume": "Volim estime",
+      "contact": "Kontak",
+      "email": "Email",
+      "phone": "Telefonn",
+      "varietiesInterested": "Varyete ki interese",
+      "message": "Mesaz",
+      "currentStatus": "Stati aktyel :",
+      "statusUpdated": "Stati met azour ✓"
+    },
+    "status": {
+      "new": "Nouvo",
+      "contacted": "Kontakte",
+      "quote_sent": "Devi avoye",
+      "won": "Gagne",
+      "lost": "Perdi"
+    },
+    "businessType": {
+      "hotel": "Otel",
+      "restaurant": "Restoran",
+      "landscaper": "Peizazist",
+      "green_space": "Espas ver",
+      "other": "Lezot"
+    }
+  },
+  "adminSowing": {
+    "title": "Semi",
+    "totalCount": "{{count}} lo anrezistre",
+    "addBatch": "Azout enn lo",
+    "productOptional": "Prodwi (opsionel)",
+    "select": "— Swazir —",
+    "varietyNameLabel": "Nom varyete *",
+    "varietyNamePlaceholder": "ex : Basilik Grand Ver",
+    "sownDateLabel": "Dat semi *",
+    "estimatedDaysLabel": "Dire estime (zour) *",
+    "plateaux": "Plato",
+    "notes": "Not",
+    "notesOptional": "Opsionel",
+    "add": "Azoute",
+    "col": {
+      "variety": "Varyete",
+      "sownOn": "Seme lor",
+      "elapsed": "Ekoule",
+      "duration": "Dire",
+      "plateaux": "Plato",
+      "status": "Stati",
+      "actions": "Aksion"
+    },
+    "empty": "Pena lo anrezistre",
+    "ready": "Pare 🎉",
+    "inDays": "Dan {{days}} z",
+    "edit": "Modifie",
+    "delete": "Efase",
+    "editTitle": "Modifie lo",
+    "varietyLabel": "Varyete *",
+    "durationLabel": "Dire (zour) *",
+    "cancel": "Anile",
+    "save": "Anrezistre",
+    "deleteTitle": "Efas sa lo la?",
+    "deleteDesc": "Ou anvi efas {{name}}? Sa aksion la irreversib.",
+    "error": "Erer",
+    "batchAdded": "Lo azoute ✓",
+    "batchUpdated": "Lo met azour ✓",
+    "batchDeleted": "Lo efase"
+  },
+  "adminCampaigns": {
+    "title": "Kanpayn",
+    "newCampaign": "Nouvo kanpayn",
+    "loading": "Sarzman…",
+    "empty": "Pena kanpayn. Kree enn pou tous ou bann kliyan par SMS ou email.",
+    "error": "Erer",
+    "col": {
+      "campaign": "Kanpayn",
+      "channel": "Kanal",
+      "status": "Stati",
+      "recipients": "Destinater",
+      "sent": "Avoye",
+      "failed": "Esek",
+      "createdOn": "Kree lor"
+    },
+    "channelBoth": "SMS + Email",
+    "status": {
+      "draft": "Bouyon",
+      "scheduled": "Planifie",
+      "sending": "Avoy…",
+      "sent": "Avoye",
+      "failed": "Esek"
+    },
+    "detail": {
+      "campaignsBack": "Kanpayn",
+      "newCampaign": "Nouvo kanpayn",
+      "notFound": "Kanpayn pa trouve",
+      "content": "Konteni",
+      "campaignName": "Nom kanpayn",
+      "channel": "Kanal",
+      "channelBoth": "SMS + Email",
+      "template": "Modell",
+      "templateNone": "— Okenn —",
+      "subjectEmail": "Size (email)",
+      "bodyText": "Teks (SMS / fallback)",
+      "bodyTextPlaceholder": "Bonzour {{full_name}}, …",
+      "charsSegments": "{{chars}} karakter · {{segments}} segman SMS",
+      "segmentBilled": " — sak segman fakture",
+      "variablesLabel": "Variab : ",
+      "bodyHtml": "Teks HTML (email, opsionel)",
+      "bodyHtmlPlaceholder": "<p>Bonzour {{full_name}}…</p>",
+      "save": "Anrezistre",
+      "targeting": "Sible",
+      "accountType": "Tip kont",
+      "accountAll": "Tou",
+      "accountB2c": "Partikilie",
+      "accountB2b": "Profesionel",
+      "district": "Distrik",
+      "districtAll": "Tou",
+      "minOrders": "Min komann",
+      "inactiveDays": "Inaktif depi (zour)",
+      "saveToCalc": "Anrezistre kanpayn pou kalkil lodyans.",
+      "calcAudience": "Kalkil lodyans",
+      "audience": "Lodyans",
+      "sms": "SMS",
+      "email": "Email",
+      "estimatedSmsCost": "Kou SMS estime :",
+      "costBreakdown": "({{count}} × {{segments}} seg × Rs {{unit}})",
+      "sendCampaign": "Avoy kanpayn",
+      "tracking": "Swivi",
+      "sentCount": "{{count}} avoye",
+      "failedCount": "{{count}} esek",
+      "deliveredPct": "{{pct}}% delivre",
+      "failures": "Esek",
+      "confirmSendTitle": "Konfirm lavoy",
+      "confirmSendRecipients": "{{count}} destinater — {{sms}} SMS, {{email}} email.",
+      "confirmSendCost": "Kou SMS estime :",
+      "cancel": "Anile",
+      "send": "Avoye",
+      "nameRequired": "Nom obligatwar",
+      "bodyRequired": "Teks mesaz obligatwar",
+      "campaignCreated": "Kanpayn kree",
+      "campaignSaved": "Kanpayn anrezistre",
+      "audienceCalculated": "Lodyans kalkile : {{count}} destinater",
+      "sendError": "Erer lavoy",
+      "sendDone": "Lavoy termine",
+      "sendDoneDesc": "{{sent}} avoye, {{failed}} esek"
+    }
+  },
+  "adminOrders": {
+    "list": {
+      "title": "Komann",
+      "summary": "{{count}} komann — {{juice}} Juice pe atann",
+      "searchPlaceholder": "No komann ou non kliyan…",
+      "statusPlaceholder": "Stati",
+      "allStatuses": "Tou bann stati",
+      "districtPlaceholder": "Distrik",
+      "allDistricts": "Tou bann distrik",
+      "paymentPlaceholder": "Peyman",
+      "allPayments": "Tou",
+      "colDate": "Dat",
+      "colCustomer": "Kliyan",
+      "colPhone": "Telefonn",
+      "colDistrict": "Distrik",
+      "colTrays": "Plato",
+      "colTotal": "Total",
+      "colPayment": "Peyman",
+      "colStatus": "Stati",
+      "colActions": "Aksion",
+      "viewDetails": "Get detay",
+      "empty": "Pena okenn komann",
+      "loadError": "Erer sarzman"
+    },
+    "detail": {
+      "notFound": "Komann pa trouve.",
+      "backToList": "Retourn lor lalis",
+      "orderTitle": "Komann {{number}}",
+      "customerInfo": "Informasion kliyan",
+      "fieldName": "Non",
+      "fieldPhone": "Telefonn",
+      "fieldEmail": "Email",
+      "fieldDistrict": "Distrik",
+      "fieldAddress": "Ladres",
+      "fieldSlot": "Kreno",
+      "fieldNotes": "Not",
+      "fieldDate": "Dat",
+      "items": "Bann artik komande",
+      "colProduct": "Prodwi",
+      "colQty": "Kantite",
+      "colUnitPrice": "Pri linite",
+      "colTotal": "Total",
+      "noItems": "Pena artik",
+      "paymentJuice": "Peyman Juice",
+      "paymentCod": "Peye kan livre (COD)",
+      "fieldMethod": "Metod",
+      "methodJuice": "MCB Juice",
+      "methodCod": "Cash on Delivery",
+      "fieldPaymentStatus": "Stati peyman",
+      "statusPaid": "✅ Peye",
+      "statusPending": "⏳ Pe atann",
+      "fieldTxnId": "ID tranzaksion",
+      "fieldPaidAt": "Peye le",
+      "juicePendingValidation": "Peyman pe atann validasion",
+      "juiceClientTxnId": "ID tranzaksion kliyan :",
+      "juiceNoTxnId": "Kliyan pankor ranpli so ID tranzaksion.",
+      "validateJuice": "Valid peyman Juice",
+      "savingJuice": "Pe anrezistre…",
+      "juiceValidated": "Peyman Juice valide",
+      "subtotal": "Sou-total",
+      "delivery": "Livrezon",
+      "deliveryFree": "Gratis",
+      "loyaltyDiscount": "Rabe fidelite {{pct}}%",
+      "total": "TOTAL",
+      "error": "Erer",
+      "statusUpdated": "Stati azour ✓",
+      "statusUpdatedTo": "Stati azour : {{status}}",
+      "juicePaymentValidated": "Peyman Juice valide ✓",
+      "juicePaymentValidatedDesc": "Komann la marke kouma peye."
+    }
   }
 }

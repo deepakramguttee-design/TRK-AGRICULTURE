@@ -1,4 +1,6 @@
 import { useTranslation } from 'react-i18next'
+import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/contexts/AuthContext'
 
 const LANGS = [
   { code: 'fr',  label: 'FR', ariaLabel: 'Passer en français' },
@@ -6,14 +8,25 @@ const LANGS = [
   { code: 'mfe', label: 'KR', ariaLabel: 'Vire ar Kreol' },
 ]
 
+// Codes i18n ('mfe') ↔ colonne customers.preferred_lang ('kr')
+const I18N_TO_DB = { fr: 'fr', en: 'en', mfe: 'kr' }
+
 export default function LanguageBar() {
   const { i18n } = useTranslation()
+  const { user } = useAuth()
   const active = i18n.language
 
   function switchLang(lang) {
     i18n.changeLanguage(lang)
     localStorage.setItem('trk-lang', lang)
     document.documentElement.lang = lang
+    // Persiste le choix sur la fiche client (best-effort, non bloquant)
+    if (user) {
+      supabase.from('customers')
+        .update({ preferred_lang: I18N_TO_DB[lang] ?? 'fr' })
+        .eq('user_id', user.id)
+        .then(() => {})
+    }
   }
 
   return (

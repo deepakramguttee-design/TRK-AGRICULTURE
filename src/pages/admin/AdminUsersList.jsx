@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/contexts/AuthContext'
 import { toast } from '@/hooks/use-toast'
@@ -12,28 +13,29 @@ import { Link } from 'react-router-dom'
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 const ACCOUNT_STYLES = {
-  retail: { label: 'Particulier',    cls: 'bg-blue-50 text-blue-700 border-blue-200' },
-  b2b:    { label: 'Professionnel',  cls: 'bg-violet-50 text-violet-700 border-violet-200' },
+  retail: { labelKey: 'adminClients.common.particulier',    cls: 'bg-blue-50 text-blue-700 border-blue-200' },
+  b2b:    { labelKey: 'adminClients.common.professionnel',  cls: 'bg-violet-50 text-violet-700 border-violet-200' },
 }
 const ROLE_STYLES = {
-  admin:   { label: 'Admin',    cls: 'bg-red-50 text-red-700 border-red-200',       icon: ShieldCheck },
-  operator: { label: 'Employé',  cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: BriefcaseBusiness },
-  client:  { label: 'Client',   cls: 'bg-blue-50 text-blue-700 border-blue-200',    icon: User },
+  admin:    { labelKey: 'adminClients.users.roles.admin',    cls: 'bg-red-50 text-red-700 border-red-200',       icon: ShieldCheck },
+  operator: { labelKey: 'adminClients.users.roles.operator', cls: 'bg-amber-50 text-amber-700 border-amber-200', icon: BriefcaseBusiness },
+  client:   { labelKey: 'adminClients.users.roles.client',   cls: 'bg-blue-50 text-blue-700 border-blue-200',    icon: User },
 }
-function fmtDate(d) {
+function fmtDate(d, lang) {
   if (!d) return '—'
-  return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+  return new Date(d).toLocaleDateString(lang === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 // ── Invite modal ──────────────────────────────────────────────────────────────
 function InviteModal({ onClose, onCreated }) {
+  const { t } = useTranslation()
   const [form, setForm] = useState({ full_name: '', email: '', password: '', role: 'operator' })
   const [saving, setSaving] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
     if (form.password.length < 8) {
-      toast({ title: 'Mot de passe trop court', description: 'Au moins 8 caractères.', variant: 'destructive' })
+      toast({ title: t('adminClients.users.invite.passwordTooShort'), description: t('adminClients.users.invite.passwordTooShortDesc'), variant: 'destructive' })
       return
     }
     setSaving(true)
@@ -50,12 +52,12 @@ function InviteModal({ onClose, onCreated }) {
     // functions.invoke renvoie l'erreur HTTP dans error, le message métier dans data.error
     const errMsg = data?.error ?? error?.message
     if (errMsg) {
-      toast({ title: 'Erreur', description: errMsg, variant: 'destructive' })
+      toast({ title: t('adminClients.common.error'), description: errMsg, variant: 'destructive' })
       setSaving(false)
       return
     }
 
-    toast({ title: 'Membre ajouté', description: `${form.email} — rôle : ${form.role}.` })
+    toast({ title: t('adminClients.users.invite.memberAdded'), description: t('adminClients.users.invite.memberAddedDesc', { email: form.email, role: form.role }) })
     setSaving(false)
     onCreated()
     onClose()
@@ -65,41 +67,41 @@ function InviteModal({ onClose, onCreated }) {
     <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6" onClick={e => e.stopPropagation()}>
         <div className="flex items-center justify-between mb-5">
-          <h2 className="font-bold text-base">Ajouter un membre de l'équipe</h2>
+          <h2 className="font-bold text-base">{t('adminClients.users.invite.title')}</h2>
           <button onClick={onClose} className="rounded-full p-1 hover:bg-muted transition-colors"><X className="h-4 w-4" /></button>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-3">
           <div>
-            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Nom complet</label>
-            <Input className="mt-1" placeholder="Prénom Nom" value={form.full_name} onChange={e => setForm(p=>({...p,full_name:e.target.value}))} required />
+            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">{t('adminClients.users.invite.fullName')}</label>
+            <Input className="mt-1" placeholder={t('adminClients.users.invite.fullNamePlaceholder')} value={form.full_name} onChange={e => setForm(p=>({...p,full_name:e.target.value}))} required />
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Email</label>
-            <Input className="mt-1" type="email" placeholder="email@exemple.com" value={form.email} onChange={e => setForm(p=>({...p,email:e.target.value}))} required />
+            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">{t('adminClients.users.invite.email')}</label>
+            <Input className="mt-1" type="email" placeholder={t('adminClients.users.invite.emailPlaceholder')} value={form.email} onChange={e => setForm(p=>({...p,email:e.target.value}))} required />
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Mot de passe temporaire</label>
-            <Input className="mt-1" type="password" placeholder="Min. 8 caractères" value={form.password} onChange={e => setForm(p=>({...p,password:e.target.value}))} required />
+            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">{t('adminClients.users.invite.tempPassword')}</label>
+            <Input className="mt-1" type="password" placeholder={t('adminClients.users.invite.tempPasswordPlaceholder')} value={form.password} onChange={e => setForm(p=>({...p,password:e.target.value}))} required />
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">Rôle</label>
+            <label className="text-xs font-semibold text-zinc-500 uppercase tracking-wide">{t('adminClients.users.invite.role')}</label>
             <div className="relative mt-1">
               <select
                 value={form.role}
                 onChange={e => setForm(p=>({...p,role:e.target.value}))}
                 className="w-full h-10 rounded-md border border-input bg-white px-3 py-2 text-sm appearance-none pr-8 focus:outline-none focus:ring-2 focus:ring-ring"
               >
-                <option value="operator">Employé</option>
-                <option value="admin">Admin</option>
+                <option value="operator">{t('adminClients.users.roles.operator')}</option>
+                <option value="admin">{t('adminClients.users.roles.admin')}</option>
               </select>
               <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
             </div>
           </div>
           <div className="flex gap-2 mt-2">
-            <Button type="button" variant="outline" className="flex-1" onClick={onClose}>Annuler</Button>
+            <Button type="button" variant="outline" className="flex-1" onClick={onClose}>{t('adminClients.common.cancel')}</Button>
             <Button type="submit" className="flex-1" disabled={saving}>
               {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Créer le compte
+              {t('adminClients.users.invite.createAccount')}
             </Button>
           </div>
         </form>
@@ -110,6 +112,7 @@ function InviteModal({ onClose, onCreated }) {
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 export default function AdminUsersList() {
+  const { t, i18n } = useTranslation()
   const { user, isAdmin } = useAuth()
   const [tab, setTab]           = useState('clients')
   const [customers, setCustomers] = useState([])
@@ -144,23 +147,23 @@ export default function AdminUsersList() {
     setUpdatingId(id)
     const { error } = await supabase.from('profiles').update({ role: newRole }).eq('id', id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminClients.common.error'), description: error.message, variant: 'destructive' })
     } else {
-      toast({ title: 'Rôle mis à jour' })
+      toast({ title: t('adminClients.users.roleUpdated') })
       await loadTeam()
     }
     setUpdatingId(null)
   }
 
   async function deleteUser(id, label) {
-    if (!window.confirm(`Supprimer définitivement le compte « ${label} » ?\n\nSes commandes éventuelles seront conservées en tant que commandes invité. Cette action est irréversible.`)) return
+    if (!window.confirm(t('adminClients.users.deleteConfirm', { label }))) return
     setUpdatingId(id)
     const { data, error } = await supabase.functions.invoke('delete-user', { body: { user_id: id } })
     const errMsg = data?.error ?? error?.message
     if (errMsg) {
-      toast({ title: 'Erreur', description: errMsg, variant: 'destructive' })
+      toast({ title: t('adminClients.common.error'), description: errMsg, variant: 'destructive' })
     } else {
-      toast({ title: 'Compte supprimé', description: label })
+      toast({ title: t('adminClients.users.accountDeleted'), description: label })
       await Promise.all([loadCustomers(), loadTeam()])
     }
     setUpdatingId(null)
@@ -170,9 +173,9 @@ export default function AdminUsersList() {
     setUpdatingId(id)
     const { error } = await supabase.from('customers').update({ discount_pct: pct }).eq('id', id)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminClients.common.error'), description: error.message, variant: 'destructive' })
     } else {
-      toast({ title: `Remise ${pct}% appliquée` })
+      toast({ title: t('adminClients.users.discountApplied', { pct }) })
       setCustomers(prev => prev.map(c => c.id === id ? { ...c, discount_pct: pct } : c))
     }
     setUpdatingId(null)
@@ -191,17 +194,17 @@ export default function AdminUsersList() {
   })
 
   const TABS = [
-    { id: 'clients', label: 'Clients', icon: Users,     count: customers.length },
-    { id: 'equipe',  label: 'Équipe',  icon: ShieldCheck, count: team.length },
+    { id: 'clients', label: t('adminClients.users.tabs.clients'), icon: Users,     count: customers.length },
+    { id: 'equipe',  label: t('adminClients.users.tabs.team'),    icon: ShieldCheck, count: team.length },
   ]
 
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Utilisateurs</h1>
+        <h1 className="text-2xl font-bold">{t('adminClients.users.title')}</h1>
         {isAdmin && tab === 'equipe' && (
           <Button size="sm" onClick={() => setShowInvite(true)} className="gap-1.5">
-            <Plus className="h-4 w-4" /> Ajouter un membre
+            <Plus className="h-4 w-4" /> {t('adminClients.users.addMember')}
           </Button>
         )}
       </div>
@@ -231,7 +234,7 @@ export default function AdminUsersList() {
       <div className="relative mb-4 max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
-          placeholder={tab === 'clients' ? 'Nom, téléphone, entreprise…' : 'Nom, email…'}
+          placeholder={tab === 'clients' ? t('adminClients.users.searchClients') : t('adminClients.users.searchTeam')}
           value={search}
           onChange={e => setSearch(e.target.value)}
           className="pl-9"
@@ -240,27 +243,34 @@ export default function AdminUsersList() {
 
       {loading ? (
         <div className="flex items-center justify-center py-16 text-muted-foreground text-sm gap-2">
-          <Loader2 className="h-4 w-4 animate-spin" /> Chargement…
+          <Loader2 className="h-4 w-4 animate-spin" /> {t('adminClients.common.loading')}
         </div>
       ) : tab === 'clients' ? (
         /* ── CLIENTS ── */
         filteredClients.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground text-sm">
-            {search ? 'Aucun résultat.' : 'Aucun client enregistré.'}
+            {search ? t('adminClients.users.noResults') : t('adminClients.users.noClients')}
           </div>
         ) : (
           <div className="rounded-lg border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/40 border-b">
-                  {['Utilisateur','Téléphone','Type','Remise','Inscrit le',...(isAdmin ? ['Action'] : [])].map(h => (
+                  {[
+                    t('adminClients.users.clientCols.user'), t('adminClients.users.clientCols.phone'),
+                    t('adminClients.users.clientCols.type'), t('adminClients.users.clientCols.discount'),
+                    t('adminClients.users.clientCols.registeredOn'),
+                    ...(isAdmin ? [t('adminClients.users.clientCols.action')] : []),
+                  ].map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filteredClients.map(c => {
-                  const type = ACCOUNT_STYLES[c.account_type] ?? { label: c.account_type??'—', cls: 'bg-muted text-muted-foreground' }
+                  const typeStyle = ACCOUNT_STYLES[c.account_type]
+                  const typeLabel = typeStyle ? t(typeStyle.labelKey) : (c.account_type ?? '—')
+                  const typeCls = typeStyle ? typeStyle.cls : 'bg-muted text-muted-foreground'
                   return (
                     <tr key={c.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
                       <td className="px-4 py-3">
@@ -273,7 +283,7 @@ export default function AdminUsersList() {
                               to={`/admin/utilisateurs/clients/${c.id}`}
                               className="font-medium text-zinc-900 hover:text-primary hover:underline underline-offset-2 transition-colors"
                             >
-                              {c.full_name || <span className="italic text-muted-foreground">Sans nom</span>}
+                              {c.full_name || <span className="italic text-muted-foreground">{t('adminClients.common.noName')}</span>}
                             </Link>
                             {c.company_name && <p className="text-xs text-muted-foreground">{c.company_name}</p>}
                           </div>
@@ -281,7 +291,7 @@ export default function AdminUsersList() {
                       </td>
                       <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{c.phone||'—'}</td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${type.cls}`}>{type.label}</span>
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium border ${typeCls}`}>{typeLabel}</span>
                       </td>
                       <td className="px-4 py-3">
                         <div className="flex gap-1">
@@ -304,14 +314,14 @@ export default function AdminUsersList() {
                           ))}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(c.created_at)}</td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(c.created_at, i18n.language)}</td>
                       {isAdmin && (
                         <td className="px-4 py-3">
                           <button
                             type="button"
                             disabled={updatingId === c.id}
-                            onClick={() => deleteUser(c.id, c.full_name || c.phone || 'Sans nom')}
-                            title="Supprimer ce compte"
+                            onClick={() => deleteUser(c.id, c.full_name || c.phone || t('adminClients.common.noName'))}
+                            title={t('adminClients.users.deleteAccount')}
                             className="rounded-md p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
                           >
                             {updatingId === c.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
@@ -329,22 +339,27 @@ export default function AdminUsersList() {
         /* ── ÉQUIPE ── */
         filteredTeam.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground text-sm">
-            {search ? 'Aucun résultat.' : 'Aucun membre d\'équipe.'}
+            {search ? t('adminClients.users.noResults') : t('adminClients.users.noTeam')}
           </div>
         ) : (
           <div className="rounded-lg border overflow-hidden">
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/40 border-b">
-                  {['Membre','Email','Rôle','Membre depuis',isAdmin ? 'Action' : ''].filter(Boolean).map(h => (
+                  {[
+                    t('adminClients.users.teamCols.member'), t('adminClients.users.teamCols.email'),
+                    t('adminClients.users.teamCols.role'), t('adminClients.users.teamCols.memberSince'),
+                    isAdmin ? t('adminClients.users.teamCols.action') : '',
+                  ].filter(Boolean).map(h => (
                     <th key={h} className="text-left px-4 py-3 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {filteredTeam.map(m => {
-                  const rs = ROLE_STYLES[m.role] ?? { label: m.role, cls: 'bg-muted text-muted-foreground', icon: User }
+                  const rs = ROLE_STYLES[m.role] ?? { labelKey: null, cls: 'bg-muted text-muted-foreground', icon: User }
                   const RoleIcon = rs.icon
+                  const roleLabel = rs.labelKey ? t(rs.labelKey) : m.role
                   return (
                     <tr key={m.id} className="border-b last:border-0 hover:bg-muted/20 transition-colors">
                       <td className="px-4 py-3">
@@ -358,10 +373,10 @@ export default function AdminUsersList() {
                       <td className="px-4 py-3 text-xs text-muted-foreground">{m.email||'—'}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium border ${rs.cls}`}>
-                          <RoleIcon className="h-3 w-3" />{rs.label}
+                          <RoleIcon className="h-3 w-3" />{roleLabel}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(m.created_at)}</td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground whitespace-nowrap">{fmtDate(m.created_at, i18n.language)}</td>
                       {isAdmin && (
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
@@ -372,8 +387,8 @@ export default function AdminUsersList() {
                                 onChange={e => changeRole(m.id, e.target.value)}
                                 className="text-xs border rounded-md px-2 py-1 bg-white focus:outline-none focus:ring-1 focus:ring-ring pr-6 appearance-none disabled:opacity-50"
                               >
-                                <option value="operator">Employé</option>
-                                <option value="admin">Admin</option>
+                                <option value="operator">{t('adminClients.users.roles.operator')}</option>
+                                <option value="admin">{t('adminClients.users.roles.admin')}</option>
                               </select>
                               <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-muted-foreground pointer-events-none" />
                             </div>
@@ -382,7 +397,7 @@ export default function AdminUsersList() {
                                 type="button"
                                 disabled={updatingId === m.id}
                                 onClick={() => deleteUser(m.id, m.full_name || m.email)}
-                                title={m.role === 'admin' ? 'Rétrograder en Employé avant de supprimer' : 'Supprimer ce compte'}
+                                title={m.role === 'admin' ? t('adminClients.users.demoteBeforeDelete') : t('adminClients.users.deleteAccount')}
                                 className="rounded-md p-1.5 text-muted-foreground hover:text-red-600 hover:bg-red-50 transition-colors disabled:opacity-40"
                               >
                                 {updatingId === m.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}

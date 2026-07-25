@@ -69,7 +69,8 @@ export default function ProductDetail() {
   }, [sku])
 
   function handleAddToCart() {
-    const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
+    // Nom de variété toujours en français, quelle que soit la langue d'interface.
+    const name = product.name_fr
     addToCart({ ...product, quantity: qty })
     toast({ title: t('product.added'), description: `${qty} × ${name}`, duration: 3000 })
   }
@@ -92,10 +93,9 @@ export default function ProductDetail() {
     )
   }
 
-  const name = lang === 'en' ? (product.name_en || product.name_fr) : product.name_fr
-  const description = lang === 'en'
-    ? (product.description_en || product.description_fr)
-    : product.description_fr
+  // Nom et description de variété toujours en français, quelle que soit la langue d'interface.
+  const name = product.name_fr
+  const description = product.description_fr
   const catLabel = categories.find(c => c.slug === product.category || c.id === product.category)?.[`name_${lang}`] || product.category
 
   return (

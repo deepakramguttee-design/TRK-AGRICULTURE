@@ -42,16 +42,13 @@ export default function Catalog() {
     const q = search.toLowerCase().trim()
     let result = products.filter(p => {
       const matchCat = activeCategory === 'all' || p.category === activeCategory
-      const name = lang === 'en' ? (p.name_en || p.name_fr) : p.name_fr
+      // Les noms de variétés sont toujours affichés en français, quelle que soit la langue.
+      const name = p.name_fr
       return matchCat && (!q || name.toLowerCase().includes(q))
     })
     if (sort === 'price_asc')  result = [...result].sort((a, b) => a.price_mur - b.price_mur)
     if (sort === 'price_desc') result = [...result].sort((a, b) => b.price_mur - a.price_mur)
-    if (sort === 'alpha') result = [...result].sort((a, b) => {
-      const na = lang === 'en' ? (a.name_en || a.name_fr) : a.name_fr
-      const nb = lang === 'en' ? (b.name_en || b.name_fr) : b.name_fr
-      return na.localeCompare(nb, lang)
-    })
+    if (sort === 'alpha') result = [...result].sort((a, b) => a.name_fr.localeCompare(b.name_fr, 'fr'))
     return result
   }, [products, activeCategory, search, lang, sort])
 
@@ -104,11 +101,11 @@ export default function Catalog() {
       <div className="relative bg-gradient-to-br from-green-50 to-emerald-50/60 rounded-2xl border border-green-100 px-6 py-8 mb-8 overflow-hidden">
         <div aria-hidden className="absolute top-0 right-0 text-8xl opacity-[0.08] select-none pointer-events-none pr-4 pt-1">🌿</div>
         <p className="text-xs font-bold tracking-[0.2em] uppercase text-green-600 mb-2">
-          {lang === 'fr' ? 'Directement de nos champs' : 'Straight from our fields'}
+          {t('catalog.heroKicker')}
         </p>
         <h1 className="font-display text-3xl md:text-4xl font-bold text-stone-900 mb-1">{t('catalog.title')}</h1>
         <p className="text-stone-500 text-sm">
-          {filtered.length} / {products.length} {lang === 'fr' ? 'produits disponibles' : 'products available'}
+          {filtered.length} / {products.length} {t('catalog.productsAvailable')}
         </p>
       </div>
 
@@ -132,9 +129,9 @@ export default function Catalog() {
               onChange={e => setSort(e.target.value)}
               className="h-9 pl-8 pr-8 rounded-full border border-stone-200 bg-background text-sm font-medium text-foreground focus:outline-none focus:ring-1 focus:ring-primary appearance-none cursor-pointer"
             >
-              <option value="default">{lang === 'fr' ? 'Trier' : 'Sort'}</option>
-              <option value="price_asc">{lang === 'fr' ? 'Prix croissant' : 'Price: Low → High'}</option>
-              <option value="price_desc">{lang === 'fr' ? 'Prix décroissant' : 'Price: High → Low'}</option>
+              <option value="default">{t('catalog.sort.default')}</option>
+              <option value="price_asc">{t('catalog.sort.priceAsc')}</option>
+              <option value="price_desc">{t('catalog.sort.priceDesc')}</option>
               <option value="alpha">A → Z</option>
             </select>
           </div>

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
@@ -12,16 +13,14 @@ const STATUS_STYLES = {
   in_production:'bg-amber-100 text-amber-800 border-amber-200',
   coming_soon:  'bg-sky-100 text-sky-800 border-sky-200',
 }
-const STATUS_LABELS = { available: 'Disponible', in_production: 'En production', coming_soon: 'Bientôt' }
-
 function formatPrice(n) {
   const parts = Number(n).toFixed(2).split('.')
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
   return 'Rs ' + parts[0] + '.' + parts[1]
 }
 
-function formatDate(d) {
-  return new Date(d).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+function formatDate(d, lang) {
+  return new Date(d).toLocaleDateString(lang === 'en' ? 'en-GB' : 'fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })
 }
 
 function StatCard({ icon: Icon, label, value, sub }) {
@@ -38,6 +37,7 @@ function StatCard({ icon: Icon, label, value, sub }) {
 }
 
 export default function AdminProductDetail() {
+  const { t, i18n } = useTranslation()
   const { sku } = useParams()
   const navigate = useNavigate()
   const [product, setProduct] = useState(null)
@@ -54,7 +54,7 @@ export default function AdminProductDetail() {
         .eq('sku', sku)
         .single()
       if (error || !p) {
-        toast({ title: 'Produit introuvable', variant: 'destructive' })
+        toast({ title: t('adminCatalog.detail.notFound'), variant: 'destructive' })
         navigate('/admin/produits', { replace: true })
         return
       }
@@ -75,7 +75,7 @@ export default function AdminProductDetail() {
       setLoading(false)
     }
     load()
-  }, [sku, navigate])
+  }, [sku, navigate, t])
 
   async function handleToggleActive() {
     setToggling(true)
@@ -84,10 +84,10 @@ export default function AdminProductDetail() {
       .update({ is_active: !product.is_active })
       .eq('sku', sku)
     if (error) {
-      toast({ title: 'Erreur', description: error.message, variant: 'destructive' })
+      toast({ title: t('adminCatalog.error'), description: error.message, variant: 'destructive' })
     } else {
       setProduct(p => ({ ...p, is_active: !p.is_active }))
-      toast({ title: product.is_active ? 'Produit désactivé' : 'Produit activé ✓' })
+      toast({ title: product.is_active ? t('adminCatalog.detail.productDeactivated') : t('adminCatalog.detail.productActivated') })
     }
     setToggling(false)
   }
@@ -109,18 +109,18 @@ export default function AdminProductDetail() {
         <Button variant="ghost" size="sm" asChild>
           <Link to="/admin/produits">
             <ChevronLeft className="h-4 w-4 mr-1" />
-            Produits
+            {t('adminCatalog.detail.productsBack')}
           </Link>
         </Button>
         <h1 className="text-xl font-bold flex-1">{product.name_fr}</h1>
         <Button variant="outline" size="sm" onClick={handleToggleActive} disabled={toggling}>
           {toggling && <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />}
-          {product.is_active ? 'Désactiver' : 'Activer'}
+          {product.is_active ? t('adminCatalog.detail.deactivate') : t('adminCatalog.detail.activate')}
         </Button>
         <Button size="sm" asChild>
           <Link to={`/admin/produits/${sku}/editer`}>
             <Pencil className="h-3.5 w-3.5 mr-1.5" />
-            Modifier
+            {t('adminCatalog.detail.modify')}
           </Link>
         </Button>
       </div>
@@ -134,7 +134,7 @@ export default function AdminProductDetail() {
           ) : (
             <div className="flex flex-col items-center gap-2 text-muted-foreground/40">
               <ImageIcon className="h-12 w-12" />
-              <span className="text-xs">Pas d'image</span>
+              <span className="text-xs">{t('adminCatalog.detail.noImage')}</span>
             </div>
           )}
         </div>
@@ -150,42 +150,42 @@ export default function AdminProductDetail() {
               {CATEGORY_EMOJI[product.category]} {product.category}
             </span>
             <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border ${statusClass}`}>
-              {STATUS_LABELS[product.status] ?? product.status}
+              {product.status ? t(`adminCatalog.status.${product.status}`, { defaultValue: product.status }) : product.status}
             </span>
             <span className={`inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full border ${
               product.is_active ? 'bg-green-100 text-green-800 border-green-200' : 'bg-red-100 text-red-800 border-red-200'
             }`}>
-              {product.is_active ? 'Actif' : 'Inactif'}
+              {product.is_active ? t('adminCatalog.detail.active') : t('adminCatalog.detail.inactive')}
             </span>
           </div>
 
           {/* Champs */}
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Nom FR</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.nameFr')}</p>
               <p className="font-semibold">{product.name_fr || '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Nom EN</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.nameEn')}</p>
               <p className="font-semibold">{product.name_en || '—'}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Prix</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.price')}</p>
               <p className="font-bold text-primary text-base">{formatPrice(product.price_mur)}</p>
             </div>
             <div>
-              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Unité</p>
+              <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.unit')}</p>
               <p className="font-semibold">{product.unit || '—'}</p>
             </div>
             {product.description_fr && (
               <div className="sm:col-span-2">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Description FR</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.descriptionFr')}</p>
                 <p className="text-muted-foreground leading-relaxed">{product.description_fr}</p>
               </div>
             )}
             {product.description_en && (
               <div className="sm:col-span-2">
-                <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">Description EN</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wide font-medium mb-0.5">{t('adminCatalog.detail.descriptionEn')}</p>
                 <p className="text-muted-foreground leading-relaxed">{product.description_en}</p>
               </div>
             )}
@@ -195,25 +195,25 @@ export default function AdminProductDetail() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <StatCard icon={ShoppingCart} label="Commandes" value={stats.orders} />
-        <StatCard icon={Package} label="Qté vendue" value={stats.qtySold} sub={`en ${product.unit || 'unité(s)'}`} />
-        <StatCard icon={TrendingUp} label="Revenus" value={formatPrice(stats.revenue)} />
+        <StatCard icon={ShoppingCart} label={t('adminCatalog.detail.orders')} value={stats.orders} />
+        <StatCard icon={Package} label={t('adminCatalog.detail.qtySold')} value={stats.qtySold} sub={t('adminCatalog.detail.inUnit', { unit: product.unit || t('adminCatalog.detail.unitFallback') })} />
+        <StatCard icon={TrendingUp} label={t('adminCatalog.detail.revenue')} value={formatPrice(stats.revenue)} />
       </div>
 
       {/* Commandes récentes */}
       {recentOrders.length > 0 && (
         <div className="rounded-lg border">
           <div className="px-5 py-3 border-b bg-muted/30">
-            <h2 className="font-semibold text-sm">Dernières commandes contenant ce produit</h2>
+            <h2 className="font-semibold text-sm">{t('adminCatalog.detail.recentOrders')}</h2>
           </div>
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b">
-                <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">N° commande</th>
-                <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">Date</th>
-                <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">Qté</th>
-                <th className="px-4 py-2.5 text-right font-medium text-muted-foreground">Total ligne</th>
-                <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">Statut</th>
+                <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">{t('adminCatalog.detail.orderNumber')}</th>
+                <th className="px-4 py-2.5 text-left font-medium text-muted-foreground">{t('adminCatalog.detail.date')}</th>
+                <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">{t('adminCatalog.detail.qty')}</th>
+                <th className="px-4 py-2.5 text-right font-medium text-muted-foreground">{t('adminCatalog.detail.lineTotal')}</th>
+                <th className="px-4 py-2.5 text-center font-medium text-muted-foreground">{t('adminCatalog.detail.orderStatus')}</th>
                 <th className="px-4 py-2.5"></th>
               </tr>
             </thead>
@@ -226,7 +226,7 @@ export default function AdminProductDetail() {
                     </code>
                   </td>
                   <td className="px-4 py-2.5 text-muted-foreground">
-                    {item.orders?.created_at ? formatDate(item.orders.created_at) : '—'}
+                    {item.orders?.created_at ? formatDate(item.orders.created_at, i18n.language) : '—'}
                   </td>
                   <td className="px-4 py-2.5 text-center font-medium">{item.quantity}</td>
                   <td className="px-4 py-2.5 text-right font-semibold">{formatPrice(item.line_total_mur)}</td>
@@ -236,7 +236,7 @@ export default function AdminProductDetail() {
                   <td className="px-4 py-2.5 text-right">
                     {item.orders?.order_number && (
                       <Button size="sm" variant="ghost" asChild>
-                        <Link to={`/admin/commandes/${item.orders.order_number}`}>Voir</Link>
+                        <Link to={`/admin/commandes/${item.orders.order_number}`}>{t('adminCatalog.detail.view')}</Link>
                       </Button>
                     )}
                   </td>
