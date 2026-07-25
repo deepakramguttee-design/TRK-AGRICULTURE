@@ -1,35 +1,40 @@
 import { NavLink, Outlet, useNavigate } from 'react-router-dom'
-import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, Leaf, UserCheck, HandCoins } from 'lucide-react'
+import { LayoutDashboard, Package, ShoppingCart, Users, LogOut, Leaf, UserCheck, HandCoins, Contact, Megaphone } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '@/contexts/AuthContext'
 import ProtectedAdminRoute from '@/components/ProtectedAdminRoute'
 import { toast } from '@/hooks/use-toast'
 
 const NAV_ADMIN = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/produits', label: 'Produits', icon: Package },
-  { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
-  { to: '/admin/encaissements', label: 'Encaissements', icon: HandCoins },
-  { to: '/admin/b2b', label: 'B2B', icon: Users },
-  { to: '/admin/semis', label: 'Semis', icon: Leaf },
-  { to: '/admin/utilisateurs', label: 'Utilisateurs', icon: UserCheck },
+  { to: '/admin', labelKey: 'adminCore.nav.dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/produits', labelKey: 'adminCore.nav.products', icon: Package },
+  { to: '/admin/commandes', labelKey: 'adminCore.nav.orders', icon: ShoppingCart },
+  { to: '/admin/encaissements', labelKey: 'adminCore.nav.payments', icon: HandCoins },
+  { to: '/admin/clients', labelKey: 'adminCore.nav.clients', icon: Contact },
+  { to: '/admin/campagnes', labelKey: 'adminCore.nav.campaigns', icon: Megaphone },
+  { to: '/admin/b2b', labelKey: 'adminCore.nav.b2b', icon: Users },
+  { to: '/admin/semis', labelKey: 'adminCore.nav.seedlings', icon: Leaf },
+  { to: '/admin/utilisateurs', labelKey: 'adminCore.nav.users', icon: UserCheck },
 ]
 
 const NAV_OPERATOR = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  { to: '/admin/commandes', label: 'Commandes', icon: ShoppingCart },
-  { to: '/admin/encaissements', label: 'Encaissements', icon: HandCoins },
-  { to: '/admin/b2b', label: 'B2B', icon: Users },
-  { to: '/admin/semis', label: 'Semis', icon: Leaf },
+  { to: '/admin', labelKey: 'adminCore.nav.dashboard', icon: LayoutDashboard, end: true },
+  { to: '/admin/commandes', labelKey: 'adminCore.nav.orders', icon: ShoppingCart },
+  { to: '/admin/encaissements', labelKey: 'adminCore.nav.payments', icon: HandCoins },
+  { to: '/admin/clients', labelKey: 'adminCore.nav.clients', icon: Contact },
+  { to: '/admin/b2b', labelKey: 'adminCore.nav.b2b', icon: Users },
+  { to: '/admin/semis', labelKey: 'adminCore.nav.seedlings', icon: Leaf },
 ]
 
 export default function AdminLayout() {
+  const { t } = useTranslation()
   const { user, signOut, isAdmin } = useAuth()
   const navigate = useNavigate()
   const NAV = isAdmin ? NAV_ADMIN : NAV_OPERATOR
 
   async function handleSignOut() {
     await signOut()
-    toast({ title: 'Déconnecté' })
+    toast({ title: t('adminCore.signedOut') })
     navigate('/', { replace: true })
   }
 
@@ -39,14 +44,14 @@ export default function AdminLayout() {
         {/* Nav mobile — barre horizontale scrollable */}
         <nav className="md:hidden border-b bg-muted/30 overflow-x-auto">
           <div className="flex items-center gap-1 px-2 py-2 min-w-max">
-            {NAV.map(({ to, label, icon: Icon, end, disabled }) =>
+            {NAV.map(({ to, labelKey, icon: Icon, end, disabled }) =>
               disabled ? (
                 <span
-                  key={label}
+                  key={labelKey}
                   className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md text-muted-foreground/40 whitespace-nowrap"
                 >
                   <Icon className="h-4 w-4" />
-                  {label}
+                  {t(labelKey)}
                 </span>
               ) : (
                 <NavLink
@@ -62,7 +67,7 @@ export default function AdminLayout() {
                   }
                 >
                   <Icon className="h-4 w-4" />
-                  {label}
+                  {t(labelKey)}
                 </NavLink>
               )
             )}
@@ -71,7 +76,7 @@ export default function AdminLayout() {
               className="flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-md hover:bg-muted text-muted-foreground whitespace-nowrap"
             >
               <LogOut className="h-4 w-4" />
-              Déconnexion
+              {t('adminCore.signOut')}
             </button>
           </div>
         </nav>
@@ -80,18 +85,18 @@ export default function AdminLayout() {
         <aside className="hidden md:flex w-56 border-r bg-muted/30 flex-col shrink-0">
           <div className="flex flex-col gap-1 p-3 flex-1">
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-3 py-2">
-              Administration
+              {t('adminCore.sectionTitle')}
             </p>
-            {NAV.map(({ to, label, icon: Icon, end, disabled }) =>
+            {NAV.map(({ to, labelKey, icon: Icon, end, disabled }) =>
               disabled ? (
                 <span
-                  key={label}
+                  key={labelKey}
                   className="flex items-center gap-2.5 px-3 py-2 text-sm rounded-md text-muted-foreground/40 cursor-not-allowed"
                 >
                   <Icon className="h-4 w-4" />
-                  {label}
+                  {t(labelKey)}
                   <span className="ml-auto text-[10px] bg-muted rounded px-1.5 py-0.5 text-muted-foreground">
-                    Bientôt
+                    {t('adminCore.comingSoon')}
                   </span>
                 </span>
               ) : (
@@ -108,7 +113,7 @@ export default function AdminLayout() {
                   }
                 >
                   <Icon className="h-4 w-4" />
-                  {label}
+                  {t(labelKey)}
                 </NavLink>
               )
             )}
@@ -121,7 +126,7 @@ export default function AdminLayout() {
               className="flex items-center gap-2 px-3 py-2 text-sm rounded-md hover:bg-muted w-full text-muted-foreground hover:text-foreground transition-colors"
             >
               <LogOut className="h-4 w-4" />
-              Déconnexion
+              {t('adminCore.signOut')}
             </button>
           </div>
         </aside>

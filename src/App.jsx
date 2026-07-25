@@ -22,6 +22,11 @@ import AdminProductCreate from './pages/admin/AdminProductCreate'
 import AdminProductEdit from './pages/admin/AdminProductEdit'
 import AdminProductDetail from './pages/admin/AdminProductDetail'
 import AdminClientDetail from './pages/admin/AdminClientDetail'
+import AdminClientsList from './pages/admin/AdminClientsList'
+import AdminClientProfile from './pages/admin/AdminClientProfile'
+import AdminCampaignsList from './pages/admin/AdminCampaignsList'
+import AdminCampaignDetail from './pages/admin/AdminCampaignDetail'
+import Unsubscribe from './pages/Unsubscribe'
 import AdminOrdersList from './pages/admin/AdminOrdersList'
 import AdminPayments from './pages/admin/AdminPayments'
 import AdminOrderDetail from './pages/admin/AdminOrderDetail'
@@ -76,6 +81,7 @@ function App() {
                 <Route path="/notre-process" element={<NosProcess />} />
                 <Route path="/calendrier" element={<Calendrier />} />
                 <Route path="/pepiniere" element={<Nursery />} />
+                <Route path="/unsubscribe" element={<Unsubscribe />} />
                 <Route path="/admin/login" element={<AdminLoginPage />} />
                 <Route path="/admin/products" element={<RequireAdmin><AdminProducts /></RequireAdmin>} />
                 <Route path="/admin" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>}>
@@ -86,6 +92,10 @@ function App() {
                   <Route path="produits/:sku/editer" element={<RequireAdmin><AdminProductEdit /></RequireAdmin>} />
                   <Route path="commandes" element={<AdminOrdersList />} />
                   <Route path="commandes/:order_number" element={<AdminOrderDetail />} />
+                  <Route path="clients" element={<AdminClientsList />} />
+                  <Route path="clients/:id" element={<AdminClientProfile />} />
+                  <Route path="campagnes" element={<RequireAdmin><AdminCampaignsList /></RequireAdmin>} />
+                  <Route path="campagnes/:id" element={<RequireAdmin><AdminCampaignDetail /></RequireAdmin>} />
                   <Route path="encaissements" element={<AdminPayments />} />
                   <Route path="b2b" element={<AdminB2BList />} />
                   <Route path="b2b/:id" element={<AdminB2BDetail />} />
